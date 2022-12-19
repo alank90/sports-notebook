@@ -5,6 +5,11 @@ import Home from "@/views/Home.vue";
 const routes = [
   { path: "/", name: "Home", component: Home },
   {
+    path: "/nba",
+    name: "nba",
+    component: () => import("@/components/nba/nba-component.vue"),
+  },
+  {
     path: "/about",
     name: "About",
     component: () => import("@/views/About.vue"), // Lazy loading this route
