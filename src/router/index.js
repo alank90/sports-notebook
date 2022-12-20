@@ -7,7 +7,17 @@ const routes = [
   {
     path: "/nba",
     name: "nba",
-    component: () => import("@/components/nba/nba-component.vue"),
+    component: () => import("@/views/nba-view.vue"),
+  },
+  {
+    path: "/nfl",
+    name: "nfl",
+    component: () => import("@/views/nfl-view.vue"),
+  },
+  {
+    path: "/mlb",
+    name: "mlb",
+    component: () => import("@/views/mlb-view.vue"),
   },
   {
     path: "/about",
