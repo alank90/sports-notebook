@@ -2,6 +2,7 @@
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
 import navBar from "@/components/nav-bar.vue";
+import footerItem from "@/components/footer-item.vue";
 </script>
 
 <template>
@@ -10,6 +11,8 @@ import navBar from "@/components/nav-bar.vue";
   <!-- component matched by the route will render here ========================== -->
   <router-view></router-view>
   <!-- =============== End route outlet ========================================= -->
+
+  <footer-item></footer-item>
 </template>
 
 <style>
