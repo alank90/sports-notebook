@@ -21,7 +21,7 @@ const nbaDivisions = ref([
 ]);
 
 const nbaTeamStandingsByDivision = ref([]);
-
+console.log(API_KEY);
 let myHeaders = new Headers();
 myHeaders.append("x-apisports-key", API_KEY);
 myHeaders.append("x-rapidapi-host", HOST_NAME);
