@@ -1,11 +1,24 @@
 <template>
-  <h1>NBA standings</h1>
-  <!-- <ul v-for="(member, index) in nbaTeamStandings" :key="member.position">
-    <li>
-      {{ index }} - {{ member.team.name }}
-      <img :src="member.team.logo" alt="Team Logo" />
-    </li>
-  </ul> -->
+  <h1>NBA Standings</h1>
+  <h2>Eastern Conference</h2>
+  <table v-if="nbaTeamStandingsByDivision">
+    <caption>
+      {{
+        nbaTeamStandingsByDivision[0].parameters.group
+      }}
+    </caption>
+    <thead>
+      <tr>
+        <th scope="col">Team</th>
+        <th scope="col">W</th>
+        <th scope="col">L</th>
+        <th scope="col">PCT</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr></tr>
+    </tbody>
+  </table>
 </template>
 
 <script setup>
@@ -21,7 +34,6 @@ const nbaDivisions = ref([
 ]);
 
 const nbaTeamStandingsByDivision = ref([]);
-console.log(API_KEY);
 let myHeaders = new Headers();
 myHeaders.append("x-apisports-key", API_KEY);
 myHeaders.append("x-rapidapi-host", HOST_NAME);
@@ -40,26 +52,73 @@ for (let i = 0; i < nbaDivisions.value.length; i++) {
       fetch(
         `https://v1.basketball.api-sports.io/standings/?league=12&group=${nbaDivisions.value[i][n]}&season=2022-2023`,
         requestOptions
-      )
+      ).then((res) => res.json())
     );
   }
 }
+
 // fetch the NBA team standings
 Promise.all(urls)
-  .then((values) => console.log(values))
-  .catch((error) => console.log("Error fetching data ==>", error));
-
-/* fetch(urlNBATeamStandings, requestOptions)
-  .then((response) => response.json())
   .then((data) => {
-    nbaTeamStandings.value = data.response[0];
-    console.log(nbaTeamStandings.value[22].group.name);
+    nbaTeamStandingsByDivision.value = data;
+    console.log(nbaTeamStandingsByDivision.value[0].response[0][0].team.name);
   })
-  .catch((error) => console.log("Error fetching data ==>", error)); */
+  .catch((error) => console.log("Error fetching data ==>", error));
 </script>
 
 <style scoped>
 img[alt="Team Logo"] {
   width: 1rem;
+}
+
+table {
+  border-collapse: collapse;
+  border: 1px solid black;
+  text-align: center;
+  vertical-align: middle;
+}
+
+caption {
+  font-weight: bold;
+  font-size: 24px;
+  text-align: left;
+  color: #333;
+  margin-bottom: 16px;
+}
+
+thead {
+  background-color: #333;
+  color: white;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 2%;
+}
+
+th,
+td {
+  border: 1px solid black;
+  padding: 8px;
+}
+
+thead th {
+  width: 25;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: #fff;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #eee;
+}
+
+tbody th {
+  background-color: #36c;
+  color: #fff;
+  text-align: left;
+}
+
+tbody tr:nth-child(even) th {
+  background-color: #25c;
 }
 </style>
