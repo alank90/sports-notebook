@@ -15,8 +15,15 @@
         <th scope="col">PCT</th>
       </tr>
     </thead>
-    <tbody>
-      <tr></tr>
+    <tbody v-for="(team, index) in nbaTeamStandingsByDivision" :key="index">
+      <tr>
+        <th scope="row">
+          {{ index }} - {{ team.response[0][0].team.name }}
+        </th>
+        <td>{{ team.response[0][0].games.win.total }}</td>
+        <td>{{ team.response[0][0].games.lose.total }}</td>
+        <td>{{ team.response[0][0].games.win.percentage }}</td>
+      </tr>
     </tbody>
   </table>
 </template>
