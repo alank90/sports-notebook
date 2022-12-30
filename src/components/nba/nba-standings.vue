@@ -2,29 +2,25 @@
   <h1>NBA Standings</h1>
   <h2>Eastern Conference</h2>
   <table v-if="nbaTeamStandingsByDivision">
-    <caption>
-      {{
-        nbaTeamStandingsByDivision[0].parameters.group
-      }}
-    </caption>
-    <thead>
-      <tr>
-        <th scope="col">Team</th>
-        <th scope="col">W</th>
-        <th scope="col">L</th>
-        <th scope="col">PCT</th>
-      </tr>
-    </thead>
-    <tbody v-for="(team, index) in nbaTeamStandingsByDivision" :key="index">
-      <tr>
-        <th scope="row">
-          {{ index }} - {{ team.response[0][0].team.name }}
-        </th>
-        <td>{{ team.response[0][0].games.win.total }}</td>
-        <td>{{ team.response[0][0].games.lose.total }}</td>
-        <td>{{ team.response[0][0].games.win.percentage }}</td>
-      </tr>
-    </tbody>
+    <template v-for="item in nbaTeamStandingsByDivision">
+      <!-- eslint-disable-next-line vue/require-v-for-key  -->
+      <thead>
+        <tr>
+          <th scope="col" colspan="2">{{ item.parameters.group }}</th>
+          <th scope="col">W</th>
+          <th scope="col">L</th>
+          <th scope="col">PCT</th>
+        </tr>
+      </thead>
+      <tbody v-for="(team, index) in item.response[0]" :key="index">
+        <tr>
+          <th scope="row" colspan="2">{{ team.team.name }}</th>
+          <td>{{ team.games.win.total }}</td>
+          <td>{{ team.games.lose.total }}</td>
+          <td>{{ team.games.win.percentage }}</td>
+        </tr>
+      </tbody>
+    </template>
   </table>
 </template>
 
@@ -68,7 +64,6 @@ for (let i = 0; i < nbaDivisions.value.length; i++) {
 Promise.all(urls)
   .then((data) => {
     nbaTeamStandingsByDivision.value = data;
-    console.log(nbaTeamStandingsByDivision.value[0].response[0][0].team.name);
   })
   .catch((error) => console.log("Error fetching data ==>", error));
 </script>
