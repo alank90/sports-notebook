@@ -14,7 +14,9 @@
       </thead>
       <tbody v-for="(team, index) in item.response[0]" :key="index">
         <tr>
-          <th scope="row" colspan="2">{{ team.team.name }}</th>
+          <th scope="row" colspan="2">
+            <img :src="team.team.logo" />{{ team.team.name }}
+          </th>
           <td>{{ team.games.win.total }}</td>
           <td>{{ team.games.lose.total }}</td>
           <td>{{ team.games.win.percentage }}</td>
@@ -122,5 +124,10 @@ tbody th {
 
 tbody tr:nth-child(even) th {
   background-color: #25c;
+}
+
+th > img {
+  max-width: 20px;
+  margin-right: 5px;
 }
 </style>
