@@ -76,6 +76,8 @@ img[alt="Team Logo"] {
 }
 
 table {
+  width: 900px;
+  margin: 0 auto;
   border-collapse: collapse;
   border: 1px solid black;
   text-align: center;
@@ -93,13 +95,14 @@ caption {
 thead {
   background-color: #333;
   color: white;
-  font-size: 0.875rem;
+  font-size: 1.4rem;
   text-transform: uppercase;
   letter-spacing: 2%;
 }
 
 th,
 td {
+  font-size: 1.2rem;
   border: 1px solid black;
   padding: 8px;
 }
