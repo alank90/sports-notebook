@@ -3,15 +3,15 @@
   <nav>
     <ul class="menu">
       <li>
-        Sports Notebook
-        <router-link id="nav-title" to="/"></router-link>
+        <router-link id="nav-title" to="/">Sports Notebook</router-link>
       </li>
       <li>
         NBA
         <ul class="sub-menu">
           <li>
-            NBA Standings
-            <router-link class="nav-link" to="/nba" href="/nba"></router-link>
+            <router-link class="nav-link" to="/nba" href="/nba"
+              >NBA Standings</router-link
+            >
           </li>
         </ul>
       </li>
@@ -32,11 +32,14 @@
 </template>
 
 <style scoped>
+.router-link-active {
+  color: #fff;
+}
 ul.menu {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  justify-content: flex-end; 
+  justify-content: flex-end;
   align-items: baseline;
   column-gap: 20px;
   padding: 20px 50px;
@@ -46,28 +49,32 @@ ul.menu {
 .menu > li {
   color: #000;
   cursor: pointer;
-  font-size: 1.1rem;
+  font-size: 1.4rem;
+  font-weight: 550;
 }
+
+.menu > li:first-child {
+  flex-grow: 3;
+  text-align: left;
+}
+
 .sub-menu {
   transform: scale(0);
   transform-origin: top center;
   transition: all 300ms ease-in-out;
 }
 .sub-menu li {
-  font-size: 14px;
-  background: rgba(0, 0, 0, 0.8);
+  font-size: 0.9rem;
   padding: 8px 0;
-  color: white;
+  color: #000;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   transform: scale(0);
   transform-origin: top center;
   transition: all 300ms ease-in-out;
 }
+
 .sub-menu li:last-child {
   border-bottom: 0;
-}
-.sub-menu li:hover {
-  background: black;
 }
 .menu > li:hover .sub-menu li {
   transform: scale(1);
@@ -76,8 +83,35 @@ ul.menu {
   transform: scale(1);
 }
 
-.router-link-active {
-  color: #72cdf1;
-  text-decoration: underline;
+a:not(.sub-menu > li > a) {
+  font-size: 1.5rem;
+  color: #000;
+  font-weight: 550;
+  outline: none;
+  text-decoration: none;
+  padding: 2px 1px 0;
+}
+
+a:link {
+  color: #265301;
+}
+
+a:visited {
+  color: #05509d;
+}
+
+a:focus {
+  background: #05509d;
+}
+
+a:hover {
+  background: #3063a159;
+  border-radius: 5px;
+  padding: 1px;
+}
+
+a:active {
+  background: #265301;
+  color: #05509d;
 }
 </style>
