@@ -32,9 +32,6 @@
 </template>
 
 <style scoped>
-nav > li:first-child {
-  color: #05509d;
-}
 ul.menu {
   display: flex;
   flex-direction: row;
