@@ -1,8 +1,11 @@
 <template>
   <h1>NBA Standings</h1>
-  <h2>Eastern Conference</h2>
+
   <table v-if="nbaTeamStandingsByDivision">
-    <template v-for="item in nbaTeamStandingsByDivision">
+    <caption>
+      Eastern Conference
+    </caption>
+    <template v-for="item in easternConferenceTeams">
       <!-- eslint-disable-next-line vue/require-v-for-key  -->
       <thead>
         <tr>
@@ -12,7 +15,34 @@
           <th scope="col">PCT</th>
         </tr>
       </thead>
-      <tbody v-for="(team, index) in item.response[0]" :key="index">
+      <tbody v-for="team in item.response[0]" :key="team.team.id">
+        <tr>
+          <th scope="row" colspan="2">
+            <img :src="team.team.logo" />{{ team.team.name }}
+          </th>
+          <td>{{ team.games.win.total }}</td>
+          <td>{{ team.games.lose.total }}</td>
+          <td>{{ team.games.win.percentage }}</td>
+        </tr>
+      </tbody>
+    </template>
+  </table>
+
+  <table v-if="nbaTeamStandingsByDivision">
+    <caption>
+      Western Conference
+    </caption>
+    <template v-for="item in westernConferenceTeams">
+      <!-- eslint-disable-next-line vue/require-v-for-key  -->
+      <thead>
+        <tr>
+          <th scope="col" colspan="2">{{ item.parameters.group }}</th>
+          <th scope="col">W</th>
+          <th scope="col">L</th>
+          <th scope="col">PCT</th>
+        </tr>
+      </thead>
+      <tbody v-for="team in item.response[0]" :key="team.team.id">
         <tr>
           <th scope="row" colspan="2">
             <img :src="team.team.logo" />{{ team.team.name }}
@@ -27,7 +57,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 
 // ======= Variable Declarations ============ //
 const API_KEY = import.meta.env.VITE_API_SPORTS_KEY;
@@ -39,6 +69,9 @@ const nbaDivisions = ref([
 ]);
 
 const nbaTeamStandingsByDivision = ref([]);
+let easternConferenceTeams = ref([]);
+let westernConferenceTeams = ref([]);
+
 let myHeaders = new Headers();
 myHeaders.append("x-apisports-key", API_KEY);
 myHeaders.append("x-rapidapi-host", HOST_NAME);
@@ -50,6 +83,7 @@ const requestOptions = {
 };
 
 let urls = [];
+
 // Populate the urls array with url's of each division for API fetch's
 for (let i = 0; i < nbaDivisions.value.length; i++) {
   for (let n = 0; n < nbaDivisions.value[i].length; n++) {
@@ -62,12 +96,25 @@ for (let i = 0; i < nbaDivisions.value.length; i++) {
   }
 }
 
-// fetch the NBA team standings
+// ======= fetch the NBA team standings ============ //
 Promise.all(urls)
   .then((data) => {
     nbaTeamStandingsByDivision.value = data;
   })
   .catch((error) => console.log("Error fetching data ==>", error));
+
+// ======== Computed Values ======================= //
+easternConferenceTeams = computed(() => {
+  return nbaTeamStandingsByDivision.value.filter((team) => {
+    return nbaDivisions.value[0].includes(team.parameters.group);
+  });
+});
+
+westernConferenceTeams = computed(() => {
+  return nbaTeamStandingsByDivision.value.filter((team) => {
+    return nbaDivisions.value[1].includes(team.parameters.group);
+  });
+});
 </script>
 
 <style scoped>
@@ -85,11 +132,12 @@ table {
 }
 
 caption {
-  font-weight: bold;
-  font-size: 24px;
+  font-weight: 550;
+  font-size: 1.2rem;
   text-align: left;
   color: #333;
-  margin-bottom: 16px;
+  margin: 15px 0;
+  text-decoration: underline;
 }
 
 thead {
