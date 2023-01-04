@@ -9,23 +9,27 @@
         NBA
         <ul class="sub-menu">
           <li>
-            <router-link class="nav-link" to="/nba" href="/nba"
-              >NBA Standings</router-link
+            <router-link class="nav-link" to="/nba/standings" href="/nba"
+              >Standings</router-link
+            >
+          </li>
+          <li>
+            <router-link class="nav-link" to="/nba/scores" href="/nba"
+              >Scores</router-link
             >
           </li>
         </ul>
       </li>
       <li>
-        NFL
-        <router-link class="nav-link" to="/nfl" href="/nfl"></router-link>
+        <router-link class="nav-link" to="/nfl" href="/nfl">NFL</router-link>
       </li>
       <li>
-        MLB
-        <router-link class="nav-link" to="/mlb" href="/mlb"></router-link>
+        <router-link class="nav-link" to="/mlb" href="/mlb"> MLB</router-link>
       </li>
       <li>
-        About
-        <router-link class="nav-link" to="/about" href="/about"></router-link>
+        <router-link class="nav-link" to="/about" href="/about"
+          >About</router-link
+        >
       </li>
     </ul>
   </nav>
@@ -66,7 +70,7 @@ ul.menu {
 .sub-menu li {
   font-size: 0.9rem;
   padding: 8px 0;
-  color: #000;
+  color: #fff;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   transform: scale(0);
   transform-origin: top center;
@@ -83,8 +87,13 @@ ul.menu {
   transform: scale(1);
 }
 
+#nav-title {
+  color: #07709c;
+  font-size: 1.7rem;
+}
+
 a:not(.sub-menu > li > a) {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   color: #000;
   font-weight: 550;
   outline: none;
@@ -93,25 +102,22 @@ a:not(.sub-menu > li > a) {
 }
 
 a:link {
-  color: #265301;
+  text-decoration: none;
+  color: #000;
 }
 
 a:visited {
-  color: #05509d;
-}
-
-a:focus {
-  background: #05509d;
+  text-decoration: none;
+  color: #000;
 }
 
 a:hover {
-  background: #3063a159;
-  border-radius: 5px;
-  padding: 1px;
+  text-decoration: none;
+  color: rgba(0, 0, 0, 0.293);
 }
 
 a:active {
-  background: #265301;
-  color: #05509d;
+  text-decoration: none;
+  color: #000;
 }
 </style>

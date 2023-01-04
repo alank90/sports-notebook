@@ -1,59 +1,67 @@
 <template>
   <h1>NBA Standings</h1>
 
-  <table v-if="nbaTeamStandingsByDivision">
-    <caption>
-      Eastern Conference
-    </caption>
-    <template v-for="item in easternConferenceTeams">
-      <!-- eslint-disable-next-line vue/require-v-for-key  -->
-      <thead>
-        <tr>
-          <th scope="col" colspan="2">{{ item.parameters.group }}</th>
-          <th scope="col">W</th>
-          <th scope="col">L</th>
-          <th scope="col">PCT</th>
-        </tr>
-      </thead>
-      <tbody v-for="team in item.response[0]" :key="team.team.id">
-        <tr>
-          <th scope="row" colspan="2">
-            <img :src="team.team.logo" />{{ team.team.name }}
-          </th>
-          <td>{{ team.games.win.total }}</td>
-          <td>{{ team.games.lose.total }}</td>
-          <td>{{ team.games.win.percentage }}</td>
-        </tr>
-      </tbody>
-    </template>
-  </table>
+  <div v-if="!loading" class="container">
+    <table>
+      <caption>
+        Eastern Conference
+      </caption>
+      <template v-for="item in easternConferenceTeams">
+        <!-- eslint-disable-next-line vue/require-v-for-key  -->
+        <thead>
+          <tr>
+            <th scope="col" colspan="2">{{ item.parameters.group }}</th>
+            <th scope="col">W</th>
+            <th scope="col">L</th>
+            <th scope="col">PCT</th>
+          </tr>
+        </thead>
+        <!-- eslint-disable-next-line vue/require-v-for-key  -->
+        <tbody>
+          <tr v-for="team in item.response[0]" :key="team.team.id">
+            <th scope="row" colspan="2">
+              <img :src="team.team.logo" />{{ team.team.name }}
+            </th>
+            <td>{{ team.games.win.total }}</td>
+            <td>{{ team.games.lose.total }}</td>
+            <td>{{ team.games.win.percentage.replace(/^0+/, "") }}</td>
+          </tr>
+        </tbody>
+      </template>
+    </table>
 
-  <table v-if="nbaTeamStandingsByDivision">
-    <caption>
-      Western Conference
-    </caption>
-    <template v-for="item in westernConferenceTeams">
-      <!-- eslint-disable-next-line vue/require-v-for-key  -->
-      <thead>
-        <tr>
-          <th scope="col" colspan="2">{{ item.parameters.group }}</th>
-          <th scope="col">W</th>
-          <th scope="col">L</th>
-          <th scope="col">PCT</th>
-        </tr>
-      </thead>
-      <tbody v-for="team in item.response[0]" :key="team.team.id">
-        <tr>
-          <th scope="row" colspan="2">
-            <img :src="team.team.logo" />{{ team.team.name }}
-          </th>
-          <td>{{ team.games.win.total }}</td>
-          <td>{{ team.games.lose.total }}</td>
-          <td>{{ team.games.win.percentage }}</td>
-        </tr>
-      </tbody>
-    </template>
-  </table>
+    <table>
+      <caption>
+        Western Conference
+      </caption>
+      <template v-for="item in westernConferenceTeams">
+        <!-- eslint-disable-next-line vue/require-v-for-key  -->
+        <thead>
+          <tr>
+            <th scope="col" colspan="2">{{ item.parameters.group }}</th>
+            <th scope="col">W</th>
+            <th scope="col">L</th>
+            <th scope="col">PCT</th>
+          </tr>
+        </thead>
+        <!-- eslint-disable-next-line vue/require-v-for-key  -->
+        <tbody>
+          <tr v-for="team in item.response[0]" :key="team.team.id">
+            <th scope="row" colspan="2">
+              <img :src="team.team.logo" />{{ team.team.name }}
+            </th>
+            <td>{{ team.games.win.total }}</td>
+            <td>{{ team.games.lose.total }}</td>
+            <td>{{ team.games.win.percentage.replace(/^0+/, "") }}</td>
+          </tr>
+        </tbody>
+      </template>
+    </table>
+  </div>
+  <div v-else>
+    <p>Loading...</p>
+  <img src="@/assets/img/loading.gif" alt="Loading Data" />
+  </div>
 </template>
 
 <script setup>
@@ -62,6 +70,7 @@ import { ref, computed } from "vue";
 // ======= Variable Declarations ============ //
 const API_KEY = import.meta.env.VITE_API_SPORTS_KEY;
 const HOST_NAME = import.meta.env.VITE_API_HOST;
+let loading = ref(true);
 
 const nbaDivisions = ref([
   ["Atlantic", "Southeast", "Central"],
@@ -100,6 +109,7 @@ for (let i = 0; i < nbaDivisions.value.length; i++) {
 Promise.all(urls)
   .then((data) => {
     nbaTeamStandingsByDivision.value = data;
+    loading.value = false;
   })
   .catch((error) => console.log("Error fetching data ==>", error));
 
@@ -122,9 +132,17 @@ img[alt="Team Logo"] {
   width: 1rem;
 }
 
-table {
+.container {
   width: 900px;
-  margin: 0 auto;
+  margin: 0 auto 5% auto;
+}
+
+div > p {
+  font-size: 1.8rem;
+}
+
+table {
+  width: 100%;
   border-collapse: collapse;
   border: 1px solid black;
   text-align: center;

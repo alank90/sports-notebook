@@ -1,6 +1,8 @@
 // Sample Router config. Need to add About and NotFound components.
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "@/views/Home.vue";
+import nbaStandings from "@/components/nba/nba-standings.vue";
+import nbaScores from "@/components/nba/nba-scores.vue";
 
 const routes = [
   { path: "/", name: "Home", component: Home },
@@ -8,6 +10,18 @@ const routes = [
     path: "/nba",
     name: "nba",
     component: () => import("@/views/nba-view.vue"),
+    children: [
+      {
+        // nbaStandings will be rendered inside nba-view's <router-view>
+        // when /nba/standings is matched
+        path: "standings",
+        component: nbaStandings,
+      },
+      {
+        path: "scores",
+        component: nbaScores,
+      },
+    ],
   },
   {
     path: "/nfl",
