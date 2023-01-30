@@ -151,7 +151,7 @@ table {
 
 caption {
   font-weight: 550;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   text-align: left;
   color: #333;
   margin: 15px 0;
