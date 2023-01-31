@@ -49,12 +49,14 @@
 
 <script setup>
 import { ref } from "vue";
+import { currentDate, yesterday } from "../modules/getDate.js";
 
 // ======= Variable Declarations ============ //
 const API_KEY = import.meta.env.VITE_API_SPORTS_KEY;
 const HOST_NAME = import.meta.env.VITE_API_HOST;
 let loading = ref(true);
 
+console.log(currentDate, yesterday);
 const nbaScores = ref([]);
 
 let myHeaders = new Headers();
@@ -69,7 +71,7 @@ const requestOptions = {
 
 // Fetch scores
 fetch(
-  `https://v1.basketball.api-sports.io/games/?league=12&season=2022-2023&date=2023-01-03`,
+  `https://v1.basketball.api-sports.io/games/?league=12&season=2022-2023&date=2023-01-30`,
   requestOptions
 )
   .then((res) => res.json())
