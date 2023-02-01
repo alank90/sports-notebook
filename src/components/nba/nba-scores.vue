@@ -1,7 +1,7 @@
 <template>
-  <h1>NBA Results</h1>
+  <h1>NBA Scoreboard</h1>
   <div v-if="!loading" class="container">
-    <h2>NBA Scoreboard</h2>
+    <h2>For {{ yesterdayLocaleString }}</h2>
     <table>
       <template v-for="team in nbaScores.response">
         <!-- eslint-disable-next-line vue/require-v-for-key  -->
@@ -12,6 +12,7 @@
             <th>Q2</th>
             <th>Q3</th>
             <th>Q4</th>
+            <th v-if="team.scores.home.over_time">O/T</th>
             <th scope="col" colspan="3">Final</th>
           </tr>
         </thead>
@@ -25,7 +26,10 @@
             <td>{{ team.scores.away.quarter_2 }}</td>
             <td>{{ team.scores.away.quarter_3 }}</td>
             <td>{{ team.scores.away.quarter_4 }}</td>
-            <td>{{ team.scores.away.total }}</td>
+            <td v-if="team.scores.away.over_time">
+              {{ team.scores.away.over_time }}
+            </td>
+            <td scope="col" colspan="3">{{ team.scores.away.total }}</td>
           </tr>
           <tr>
             <td scope="row" colspan="2">
@@ -35,7 +39,10 @@
             <td>{{ team.scores.home.quarter_2 }}</td>
             <td>{{ team.scores.home.quarter_3 }}</td>
             <td>{{ team.scores.home.quarter_4 }}</td>
-            <td>{{ team.scores.home.total }}</td>
+            <td v-if="team.scores.home.over_time">
+              {{ team.scores.home.over_time }}
+            </td>
+            <td scope="col" colspan="3">{{ team.scores.home.total }}</td>
           </tr>
         </tbody>
       </template>
@@ -49,14 +56,13 @@
 
 <script setup>
 import { ref } from "vue";
-import { currentDate, yesterday } from "../modules/getDate.js";
+import { todayISOString, yesterdayLocaleString } from "../modules/getDate.js";
 
 // ======= Variable Declarations ============ //
 const API_KEY = import.meta.env.VITE_API_SPORTS_KEY;
 const HOST_NAME = import.meta.env.VITE_API_HOST;
 let loading = ref(true);
 
-console.log(currentDate, yesterday);
 const nbaScores = ref([]);
 
 let myHeaders = new Headers();
@@ -71,7 +77,7 @@ const requestOptions = {
 
 // Fetch scores
 fetch(
-  `https://v1.basketball.api-sports.io/games/?league=12&season=2022-2023&date=2023-01-30`,
+  `https://v1.basketball.api-sports.io/games/?league=12&season=2022-2023&date=${todayISOString}`,
   requestOptions
 )
   .then((res) => res.json())
@@ -84,16 +90,24 @@ fetch(
 <style scoped>
 h1 {
   font-size: 2rem;
+  font-weight: 600;
+}
+
+h2 {
+  font-size: 1.4rem;
+  font-weight: 550;
+  text-align: middle;
+  margin-left: -150px;
 }
 
 table {
   border-collapse: collapse;
   border-spacing: 5px;
   table-layout: auto;
-  width: 40vw;
-  max-width: 950px;
+  max-width: 1000px;
   margin: 20px auto 75px;
   border: 3px solid #000;
+  border-radius: 5px;
 }
 
 thead {
@@ -104,12 +118,18 @@ th,
 td {
   max-width: 10%;
   text-align: center;
-  vertical-align: bottom;
+  vertical-align: middle;
   border-collapse: collapse;
   padding: 0.3em;
   font-weight: 500;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   caption-side: bottom;
+}
+
+th:first-child {
+  text-align: left;
+  vertical-align: middle;
+  font-size: 1.3rem;
 }
 
 tr {
@@ -117,31 +137,26 @@ tr {
   height: 35px;
 }
 
-td:first-child,
-th:first-child {
-  text-align: left;
-  vertical-align: middle;
+td:first-child {
+  vertical-align: bottom;
+  text-align: center;
+  font-size: 1.5rem;
+  padding: 5px;
 }
 
-td {
-  height: 25px;
-}
 td:last-child {
-  font-weight: 550;
-}
-
-caption {
-  padding: 0.3em;
-  color: #fff;
-  background: #000;
+  font-weight: 700;
+  font-size: 1.4rem;
 }
 
 th {
   background: #eee;
 }
 
-img {
-  max-width: 24px;
-  max-height: 24px;
+td > img {
+  max-width: 48px;
+  max-height: 48px;
+  float: left;
+  padding: 5px;
 }
 </style>
