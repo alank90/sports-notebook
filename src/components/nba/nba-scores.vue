@@ -1,52 +1,79 @@
 <template>
   <h1>NBA Scoreboard</h1>
+  <h2>For {{ yesterdayLocaleString }}</h2>
+
   <div v-if="!loading" class="container">
-    <h2>For {{ yesterdayLocaleString }}</h2>
-    <table>
-      <template v-for="team in nbaScores.response">
-        <!-- eslint-disable-next-line vue/require-v-for-key  -->
-        <thead v-if="(team.status.short = 'FT' || 'AOT')">
-          <tr>
-            <th scope="row" colspan="2">{{ team.status.short }}</th>
-            <th>Q1</th>
-            <th>Q2</th>
-            <th>Q3</th>
-            <th>Q4</th>
-            <th v-if="team.scores.home.over_time">O/T</th>
-            <th scope="col" colspan="3">Final</th>
-          </tr>
-        </thead>
-        <!-- eslint-disable-next-line vue/require-v-for-key  -->
-        <tbody v-if="(team.status.short = 'FT' || 'AOT')">
-          <tr>
-            <td scope="row" colspan="2">
-              <img :src="team.teams.away.logo" />{{ team.teams.away.name }}
-            </td>
-            <td>{{ team.scores.away.quarter_1 }}</td>
-            <td>{{ team.scores.away.quarter_2 }}</td>
-            <td>{{ team.scores.away.quarter_3 }}</td>
-            <td>{{ team.scores.away.quarter_4 }}</td>
-            <td v-if="team.scores.away.over_time">
-              {{ team.scores.away.over_time }}
-            </td>
-            <td scope="col" colspan="3">{{ team.scores.away.total }}</td>
-          </tr>
-          <tr>
-            <td scope="row" colspan="2">
-              <img :src="team.teams.home.logo" />{{ team.teams.home.name }}
-            </td>
-            <td>{{ team.scores.home.quarter_1 }}</td>
-            <td>{{ team.scores.home.quarter_2 }}</td>
-            <td>{{ team.scores.home.quarter_3 }}</td>
-            <td>{{ team.scores.home.quarter_4 }}</td>
-            <td v-if="team.scores.home.over_time">
-              {{ team.scores.home.over_time }}
-            </td>
-            <td scope="col" colspan="3">{{ team.scores.home.total }}</td>
-          </tr>
-        </tbody>
-      </template>
-    </table>
+    <template v-for="team in nbaScores.response">
+      <!-- eslint-disable-next-line vue/require-v-for-key  -->
+      <table>
+        <template v-if="team.status.short === 'POST'">
+          <!-- eslint-disable-next-line vue/require-v-for-key  -->
+          <thead>
+            <tr>
+              <th scope="row" colspan="2">{{ team.status.long }}</th>
+            </tr>
+          </thead>
+
+          <!-- eslint-disable-next-line vue/require-v-for-key  -->
+          <tbody>
+            <tr>
+              <td scope="row" colspan="2">
+                <img :src="team.teams.away.logo" />{{ team.teams.away.name }}
+              </td>
+            </tr>
+            <tr>
+              <td scope="row" colspan="2">
+                <img :src="team.teams.home.logo" />{{ team.teams.home.name }}
+              </td>
+            </tr>
+          </tbody>
+        </template>
+
+        <template v-else>
+          <!-- eslint-disable-next-line vue/require-v-for-key  -->
+          <thead>
+            <tr>
+              <th scope="row" colspan="2">{{ team.status.short }}</th>
+              <th>Q1</th>
+              <th>Q2</th>
+              <th>Q3</th>
+              <th>Q4</th>
+              <th v-if="team.scores.home.over_time">O/T</th>
+              <th scope="col" colspan="3">Final</th>
+            </tr>
+          </thead>
+          <!-- eslint-disable-next-line vue/require-v-for-key  -->
+          <tbody>
+            <tr>
+              <td scope="row" colspan="2">
+                <img :src="team.teams.away.logo" />{{ team.teams.away.name }}
+              </td>
+              <td>{{ team.scores.away.quarter_1 }}</td>
+              <td>{{ team.scores.away.quarter_2 }}</td>
+              <td>{{ team.scores.away.quarter_3 }}</td>
+              <td>{{ team.scores.away.quarter_4 }}</td>
+              <td v-if="team.scores.away.over_time">
+                {{ team.scores.away.over_time }}
+              </td>
+              <td scope="col" colspan="3">{{ team.scores.away.total }}</td>
+            </tr>
+            <tr>
+              <td scope="row" colspan="2">
+                <img :src="team.teams.home.logo" />{{ team.teams.home.name }}
+              </td>
+              <td>{{ team.scores.home.quarter_1 }}</td>
+              <td>{{ team.scores.home.quarter_2 }}</td>
+              <td>{{ team.scores.home.quarter_3 }}</td>
+              <td>{{ team.scores.home.quarter_4 }}</td>
+              <td v-if="team.scores.home.over_time">
+                {{ team.scores.home.over_time }}
+              </td>
+              <td scope="col" colspan="3">{{ team.scores.home.total }}</td>
+            </tr>
+          </tbody>
+        </template>
+      </table>
+    </template>
   </div>
   <div v-else>
     <p>Loading...</p>
@@ -100,12 +127,19 @@ h2 {
   margin-left: -150px;
 }
 
+.container {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: repeat(20%);
+  gap: 15px 10px;
+  justify-items: start;
+  align-items: start;
+}
+
 table {
   border-collapse: collapse;
   border-spacing: 5px;
   table-layout: auto;
-  max-width: 1000px;
-  margin: 20px auto 75px;
   border: 3px solid #000;
   border-radius: 5px;
 }
@@ -144,7 +178,7 @@ td:first-child {
   padding: 5px;
 }
 
-td:last-child {
+td:last-child:not(:first-child) {
   font-weight: 700;
   font-size: 1.4rem;
 }
