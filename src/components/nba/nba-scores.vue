@@ -3,10 +3,10 @@
   <h2>For {{ yesterdayLocaleString }}</h2>
 
   <div v-if="!loading" class="container">
-    <template v-for="team in nbaScores.response">
+    <template v-for="team in nbaScores.sportsData.response">
       <!-- eslint-disable-next-line vue/require-v-for-key  -->
       <table>
-        <template v-if="team.status.short === 'POST'">
+        <template v-if="team.status.short !== 'FT'">
           <!-- eslint-disable-next-line vue/require-v-for-key  -->
           <thead>
             <tr>
@@ -84,34 +84,19 @@
 <script setup>
 import { ref } from "vue";
 import { todayISOString, yesterdayLocaleString } from "../modules/getDate.js";
-
+import getData from "../modules/getData.js";
 // ======= Variable Declarations ============ //
-const API_KEY = import.meta.env.VITE_API_SPORTS_KEY;
-const HOST_NAME = import.meta.env.VITE_API_HOST;
 let loading = ref(true);
-
-const nbaScores = ref([]);
-
-let myHeaders = new Headers();
-myHeaders.append("x-apisports-key", API_KEY);
-myHeaders.append("x-rapidapi-host", HOST_NAME);
-
-const requestOptions = {
-  method: "GET",
-  headers: myHeaders,
-  redirect: "follow",
-};
+let nbaScores = ref([]);
+const urlNBAScores = `https://v1.basketball.api-sports.io/games/?league=12&season=2022-2023&date=${todayISOString}`;
 
 // Fetch scores
-fetch(
-  `https://v1.basketball.api-sports.io/games/?league=12&season=2022-2023&date=${todayISOString}`,
-  requestOptions
-)
-  .then((res) => res.json())
-  .then((data) => {
-    nbaScores.value = data;
-    loading.value = false;
-  });
+const retrieveScores = async () => {
+  nbaScores.value = await getData(urlNBAScores);
+  console.log("main function", nbaScores.value);
+};
+
+retrieveScores();
 </script>
 
 <style scoped>
@@ -123,17 +108,18 @@ h1 {
 h2 {
   font-size: 1.4rem;
   font-weight: 550;
-  text-align: middle;
   margin-left: -150px;
 }
 
 .container {
   display: grid;
   grid-template-columns: 50% 50%;
-  grid-template-rows: repeat(20%);
-  gap: 15px 10px;
+  grid-template-rows: 10%;
+  gap: 15px 50px;
   justify-items: start;
   align-items: start;
+  width: max(95vw);
+  margin-bottom: 50px;
 }
 
 table {
@@ -142,6 +128,8 @@ table {
   table-layout: auto;
   border: 3px solid #000;
   border-radius: 5px;
+  margin-left: 15px;
+  width: 100%;
 }
 
 thead {
@@ -192,5 +180,24 @@ td > img {
   max-height: 48px;
   float: left;
   padding: 5px;
+}
+
+@media only screen and (max-width: 600px) {
+  .container {
+    grid-template-columns: 100%;
+  }
+
+  h1 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    width: 100vw;
+  }
+
+  h2 {
+    font-size: 0.8rem;
+    font-weight: 550;
+    margin-left: -15px;
+    width: 100vw;
+  }
 }
 </style>

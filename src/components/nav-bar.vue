@@ -120,4 +120,10 @@ a:active {
   text-decoration: none;
   color: #000;
 }
+
+@media only screen and (max-width: 500px) {
+  nav {
+    width: 100vw;
+  }
+}
 </style>
