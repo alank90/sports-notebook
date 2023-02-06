@@ -2,8 +2,11 @@
   <h1>NBA Scoreboard</h1>
   <h2>For {{ yesterdayLocaleString }}</h2>
 
-  <div v-if="!loading" class="container">
-    <template v-for="team in nbaScores.sportsData.response">
+  <div v-if="error">
+    <p>Oops! Error encountered: {{ error.message }}</p>
+  </div>
+  <div v-else-if="data" class="container">
+    <template v-for="team in data.response">
       <!-- eslint-disable-next-line vue/require-v-for-key  -->
       <table>
         <template v-if="team.status.short !== 'FT'">
@@ -82,21 +85,16 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
 import { todayISOString, yesterdayLocaleString } from "../modules/getDate.js";
-import getData from "../modules/getData.js";
+import { useFetch } from "../modules/useFetch.js";
 // ======= Variable Declarations ============ //
-let loading = ref(true);
-let nbaScores = ref([]);
+//let nbaScores = ref([]);
 const urlNBAScores = `https://v1.basketball.api-sports.io/games/?league=12&season=2022-2023&date=${todayISOString}`;
 
 // Fetch scores
-const retrieveScores = async () => {
-  nbaScores.value = await getData(urlNBAScores);
-  console.log("main function", nbaScores.value);
-};
 
-retrieveScores();
+const { data, error } = useFetch(urlNBAScores);
+console.log(data.value);
 </script>
 
 <style scoped>
