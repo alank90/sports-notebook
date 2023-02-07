@@ -1,5 +1,11 @@
 import { ref, isRef, unref, watchEffect } from "vue";
 
+/**
+ * Description - Vue  composable function to fetch data 
+ * @param {string} url 
+ * @returns {object} - Reactive variables 
+ * @importedBy - nba-scores.vue
+ */
 export function useFetch(url) {
   // ======= Variable Declarations ============ //
   const API_KEY = import.meta.env.VITE_API_SPORTS_KEY;
@@ -32,13 +38,12 @@ export function useFetch(url) {
 
       const res = await fetch(urlValue, requestOptions);
       data.value = await res.json();
-      console.log(data.value);
     } catch (e) {
       error.value = e;
     }
   }
 
-  
+  // Will refetch data if input url changes when url is a ref
   if (isRef(url)) {
     // setup reactive re-fetch if input URL is a ref
     watchEffect(doFetch);

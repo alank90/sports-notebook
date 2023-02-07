@@ -88,13 +88,10 @@
 import { todayISOString, yesterdayLocaleString } from "../modules/getDate.js";
 import { useFetch } from "../modules/useFetch.js";
 // ======= Variable Declarations ============ //
-//let nbaScores = ref([]);
 const urlNBAScores = `https://v1.basketball.api-sports.io/games/?league=12&season=2022-2023&date=${todayISOString}`;
 
 // Fetch scores
-
 const { data, error } = useFetch(urlNBAScores);
-console.log(data.value);
 </script>
 
 <style scoped>
