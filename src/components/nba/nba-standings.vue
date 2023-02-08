@@ -1,5 +1,6 @@
 <template>
   <h1>NBA Standings</h1>
+  <toggleButton />
 
   <div v-if="!loading" class="container">
     <table>
@@ -60,12 +61,13 @@
   </div>
   <div v-else>
     <p>Loading...</p>
-  <img src="@/assets/img/loading.gif" alt="Loading Data" />
+    <img src="@/assets/img/loading.gif" alt="Loading Data" />
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from "vue";
+import toggleButton from "../toggle-button.vue";
 
 // ======= Variable Declarations ============ //
 const API_KEY = import.meta.env.VITE_API_SPORTS_KEY;
