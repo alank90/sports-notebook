@@ -1,23 +1,29 @@
 <template>
   <div class="switch-button">
-    <input class="switch-button-checkbox" type="checkbox" />
+    <input class="switch-button-checkbox" type="checkbox" v-model="checked" />
     <label class="switch-button-label" for=""
       ><span class="switch-button-label-span">Divisional</span></label
     >
   </div>
 </template>
 
+<script setup>
+import { ref } from "vue";
+
+const checked = ref(Boolean);
+</script>
+
 <style scoped>
 .switch-button {
-  background: #81A4CDd7;
+  background: #81a4cdd7;
   border-radius: 30px;
   overflow: hidden;
   width: 240px;
-  margin: 0  auto 30px 10vw;
+  margin: 0 auto 30px 10vw;
   text-align: center;
   font-size: 18px;
   letter-spacing: 1px;
-  color: #054A91;
+  color: #054a91;
   padding-right: 120px;
   position: relative;
 }
