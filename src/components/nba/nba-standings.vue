@@ -188,13 +188,13 @@ tbody tr:nth-child(even) {
 }
 
 tbody th {
-  background-color: #36c;
+  background-color: #3E7CB1;
   color: #fff;
   text-align: left;
 }
 
 tbody tr:nth-child(even) th {
-  background-color: #25c;
+  background-color: #81A4CD;
 }
 
 th > img {
