@@ -1,5 +1,5 @@
 <template>
-  <div class="switch-button">
+  <div class="switch-button" @click="$emit('toggleClicked', checked)">
     <input class="switch-button-checkbox" type="checkbox" v-model="checked" />
     <label class="switch-button-label" for=""
       ><span class="switch-button-label-span">Divisional</span></label
@@ -10,7 +10,7 @@
 <script setup>
 import { ref } from "vue";
 
-const checked = ref(Boolean);
+const checked = ref(false);
 </script>
 
 <style scoped>
