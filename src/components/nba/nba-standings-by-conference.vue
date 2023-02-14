@@ -1,30 +1,70 @@
 <template>
   <div class="container">
-    <h1>NBA Standings by Conference Here</h1>
-    <table>
-      <caption>
-        {{
-          nbaTeamStandingsByConference[0].parameters.group
-        }}
-      </caption>
+    <h1>Conference Standings</h1>
 
-      <caption>
-        {{
-          nbaTeamStandingsByConference[1].parameters.group
-        }}
-      </caption>
+    <!-- --------------- Eastern Conference ------------------- -->
+    <table>
+      <template v-for="item in easternConferenceTeams">
+        <!-- eslint-disable-next-line vue/require-v-for-key  -->
+        <thead>
+          <tr>
+            <th scope="col" colspan="2">{{ item.parameters.group }}</th>
+            <th scope="col">W</th>
+            <th scope="col">L</th>
+            <th scope="col">PCT</th>
+          </tr>
+        </thead>
+        <!-- eslint-disable-next-line vue/require-v-for-key  -->
+        <tbody>
+          <tr v-for="team in item.response[0]" :key="team.team.id">
+            <th scope="row" colspan="2">
+              <img :src="team.team.logo" />{{ team.team.name }}
+            </th>
+            <td>{{ team.games.win.total }}</td>
+            <td>{{ team.games.lose.total }}</td>
+            <td>{{ team.games.win.percentage.replace(/^0+/, "") }}</td>
+          </tr>
+        </tbody>
+      </template>
+    </table>
+    <!-- --------------- Western Conference Standings ------------- -->
+    <table>
+      <template v-for="item in westernConferenceTeams">
+        <!-- eslint-disable-next-line vue/require-v-for-key  -->
+        <thead>
+          <tr>
+            <th scope="col" colspan="2">{{ item.parameters.group }}</th>
+            <th scope="col">W</th>
+            <th scope="col">L</th>
+            <th scope="col">PCT</th>
+          </tr>
+        </thead>
+        <!-- eslint-disable-next-line vue/require-v-for-key  -->
+        <tbody>
+          <tr v-for="team in item.response[0]" :key="team.team.id">
+            <th scope="row" colspan="2">
+              <img :src="team.team.logo" />{{ team.team.name }}
+            </th>
+            <td>{{ team.games.win.total }}</td>
+            <td>{{ team.games.lose.total }}</td>
+            <td>{{ team.games.win.percentage.replace(/^0+/, "") }}</td>
+          </tr>
+        </tbody>
+      </template>
     </table>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 
 // ======= Variable Declarations ============ //
 const API_KEY = import.meta.env.VITE_API_SPORTS_KEY;
 const HOST_NAME = import.meta.env.VITE_API_HOST;
 let loading = ref(true);
 let nbaTeamStandingsByConference = ref([]);
+let easternConferenceTeams = ref([]);
+let westernConferenceTeams = ref([]);
 const nbaConferences = ref(["Eastern Conference", "Western Conference"]);
 
 let myHeaders = new Headers();
@@ -56,6 +96,19 @@ Promise.all(urls)
     loading.value = false;
   })
   .catch((error) => console.log("Error fetching data ==>", error));
+
+// ======== Computed Values ======================= //
+easternConferenceTeams = computed(() => {
+  return nbaTeamStandingsByConference.value.filter((team) => {
+    return nbaConferences.value[0].includes(team.parameters.group);
+  });
+});
+
+westernConferenceTeams = computed(() => {
+  return nbaTeamStandingsByConference.value.filter((team) => {
+    return nbaConferences.value[1].includes(team.parameters.group);
+  });
+});
 </script>
 
 <style scoped>
@@ -80,13 +133,8 @@ table {
   vertical-align: middle;
 }
 
-caption {
-  font-weight: 550;
-  font-size: 1.3rem;
-  text-align: left;
-  color: #333;
-  margin: 15px 0;
-  text-decoration: underline;
+table:last-child {
+  margin-top: 30px;
 }
 
 thead {
@@ -108,6 +156,12 @@ thead th {
   width: 25;
 }
 
+tbody th {
+  background-color: #3e7cb1;
+  color: #fff;
+  text-align: left;
+}
+
 tbody tr:nth-child(odd) {
   background-color: #fff;
 }
@@ -116,14 +170,13 @@ tbody tr:nth-child(even) {
   background-color: #eee;
 }
 
-tbody th {
-  background-color: #3e7cb1;
-  color: #fff;
-  text-align: left;
-}
-
 tbody tr:nth-child(even) th {
   background-color: #81a4cd;
+}
+
+tbody tr:nth-child(6),
+tbody tr:nth-child(10) {
+  border-bottom: 10px solid #05509d;
 }
 
 th > img {
