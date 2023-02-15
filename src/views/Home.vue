@@ -17,14 +17,13 @@
   flex-wrap: nowrap;
   justify-content: center;
   padding: 20px 50px;
-  max-height: 60vh;
-
+  max-width: 1200px;
+  height: auto;
+  margin: 0 auto;
 }
 
 img {
   width: 100%;
   overflow: hidden;
 }
-
-
 </style>

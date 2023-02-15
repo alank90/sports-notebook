@@ -3,69 +3,66 @@
     <h1>Conference Standings</h1>
 
     <!-- --------------- Eastern Conference ------------------- -->
-    <table>
-      <template v-for="item in easternConferenceTeams">
-        <!-- eslint-disable-next-line vue/require-v-for-key  -->
-        <thead>
-          <tr>
-            <th scope="col" colspan="2">{{ item.parameters.group }}</th>
-            <th scope="col">W</th>
-            <th scope="col">L</th>
-            <th scope="col">PCT</th>
-          </tr>
-        </thead>
-        <!-- eslint-disable-next-line vue/require-v-for-key  -->
-        <tbody>
-          <tr v-for="team in item.response[0]" :key="team.team.id">
-            <th scope="row" colspan="2">
-              <img :src="team.team.logo" />{{ team.team.name }}
-            </th>
-            <td>{{ team.games.win.total }}</td>
-            <td>{{ team.games.lose.total }}</td>
-            <td>{{ team.games.win.percentage.replace(/^0+/, "") }}</td>
-          </tr>
-        </tbody>
-      </template>
+    <table v-if="easternConferenceItems[0]">
+      <thead>
+        <tr>
+          <th scope="col" colspan="2">
+            {{ easternConferenceItems[0].group.name }}
+          </th>
+          <th scope="col">W</th>
+          <th scope="col">L</th>
+          <th scope="col">PCT</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="item in easternConferenceItems" :key="item.team.id">
+          <th scope="row" colspan="2">
+            <img :src="item.team.logo" />{{ item.team.name }}
+          </th>
+          <td>{{ item.games.win.total }}</td>
+          <td>{{ item.games.lose.total }}</td>
+          <td>{{ item.games.win.percentage.replace(/^0+/, "") }}</td>
+        </tr>
+      </tbody>
     </table>
     <!-- --------------- Western Conference Standings ------------- -->
-    <table>
-      <template v-for="item in westernConferenceTeams">
-        <!-- eslint-disable-next-line vue/require-v-for-key  -->
-        <thead>
-          <tr>
-            <th scope="col" colspan="2">{{ item.parameters.group }}</th>
-            <th scope="col">W</th>
-            <th scope="col">L</th>
-            <th scope="col">PCT</th>
-          </tr>
-        </thead>
-        <!-- eslint-disable-next-line vue/require-v-for-key  -->
-        <tbody>
-          <tr v-for="team in item.response[0]" :key="team.team.id">
-            <th scope="row" colspan="2">
-              <img :src="team.team.logo" />{{ team.team.name }}
-            </th>
-            <td>{{ team.games.win.total }}</td>
-            <td>{{ team.games.lose.total }}</td>
-            <td>{{ team.games.win.percentage.replace(/^0+/, "") }}</td>
-          </tr>
-        </tbody>
-      </template>
+    <table v-if="westernConferenceItems[0]">
+      <thead>
+        <tr>
+          <th scope="col" colspan="2">
+            {{ westernConferenceItems[0].group.name }}
+          </th>
+          <th scope="col">W</th>
+          <th scope="col">L</th>
+          <th scope="col">PCT</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr v-for="item in westernConferenceItems" :key="item.team.id">
+          <th scope="row" colspan="2">
+            <img :src="item.team.logo" />{{ item.team.name }}
+          </th>
+          <td>{{ item.games.win.total }}</td>
+          <td>{{ item.games.lose.total }}</td>
+          <td>{{ item.games.win.percentage.replace(/^0+/, "") }}</td>
+        </tr>
+      </tbody>
     </table>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref } from "vue";
 
 // ======= Variable Declarations ============ //
 const API_KEY = import.meta.env.VITE_API_SPORTS_KEY;
 const HOST_NAME = import.meta.env.VITE_API_HOST;
 let loading = ref(true);
-let nbaTeamStandingsByConference = ref([]);
-let easternConferenceTeams = ref([]);
-let westernConferenceTeams = ref([]);
-const nbaConferences = ref(["Eastern Conference", "Western Conference"]);
+let nbaItemStandingsByConference = [];
+let easternConferenceItems = ref([]);
+let westernConferenceItems = ref([]);
+const nbaConferences = ["Eastern Conference", "Western Conference"];
 
 let myHeaders = new Headers();
 myHeaders.append("x-apisports-key", API_KEY);
@@ -80,35 +77,24 @@ const requestOptions = {
 let urls = [];
 
 // Populate the urls array with url's of each conference for API fetch's
-for (let i = 0; i < nbaConferences.value.length; i++) {
+for (let i = 0; i < nbaConferences.length; i++) {
   urls.push(
     fetch(
-      `https://v1.basketball.api-sports.io/standings/?league=12&group=${nbaConferences.value[i]}&season=2022-2023`,
+      `https://v1.basketball.api-sports.io/standings/?league=12&group=${nbaConferences[i]}&season=2022-2023`,
       requestOptions
     ).then((res) => res.json())
   );
 }
 
-// ======= fetch the NBA team standings ============ //
+// ======= fetch the NBA item standings ============ //
 Promise.all(urls)
   .then((data) => {
-    nbaTeamStandingsByConference.value = data;
+    nbaItemStandingsByConference = data;
+    easternConferenceItems.value = nbaItemStandingsByConference[0].response[0];
+    westernConferenceItems.value = nbaItemStandingsByConference[1].response[0];
     loading.value = false;
   })
   .catch((error) => console.log("Error fetching data ==>", error));
-
-// ======== Computed Values ======================= //
-easternConferenceTeams = computed(() => {
-  return nbaTeamStandingsByConference.value.filter((team) => {
-    return nbaConferences.value[0].includes(team.parameters.group);
-  });
-});
-
-westernConferenceTeams = computed(() => {
-  return nbaTeamStandingsByConference.value.filter((team) => {
-    return nbaConferences.value[1].includes(team.parameters.group);
-  });
-});
 </script>
 
 <style scoped>
@@ -176,7 +162,7 @@ tbody tr:nth-child(even) th {
 
 tbody tr:nth-child(6),
 tbody tr:nth-child(10) {
-  border-bottom: 10px solid #05509d;
+  border-bottom: 10px solid #0880f9;
 }
 
 th > img {
