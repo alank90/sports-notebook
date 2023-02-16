@@ -23,7 +23,7 @@
           <td>{{ item.games.win.total }}</td>
           <td>{{ item.games.lose.total }}</td>
           <td>{{ item.games.win.percentage.replace(/^0+/, "") }}</td>
-          <td>{{ gamesBackEasterConference[index] }}</td>
+          <td>{{ gamesBackEasternConference[index] }}</td>
         </tr>
       </tbody>
     </table>
@@ -37,17 +37,19 @@
           <th scope="col">W</th>
           <th scope="col">L</th>
           <th scope="col">PCT</th>
+          <th>GB</th>
         </tr>
       </thead>
 
       <tbody>
-        <tr v-for="item in westernConferenceItems" :key="item.team.id">
+        <tr v-for="(item, index) in westernConferenceItems" :key="item.team.id">
           <th scope="row" colspan="2">
             <img :src="item.team.logo" />{{ item.team.name }}
           </th>
           <td>{{ item.games.win.total }}</td>
           <td>{{ item.games.lose.total }}</td>
           <td>{{ item.games.win.percentage.replace(/^0+/, "") }}</td>
+          <td>{{ gamesBackWesternConference[index] }}</td>
         </tr>
       </tbody>
     </table>
@@ -64,7 +66,9 @@ let loading = ref(true);
 let nbaItemStandingsByConference = [];
 let easternConferenceItems = ref([]);
 let westernConferenceItems = ref([]);
-let gamesBackEasterConference = ref([]);
+let gamesBackEasternConference = ref([]);
+let gamesBackWesternConference = ref([]);
+
 const nbaConferences = ["Eastern Conference", "Western Conference"];
 
 let myHeaders = new Headers();
@@ -89,7 +93,7 @@ for (let i = 0; i < nbaConferences.length; i++) {
   );
 }
 
-// Function to create an array of values for games back of 1st place
+// ==== Function to create an array of values for games back of 1st place ===================== //
 const calculateGamesBack = function (conferenceArray) {
   const firstPlaceTeam = {
     wins: conferenceArray[0].games.win.total,
@@ -111,6 +115,7 @@ const calculateGamesBack = function (conferenceArray) {
 
   return gamesBackValuesArray;
 };
+// ============== End function calculateGamesBack() =============================== //
 
 // ======= fetch the NBA item standings ============ //
 Promise.all(urls)
@@ -120,8 +125,12 @@ Promise.all(urls)
     westernConferenceItems.value = nbaItemStandingsByConference[1].response[0];
     loading.value = false;
 
-    gamesBackEasterConference.value = calculateGamesBack(
+    gamesBackEasternConference.value = calculateGamesBack(
       easternConferenceItems.value
+    );
+
+    gamesBackWesternConference.value = calculateGamesBack(
+      westernConferenceItems.value
     );
   })
   .catch((error) => console.log("Error fetching data ==>", error));
