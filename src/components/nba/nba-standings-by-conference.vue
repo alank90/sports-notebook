@@ -12,16 +12,18 @@
           <th scope="col">W</th>
           <th scope="col">L</th>
           <th scope="col">PCT</th>
+          <th>GB</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in easternConferenceItems" :key="item.team.id">
+        <tr v-for="(item, index) in easternConferenceItems" :key="item.team.id">
           <th scope="row" colspan="2">
             <img :src="item.team.logo" />{{ item.team.name }}
           </th>
           <td>{{ item.games.win.total }}</td>
           <td>{{ item.games.lose.total }}</td>
           <td>{{ item.games.win.percentage.replace(/^0+/, "") }}</td>
+          <td>{{ gamesBackEasterConference[index] }}</td>
         </tr>
       </tbody>
     </table>
@@ -62,6 +64,7 @@ let loading = ref(true);
 let nbaItemStandingsByConference = [];
 let easternConferenceItems = ref([]);
 let westernConferenceItems = ref([]);
+let gamesBackEasterConference = ref([]);
 const nbaConferences = ["Eastern Conference", "Western Conference"];
 
 let myHeaders = new Headers();
@@ -86,6 +89,29 @@ for (let i = 0; i < nbaConferences.length; i++) {
   );
 }
 
+// Function to create an array of values for games back of 1st place
+const calculateGamesBack = function (conferenceArray) {
+  const firstPlaceTeam = {
+    wins: conferenceArray[0].games.win.total,
+    losses: conferenceArray[0].games.lose.total,
+  };
+
+  const gamesBackValuesArray = conferenceArray.map((team) => {
+    if (team.position === 1) {
+      return "--";
+    } else {
+      return (
+        (firstPlaceTeam.wins -
+          firstPlaceTeam.losses -
+          (team.games.win.total - team.games.lose.total)) /
+        2
+      );
+    }
+  });
+
+  return gamesBackValuesArray;
+};
+
 // ======= fetch the NBA item standings ============ //
 Promise.all(urls)
   .then((data) => {
@@ -93,6 +119,10 @@ Promise.all(urls)
     easternConferenceItems.value = nbaItemStandingsByConference[0].response[0];
     westernConferenceItems.value = nbaItemStandingsByConference[1].response[0];
     loading.value = false;
+
+    gamesBackEasterConference.value = calculateGamesBack(
+      easternConferenceItems.value
+    );
   })
   .catch((error) => console.log("Error fetching data ==>", error));
 </script>
