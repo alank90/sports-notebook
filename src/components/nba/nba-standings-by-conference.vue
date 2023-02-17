@@ -16,14 +16,14 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in easternConferenceItems" :key="item.team.id">
+        <tr v-for="item in easternConferenceItems" :key="item.team.id">
           <th scope="row" colspan="2">
             <img :src="item.team.logo" />{{ item.team.name }}
           </th>
           <td>{{ item.games.win.total }}</td>
           <td>{{ item.games.lose.total }}</td>
           <td>{{ item.games.win.percentage.replace(/^0+/, "") }}</td>
-          <td>{{ gamesBackEasternConference[index] }}</td>
+          <td>{{ item.gmsBk }}</td>
         </tr>
       </tbody>
     </table>
@@ -42,14 +42,14 @@
       </thead>
 
       <tbody>
-        <tr v-for="(item, index) in westernConferenceItems" :key="item.team.id">
+        <tr v-for="item in westernConferenceItems" :key="item.team.id">
           <th scope="row" colspan="2">
             <img :src="item.team.logo" />{{ item.team.name }}
           </th>
           <td>{{ item.games.win.total }}</td>
           <td>{{ item.games.lose.total }}</td>
           <td>{{ item.games.win.percentage.replace(/^0+/, "") }}</td>
-          <td>{{ gamesBackWesternConference[index] }}</td>
+          <td>{{ item.gmsBk }}</td>
         </tr>
       </tbody>
     </table>
@@ -66,8 +66,6 @@ let loading = ref(true);
 let nbaItemStandingsByConference = [];
 let easternConferenceItems = ref([]);
 let westernConferenceItems = ref([]);
-let gamesBackEasternConference = ref([]);
-let gamesBackWesternConference = ref([]);
 
 const nbaConferences = ["Eastern Conference", "Western Conference"];
 
@@ -93,28 +91,37 @@ for (let i = 0; i < nbaConferences.length; i++) {
   );
 }
 
-// ==== Function to create an array of values for games back of 1st place ===================== //
+/**
+ * Function calculates the number of games back for eack team and then creates a
+ * property on the __ConferenceItems array object item to store it. Yes this mutates
+ * an object out of scope which is not good!! But I thought it was an elegant solution to problem
+ * and worth the tradeoff.
+ * @param {array} conferenceArray - Copy of the __ConferenceItems object array
+ */
 const calculateGamesBack = function (conferenceArray) {
+  let gamesBack = Number;
+
   const firstPlaceTeam = {
     wins: conferenceArray[0].games.win.total,
     losses: conferenceArray[0].games.lose.total,
   };
 
-  const gamesBackValuesArray = conferenceArray.map((team) => {
+  conferenceArray.forEach((team, index) => {
     if (team.position === 1) {
-      return "--";
+      team.gmsBk = "--";
     } else {
-      return (
+      gamesBack =
         (firstPlaceTeam.wins -
           firstPlaceTeam.losses -
           (team.games.win.total - team.games.lose.total)) /
-        2
-      );
+        2;
+
+      // Add games back number to the __ConferenceItems object w/spread syntax
+      conferenceArray[index] = { ...team, gmsBk: gamesBack };
     }
   });
-
-  return gamesBackValuesArray;
 };
+
 // ============== End function calculateGamesBack() =============================== //
 
 // ======= fetch the NBA item standings ============ //
@@ -125,13 +132,9 @@ Promise.all(urls)
     westernConferenceItems.value = nbaItemStandingsByConference[1].response[0];
     loading.value = false;
 
-    gamesBackEasternConference.value = calculateGamesBack(
-      easternConferenceItems.value
-    );
-
-    gamesBackWesternConference.value = calculateGamesBack(
-      westernConferenceItems.value
-    );
+    // Generate the .gmsBk property for use in the template
+    calculateGamesBack(easternConferenceItems.value);
+    calculateGamesBack(westernConferenceItems.value);
   })
   .catch((error) => console.log("Error fetching data ==>", error));
 </script>
