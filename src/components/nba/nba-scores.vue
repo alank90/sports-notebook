@@ -9,7 +9,9 @@
     <template v-for="team in data.response">
       <!-- eslint-disable-next-line vue/require-v-for-key  -->
       <table>
-        <template v-if="team.status.short !== 'FT'">
+        <template
+          v-if="team.status.short !== 'FT' && team.status.short !== 'AOT'"
+        >
           <!-- eslint-disable-next-line vue/require-v-for-key  -->
           <thead>
             <tr>
@@ -58,7 +60,15 @@
               <td v-if="team.scores.away.over_time">
                 {{ team.scores.away.over_time }}
               </td>
-              <td scope="col" colspan="3">{{ team.scores.away.total }}</td>
+              <td
+                :class="{
+                  winner: team.scores.away.total > team.scores.home.total,
+                }"
+                scope="col"
+                colspan="3"
+              >
+                {{ team.scores.away.total }}
+              </td>
             </tr>
             <tr>
               <td scope="row" colspan="2">
@@ -71,7 +81,15 @@
               <td v-if="team.scores.home.over_time">
                 {{ team.scores.home.over_time }}
               </td>
-              <td scope="col" colspan="3">{{ team.scores.home.total }}</td>
+              <td
+                :class="{
+                  winner: team.scores.home.total > team.scores.away.total,
+                }"
+                scope="col"
+                colspan="3"
+              >
+                {{ team.scores.home.total }}
+              </td>
             </tr>
           </tbody>
         </template>
@@ -175,6 +193,10 @@ td > img {
   max-height: 48px;
   float: left;
   padding: 5px;
+}
+
+.winner {
+  color: #a19923;
 }
 
 @media only screen and (max-width: 600px) {
