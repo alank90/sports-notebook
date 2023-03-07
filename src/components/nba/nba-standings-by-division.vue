@@ -64,6 +64,7 @@
 
 <script setup>
 import { ref, computed } from "vue";
+import { useFetches } from "../modules/useFetches.js";
 
 // ======= Variable Declarations ============ //
 const API_KEY = import.meta.env.VITE_API_SPORTS_KEY;
@@ -75,7 +76,7 @@ const nbaDivisions = ref([
   ["Northwest", "Pacific", "Southwest"],
 ]);
 
-const nbaTeamStandingsByDivision = ref([]);
+//let nbaTeamStandingsByDivision = ref([]);
 let easternConferenceTeams = ref([]);
 let westernConferenceTeams = ref([]);
 
@@ -102,24 +103,27 @@ for (let i = 0; i < nbaDivisions.value.length; i++) {
     );
   }
 }
+const { teamStandings, loadingState, error } = await useFetches(urls);
+
+console.log(teamStandings);
 
 // ======= fetch the NBA team standings ============ //
-Promise.all(urls)
+/* Promise.all(urls)
   .then((data) => {
     nbaTeamStandingsByDivision.value = data;
     loading.value = false;
   })
   .catch((error) => console.log("Error fetching data ==>", error));
-
+ */
 // ======== Computed Values ======================= //
 easternConferenceTeams = computed(() => {
-  return nbaTeamStandingsByDivision.value.filter((team) => {
+  return teamStandings.value.filter((team) => {
     return nbaDivisions.value[0].includes(team.parameters.group);
   });
 });
 
 westernConferenceTeams = computed(() => {
-  return nbaTeamStandingsByDivision.value.filter((team) => {
+  return teamStandings.value.filter((team) => {
     return nbaDivisions.value[1].includes(team.parameters.group);
   });
 });
