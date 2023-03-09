@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!loading" class="container">
+  <div v-if="!loadingState && teamStandings" class="container">
     <table>
       <caption>
         Eastern Conference
@@ -69,7 +69,6 @@ import { useFetches } from "../modules/useFetches.js";
 // ======= Variable Declarations ============ //
 const API_KEY = import.meta.env.VITE_API_SPORTS_KEY;
 const HOST_NAME = import.meta.env.VITE_API_HOST;
-let loading = ref(true);
 
 const nbaDivisions = ref([
   ["Atlantic", "Southeast", "Central"],
@@ -103,7 +102,7 @@ for (let i = 0; i < nbaDivisions.value.length; i++) {
     );
   }
 }
-const { teamStandings, loadingState, error } = await useFetches(urls);
+let { teamStandings, loadingState, error } = useFetches(urls);
 
 console.log(teamStandings);
 

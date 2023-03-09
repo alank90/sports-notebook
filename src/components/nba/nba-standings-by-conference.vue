@@ -1,13 +1,13 @@
 <template>
-  <div class="container">
+  <div v-if="!loadingState && teamStandings" class="container">
     <h1>Conference Standings</h1>
 
     <!-- --------------- Eastern Conference ------------------- -->
-    <table v-if="easternConferenceItems[0]">
+    <table v-if="teamStandings[0]">
       <thead>
         <tr>
           <th scope="col" colspan="2">
-            {{ easternConferenceItems[0].group.name }}
+            {{ teamStandings[0].response[0][0].group.name }}
           </th>
           <th scope="col">W</th>
           <th scope="col">L</th>
@@ -16,7 +16,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in easternConferenceItems" :key="item.team.id">
+        <tr v-for="item in teamStandings[0].response[0]" :key="item.team.id">
           <th scope="row" colspan="2">
             <img :src="item.team.logo" />{{ item.team.name }}
           </th>
@@ -28,11 +28,11 @@
       </tbody>
     </table>
     <!-- --------------- Western Conference Standings ------------- -->
-    <table v-if="westernConferenceItems[0]">
+    <table v-if="teamStandings[1]">
       <thead>
         <tr>
           <th scope="col" colspan="2">
-            {{ westernConferenceItems[0].group.name }}
+            {{ teamStandings[1].response[0][0].group.name }}
           </th>
           <th scope="col">W</th>
           <th scope="col">L</th>
@@ -42,7 +42,7 @@
       </thead>
 
       <tbody>
-        <tr v-for="item in westernConferenceItems" :key="item.team.id">
+        <tr v-for="item in teamStandings[1].response[0]" :key="item.team.id">
           <th scope="row" colspan="2">
             <img :src="item.team.logo" />{{ item.team.name }}
           </th>
@@ -54,16 +54,21 @@
       </tbody>
     </table>
   </div>
+  <div v-else>
+    <p>Loading...</p>
+    <img src="@/assets/img/loading.gif" alt="Loading Data" />
+  </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
+import { useFetches } from "../modules/useFetches.js";
 
 // ======= Variable Declarations ============ //
 const API_KEY = import.meta.env.VITE_API_SPORTS_KEY;
 const HOST_NAME = import.meta.env.VITE_API_HOST;
-let loading = ref(true);
-let nbaItemStandingsByConference = [];
+
+let nbaItemStandingsByConference = ref([]);
 let easternConferenceItems = ref([]);
 let westernConferenceItems = ref([]);
 
@@ -81,18 +86,10 @@ const requestOptions = {
 
 let urls = [];
 
-// Populate the urls array with url's of each conference for API fetch's
-for (let i = 0; i < nbaConferences.length; i++) {
-  urls.push(
-    fetch(
-      `https://v1.basketball.api-sports.io/standings/?league=12&group=${nbaConferences[i]}&season=2022-2023`,
-      requestOptions
-    ).then((res) => res.json())
-  );
-}
+// ------------------------------ Functions ------------------------------------------------------ //
 
 /**
- * Function calculates the number of games back for eack team and then creates a
+ * Function calculates the number of games back for each team and then creates a
  * property on the __ConferenceItems array object item to store it. Yes this mutates
  * an object out of scope which is not good!! But I thought it was an elegant solution to problem
  * and worth the tradeoff.
@@ -124,8 +121,27 @@ const calculateGamesBack = function (conferenceArray) {
 
 // ============== End function calculateGamesBack() =============================== //
 
+// ------------------------ End of Function Declarations ----------------------------------------- //
+
+// Populate the urls array with url's of each conference for API fetch's
+for (let i = 0; i < nbaConferences.length; i++) {
+  urls.push(
+    fetch(
+      `https://v1.basketball.api-sports.io/standings/?league=12&group=${nbaConferences[i]}&season=2022-2023`,
+      requestOptions
+    ).then((res) => res.json())
+  );
+}
+
 // ======= fetch the NBA item standings ============ //
-Promise.all(urls)
+let { teamStandings, loadingState, error } = useFetches(urls);
+nbaItemStandingsByConference.value = teamStandings.value;
+
+// Generate the .gmsBk property for use in the template
+/* calculateGamesBack(easternConferenceItems.value);
+calculateGamesBack(westernConferenceItems.value); */
+
+/* Promise.all(urls)
   .then((data) => {
     nbaItemStandingsByConference = data;
     easternConferenceItems.value = nbaItemStandingsByConference[0].response[0];
@@ -136,7 +152,7 @@ Promise.all(urls)
     calculateGamesBack(easternConferenceItems.value);
     calculateGamesBack(westernConferenceItems.value);
   })
-  .catch((error) => console.log("Error fetching data ==>", error));
+  .catch((error) => console.log("Error fetching data ==>", error)); */
 </script>
 
 <style scoped>
