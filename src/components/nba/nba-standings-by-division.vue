@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!loadingState && teamStandings" class="container">
+  <div v-if="!loadingState && teamStandingsByDivision" class="container">
     <table>
       <caption>
         Eastern Conference
@@ -75,7 +75,6 @@ const nbaDivisions = ref([
   ["Northwest", "Pacific", "Southwest"],
 ]);
 
-//let nbaTeamStandingsByDivision = ref([]);
 let easternConferenceTeams = ref([]);
 let westernConferenceTeams = ref([]);
 
@@ -102,17 +101,21 @@ for (let i = 0; i < nbaDivisions.value.length; i++) {
     );
   }
 }
-let { teamStandings, loadingState, error } = useFetches(urls);
+let {
+  teamStandings: teamStandingsByDivision,
+  loadingState,
+  error,
+} = useFetches(urls);
 if (error.value) console.log("Error returned from doFetch() =>", error);
 // ======== Computed Values ======================= //
 easternConferenceTeams = computed(() => {
-  return teamStandings.value.filter((team) => {
+  return teamStandingsByDivision.value.filter((team) => {
     return nbaDivisions.value[0].includes(team.parameters.group);
   });
 });
 
 westernConferenceTeams = computed(() => {
-  return teamStandings.value.filter((team) => {
+  return teamStandingsByDivision.value.filter((team) => {
     return nbaDivisions.value[1].includes(team.parameters.group);
   });
 });

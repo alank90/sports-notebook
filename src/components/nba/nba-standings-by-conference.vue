@@ -1,13 +1,13 @@
 <template>
-  <div v-if="!loadingState && teamStandings" class="container">
+  <div v-if="!loadingState && teamStandingsByConference" class="container">
     <h1>Conference Standings</h1>
 
     <!-- --------------- Eastern Conference ------------------- -->
-    <table v-if="teamStandings[0]">
+    <table v-if="teamStandingsByConference[0]">
       <thead>
         <tr>
           <th scope="col" colspan="2">
-            {{ teamStandings[0].response[0][0].group.name }}
+            {{ teamStandingsByConference[0].response[0][0].group.name }}
           </th>
           <th scope="col">W</th>
           <th scope="col">L</th>
@@ -16,7 +16,10 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in teamStandings[0].response[0]" :key="item.team.id">
+        <tr
+          v-for="item in teamStandingsByConference[0].response[0]"
+          :key="item.team.id"
+        >
           <th scope="row" colspan="2">
             <img :src="item.team.logo" />{{ item.team.name }}
           </th>
@@ -28,11 +31,11 @@
       </tbody>
     </table>
     <!-- --------------- Western Conference Standings ------------- -->
-    <table v-if="teamStandings[1]">
+    <table v-if="teamStandingsByConference[1]">
       <thead>
         <tr>
           <th scope="col" colspan="2">
-            {{ teamStandings[1].response[0][0].group.name }}
+            {{ teamStandingsByConference[1].response[0][0].group.name }}
           </th>
           <th scope="col">W</th>
           <th scope="col">L</th>
@@ -42,7 +45,10 @@
       </thead>
 
       <tbody>
-        <tr v-for="item in teamStandings[1].response[0]" :key="item.team.id">
+        <tr
+          v-for="item in teamStandingsByConference[1].response[0]"
+          :key="item.team.id"
+        >
           <th scope="row" colspan="2">
             <img :src="item.team.logo" />{{ item.team.name }}
           </th>
@@ -130,14 +136,18 @@ for (let i = 0; i < nbaConferences.length; i++) {
 }
 
 // ======= fetch the NBA item standings ============ //
-let { teamStandings, loadingState, error } = useFetches(urls);
+let {
+  teamStandings: teamStandingsByConference,
+  loadingState,
+  error,
+} = useFetches(urls);
 
 if (error.value) console.log("Error returned from doFetches() =>", error);
 
 // Watch for change in teamStandings value once fetch completes. This
 // will trigger watch function and call calculateGamesBack array for
 // Eastern & Western conferences.
-watch(teamStandings, (newValue) => {
+watch(teamStandingsByConference, (newValue) => {
   if (newValue.length > 0) {
     calculateGamesBack(newValue[0].response[0]);
     calculateGamesBack(newValue[1].response[0]);
