@@ -103,17 +103,7 @@ for (let i = 0; i < nbaDivisions.value.length; i++) {
   }
 }
 let { teamStandings, loadingState, error } = useFetches(urls);
-
-console.log(teamStandings);
-
-// ======= fetch the NBA team standings ============ //
-/* Promise.all(urls)
-  .then((data) => {
-    nbaTeamStandingsByDivision.value = data;
-    loading.value = false;
-  })
-  .catch((error) => console.log("Error fetching data ==>", error));
- */
+if (error.value) console.log("Error returned from doFetch() =>", error);
 // ======== Computed Values ======================= //
 easternConferenceTeams = computed(() => {
   return teamStandings.value.filter((team) => {

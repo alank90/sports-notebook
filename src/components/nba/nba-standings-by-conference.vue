@@ -61,16 +61,12 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { watch } from "vue";
 import { useFetches } from "../modules/useFetches.js";
 
 // ======= Variable Declarations ============ //
 const API_KEY = import.meta.env.VITE_API_SPORTS_KEY;
 const HOST_NAME = import.meta.env.VITE_API_HOST;
-
-let nbaItemStandingsByConference = ref([]);
-let easternConferenceItems = ref([]);
-let westernConferenceItems = ref([]);
 
 const nbaConferences = ["Eastern Conference", "Western Conference"];
 
@@ -90,10 +86,10 @@ let urls = [];
 
 /**
  * Function calculates the number of games back for each team and then creates a
- * property on the __ConferenceItems array object item to store it. Yes this mutates
+ * property on the __teamStandings array object item to store it. Yes this mutates
  * an object out of scope which is not good!! But I thought it was an elegant solution to problem
  * and worth the tradeoff.
- * @param {array} conferenceArray - Copy of the __ConferenceItems object array
+ * @param {array} conferenceArray - Copy of the __teamStandings object array
  */
 const calculateGamesBack = function (conferenceArray) {
   let gamesBack = Number;
@@ -113,7 +109,7 @@ const calculateGamesBack = function (conferenceArray) {
           (team.games.win.total - team.games.lose.total)) /
         2;
 
-      // Add games back number to the __ConferenceItems object w/spread syntax
+      // Add games back number to the __teamStandings object w/spread syntax
       conferenceArray[index] = { ...team, gmsBk: gamesBack };
     }
   });
@@ -135,24 +131,18 @@ for (let i = 0; i < nbaConferences.length; i++) {
 
 // ======= fetch the NBA item standings ============ //
 let { teamStandings, loadingState, error } = useFetches(urls);
-nbaItemStandingsByConference.value = teamStandings.value;
 
-// Generate the .gmsBk property for use in the template
-/* calculateGamesBack(easternConferenceItems.value);
-calculateGamesBack(westernConferenceItems.value); */
+if (error.value) console.log("Error returned from doFetches() =>", error);
 
-/* Promise.all(urls)
-  .then((data) => {
-    nbaItemStandingsByConference = data;
-    easternConferenceItems.value = nbaItemStandingsByConference[0].response[0];
-    westernConferenceItems.value = nbaItemStandingsByConference[1].response[0];
-    loading.value = false;
-
-    // Generate the .gmsBk property for use in the template
-    calculateGamesBack(easternConferenceItems.value);
-    calculateGamesBack(westernConferenceItems.value);
-  })
-  .catch((error) => console.log("Error fetching data ==>", error)); */
+// Watch for change in teamStandings value once fetch completes. This
+// will trigger watch function and call calculateGamesBack array for
+// Eastern & Western conferences.
+watch(teamStandings, (newValue) => {
+  if (newValue.length > 0) {
+    calculateGamesBack(newValue[0].response[0]);
+    calculateGamesBack(newValue[1].response[0]);
+  }
+});
 </script>
 
 <style scoped>

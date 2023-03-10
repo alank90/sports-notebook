@@ -1,8 +1,9 @@
-import { ref, isRef, unref, watchEffect } from "vue";
+import { ref } from "vue";
 
 /**
- * Description - Vue  composable function to fetch data
- * @param {string} url
+ * @Description - Vue composable function to do multiple fetches asynchrounosly
+ * w/Promise.all
+ * @param {array} urls
  * @returns {object} - Reactive variables
  * @importedBy - nba-scores.vue
  */
@@ -17,10 +18,6 @@ export function useFetches(urls) {
     teamStandings.value = null;
     error.value = null;
 
-    // resolve the url value synchrously so it's tracked as a
-    // dependency by watchEffect()
-    //const urlValues = unref(urls);
-
     try {
       // ======= fetch the NBA team standings ============ //
       Promise.all(urls).then((data) => {
@@ -28,22 +25,12 @@ export function useFetches(urls) {
       });
     } catch (e) {
       error.value = e;
-      return { error };
     }
 
     loadingState.value = false;
   };
 
   doFetches();
-
-  // Will refetch data if input url changes when url is a ref
-  /* if (isRef(urls)) {
-    // setup reactive re-fetch if input URL is a ref
-    watchEffect(doFetches);
-  } else {
-    // otherwise, just fetch once
-    doFetches();
-  } */
 
   return { teamStandings, loadingState, error };
 }
