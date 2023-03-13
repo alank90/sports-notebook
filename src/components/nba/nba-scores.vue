@@ -5,8 +5,8 @@
   <div v-if="error">
     <p>Oops! Error encountered: {{ error.message }}</p>
   </div>
-  <div v-else-if="data" class="container">
-    <template v-for="team in data.response">
+  <div v-else-if="gameScores" class="container">
+    <template v-for="team in gameScores.response">
       <!-- eslint-disable-next-line vue/require-v-for-key  -->
       <table>
         <template
@@ -103,13 +103,17 @@
 </template>
 
 <script setup>
-import { todayISOString, yesterdayLocaleString } from "../modules/getDate.js";
+import {
+  yesterdayISOString,
+  yesterdayLocaleString,
+} from "../modules/getDate.js";
 import { useFetch } from "../modules/useFetch.js";
+
 // ======= Variable Declarations ============ //
-const urlNBAScores = `https://v1.basketball.api-sports.io/games/?league=12&season=2022-2023&date=${todayISOString}`;
+const urlNBAScores = `https://v1.basketball.api-sports.io/games/?league=12&season=2022-2023&date=${yesterdayISOString}&timezone=America/New_York`;
 
 // Fetch scores
-const { data, error } = useFetch(urlNBAScores);
+const { data: gameScores, error } = useFetch(urlNBAScores);
 </script>
 
 <style scoped>

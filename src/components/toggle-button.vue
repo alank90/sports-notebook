@@ -2,7 +2,7 @@
   <div class="switch-button" @click="$emit('toggleClicked', checked)">
     <input class="switch-button-checkbox" type="checkbox" v-model="checked" />
     <label class="switch-button-label" for=""
-      ><span class="switch-button-label-span">Divisional</span></label
+      ><span class="switch-button-label-span">Conference</span></label
     >
   </div>
 </template>
@@ -28,7 +28,7 @@ const checked = ref(false);
   position: relative;
 }
 .switch-button:before {
-  content: "Conference";
+  content: "Divisional";
   position: absolute;
   font-weight: 550;
   top: 0;
