@@ -22,14 +22,14 @@
           <!-- eslint-disable-next-line vue/require-v-for-key  -->
           <tbody>
             <tr>
-              <td scope="row" colspan="2">
-                <img :src="team.teams.away.logo" />{{ team.teams.away.name }}
-              </td>
+              <td><img :src="team.teams.away.logo" /></td>
+
+              <td scope="row" colspan="2">{{ team.teams.away.name }}</td>
             </tr>
             <tr>
-              <td scope="row" colspan="2">
-                <img :src="team.teams.home.logo" />{{ team.teams.home.name }}
-              </td>
+              <td><img :src="team.teams.home.logo" /></td>
+
+              <td scope="row" colspan="2">{{ team.teams.home.name }}</td>
             </tr>
           </tbody>
         </template>
@@ -38,7 +38,8 @@
           <!-- eslint-disable-next-line vue/require-v-for-key  -->
           <thead>
             <tr>
-              <th scope="row" colspan="2">{{ team.status.short }}</th>
+              <th scope="row">{{ team.status.short }}</th>
+              <th colspan="2"></th>
               <th>Q1</th>
               <th>Q2</th>
               <th>Q3</th>
@@ -50,8 +51,9 @@
           <!-- eslint-disable-next-line vue/require-v-for-key  -->
           <tbody>
             <tr>
+              <td><img :src="team.teams.away.logo" /></td>
               <td scope="row" colspan="2">
-                <img :src="team.teams.away.logo" />{{ team.teams.away.name }}
+                {{ team.teams.away.name }}
               </td>
               <td>{{ team.scores.away.quarter_1 }}</td>
               <td>{{ team.scores.away.quarter_2 }}</td>
@@ -71,8 +73,9 @@
               </td>
             </tr>
             <tr>
+              <td><img :src="team.teams.home.logo" /></td>
               <td scope="row" colspan="2">
-                <img :src="team.teams.home.logo" />{{ team.teams.home.name }}
+                {{ team.teams.home.name }}
               </td>
               <td>{{ team.scores.home.quarter_1 }}</td>
               <td>{{ team.scores.home.quarter_2 }}</td>
@@ -131,7 +134,7 @@ h2 {
 .container {
   display: grid;
   grid-template-columns: 50% 50%;
-  grid-template-rows: 10%;
+  grid-template-rows: auto;
   gap: 15px 50px;
   justify-items: start;
   align-items: start;
@@ -193,8 +196,8 @@ th {
 }
 
 td > img {
-  max-width: 48px;
-  max-height: 48px;
+  max-width: 42px;
+  max-height: 42px;
   float: left;
   padding: 5px;
 }
