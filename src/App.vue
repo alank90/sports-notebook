@@ -22,6 +22,7 @@ import footerItem from "@/components/footer-item.vue";
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 25px;
+  width: 100vw;
+  margin: 25px 0;
 }
 </style>

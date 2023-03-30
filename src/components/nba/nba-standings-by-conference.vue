@@ -161,7 +161,7 @@ h1 {
 }
 
 .container {
-  width: 900px;
+  width: 100%;
   margin: 0 auto 5% auto;
 }
 

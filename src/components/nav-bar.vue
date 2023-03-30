@@ -1,6 +1,6 @@
 <!-- ========== Navbar Component ================ -->
 <template>
-  <nav>
+  <nav class="nav-container">
     <ul class="menu">
       <li>
         <router-link id="nav-title" to="/">Sports Notebook</router-link>
@@ -36,6 +36,10 @@
 </template>
 
 <style scoped>
+.nav-container {
+  width: 100%;
+  margin: 0;
+}
 .router-link-active {
   color: #fff;
 }

@@ -9,14 +9,13 @@
   </div>
 </template>
 
-<script setup></script>
-
 <style scoped>
 .container {
   display: flex;
   flex-wrap: nowrap;
   justify-content: center;
   padding: 20px 50px;
+  width: 100%;
   max-width: 1200px;
   height: auto;
   margin: 0 auto;

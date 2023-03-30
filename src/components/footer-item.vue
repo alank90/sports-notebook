@@ -24,7 +24,7 @@
   justify-content: space-evenly;
   left: 0;
   position: fixed;
-  width: 100%;
+  width: 100vw;
 }
 
 .footer a {

@@ -1,9 +1,11 @@
 <template>
-  <div class="switch-button" @click="$emit('toggleClicked', checked)">
-    <input class="switch-button-checkbox" type="checkbox" v-model="checked" />
-    <label class="switch-button-label" for=""
-      ><span class="switch-button-label-span">Conference</span></label
-    >
+  <div class="toggle-button-container">
+    <div class="switch-button" @click="$emit('toggleClicked', checked)">
+      <input class="switch-button-checkbox" type="checkbox" v-model="checked" />
+      <label class="switch-button-label" for=""
+        ><span class="switch-button-label-span">Conference</span></label
+      >
+    </div>
   </div>
 </template>
 
@@ -14,6 +16,9 @@ const checked = ref(false);
 </script>
 
 <style scoped>
+.toggle-button-container {
+  width: 75%;
+}
 .switch-button {
   background: #81a4cdd7;
   border-radius: 30px;
