@@ -9,9 +9,7 @@
     <template v-for="team in gameScores.response">
       <!-- eslint-disable-next-line vue/require-v-for-key  -->
       <table>
-        <template
-          v-if="team.status.short !== 'FT' && team.status.short !== 'AOT'"
-        >
+        <template v-if="team.status.short !== 'FT' && team.status.short !== 'AOT'">
           <!-- eslint-disable-next-line vue/require-v-for-key  -->
           <thead>
             <tr>
@@ -62,13 +60,9 @@
               <td v-if="team.scores.away.over_time">
                 {{ team.scores.away.over_time }}
               </td>
-              <td
-                :class="{
-                  winner: team.scores.away.total > team.scores.home.total,
-                }"
-                scope="col"
-                colspan="3"
-              >
+              <td :class="{
+                winner: team.scores.away.total > team.scores.home.total,
+              }" scope="col" colspan="3">
                 {{ team.scores.away.total }}
               </td>
             </tr>
@@ -84,13 +78,9 @@
               <td v-if="team.scores.home.over_time">
                 {{ team.scores.home.over_time }}
               </td>
-              <td
-                :class="{
-                  winner: team.scores.home.total > team.scores.away.total,
-                }"
-                scope="col"
-                colspan="3"
-              >
+              <td :class="{
+                winner: team.scores.home.total > team.scores.away.total,
+              }" scope="col" colspan="3">
                 {{ team.scores.home.total }}
               </td>
             </tr>
@@ -106,6 +96,7 @@
 </template>
 
 <script setup>
+import { inject } from "vue";
 import {
   yesterdayISOString,
   yesterdayLocaleString,
@@ -113,7 +104,8 @@ import {
 import { useFetch } from "../modules/useFetch.js";
 
 // ======= Variable Declarations ============ //
-const urlNBAScores = `https://v1.basketball.api-sports.io/games/?league=12&season=2022-2023&date=${yesterdayISOString}&timezone=America/New_York`;
+const currentNBASeason = inject("currentNBASeason");
+const urlNBAScores = `https://v1.basketball.api-sports.io/games/?league=12&season=${currentNBASeason}&date=${yesterdayISOString}&timezone=America/New_York`;
 
 // Fetch scores
 const { data: gameScores, error } = useFetch(urlNBAScores);
@@ -195,7 +187,7 @@ th {
   background: #eee;
 }
 
-td > img {
+td>img {
   max-width: 42px;
   max-height: 42px;
   float: left;

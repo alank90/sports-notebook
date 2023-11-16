@@ -63,13 +63,13 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, inject } from "vue";
 import { useFetches } from "../modules/useFetches.js";
 
 // ======= Variable Declarations ============ //
 const API_KEY = import.meta.env.VITE_API_SPORTS_KEY;
 const HOST_NAME = import.meta.env.VITE_API_HOST;
-
+const currentNBASeason = inject("currentNBASeason")
 const nbaDivisions = ref([
   ["Atlantic", "Southeast", "Central"],
   ["Northwest", "Pacific", "Southwest"],
@@ -95,7 +95,7 @@ for (let i = 0; i < nbaDivisions.value.length; i++) {
   for (let n = 0; n < nbaDivisions.value[i].length; n++) {
     urls.push(
       fetch(
-        `https://v1.basketball.api-sports.io/standings/?league=12&group=${nbaDivisions.value[i][n]}&season=2022-2023`,
+        `https://v1.basketball.api-sports.io/standings/?league=12&group=${nbaDivisions.value[i][n]}&season=${currentNBASeason}`,
         requestOptions
       ).then((res) => res.json())
     );
@@ -131,7 +131,7 @@ img[alt="Team Logo"] {
   margin: 0 auto 5% auto;
 }
 
-div > p {
+div>p {
   font-size: 1.8rem;
 }
 
@@ -189,7 +189,7 @@ tbody tr:nth-child(even) th {
   background-color: #81a4cd;
 }
 
-th > img {
+th>img {
   max-width: 20px;
   margin-right: 5px;
 }

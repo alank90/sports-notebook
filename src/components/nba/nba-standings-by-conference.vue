@@ -16,10 +16,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr
-          v-for="item in teamStandingsByConference[0].response[0]"
-          :key="item.team.id"
-        >
+        <tr v-for="item in teamStandingsByConference[0].response[0]" :key="item.team.id">
           <th scope="row" colspan="2">
             <img :src="item.team.logo" />{{ item.team.name }}
           </th>
@@ -45,10 +42,7 @@
       </thead>
 
       <tbody>
-        <tr
-          v-for="item in teamStandingsByConference[1].response[0]"
-          :key="item.team.id"
-        >
+        <tr v-for="item in teamStandingsByConference[1].response[0]" :key="item.team.id">
           <th scope="row" colspan="2">
             <img :src="item.team.logo" />{{ item.team.name }}
           </th>
@@ -67,13 +61,13 @@
 </template>
 
 <script setup>
-import { watch } from "vue";
+import { watch, inject } from "vue";
 import { useFetches } from "../modules/useFetches.js";
 
 // ======= Variable Declarations ============ //
 const API_KEY = import.meta.env.VITE_API_SPORTS_KEY;
 const HOST_NAME = import.meta.env.VITE_API_HOST;
-
+const currentNBASeason = inject("currentNBASeason")
 const nbaConferences = ["Eastern Conference", "Western Conference"];
 
 let myHeaders = new Headers();
@@ -129,7 +123,7 @@ const calculateGamesBack = function (conferenceArray) {
 for (let i = 0; i < nbaConferences.length; i++) {
   urls.push(
     fetch(
-      `https://v1.basketball.api-sports.io/standings/?league=12&group=${nbaConferences[i]}&season=2022-2023`,
+      `https://v1.basketball.api-sports.io/standings/?league=12&group=${nbaConferences[i]}&season=${currentNBASeason}`,
       requestOptions
     ).then((res) => res.json())
   );
@@ -165,7 +159,7 @@ h1 {
   margin: 0 auto 5% auto;
 }
 
-div > p {
+div>p {
   font-size: 1.8rem;
 }
 
@@ -223,7 +217,7 @@ tbody tr:nth-child(10) {
   border-bottom: 10px solid #0880f9;
 }
 
-th > img {
+th>img {
   max-width: 20px;
   margin-right: 5px;
 }
