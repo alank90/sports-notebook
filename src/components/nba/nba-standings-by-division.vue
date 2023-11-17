@@ -56,10 +56,11 @@
       </template>
     </table>
   </div>
-  <div v-else>
+  <div v-else-if="loadingState">
     <p>Loading...</p>
     <img src="@/assets/img/loading.gif" alt="Loading Data" />
   </div>
+  <div v-else>Sorry. Error retrieving data at this time. {{ error }}</div>
 </template>
 
 <script setup>
@@ -101,11 +102,13 @@ for (let i = 0; i < nbaDivisions.value.length; i++) {
     );
   }
 }
+
 let {
   teamStandings: teamStandingsByDivision,
   loadingState,
   error,
 } = useFetches(urls);
+
 if (error.value) console.log("Error returned from doFetch() =>", error);
 // ======== Computed Values ======================= //
 easternConferenceTeams = computed(() => {
