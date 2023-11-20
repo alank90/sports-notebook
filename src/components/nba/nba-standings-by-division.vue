@@ -92,6 +92,7 @@ const requestOptions = {
 let urls = [];
 
 // Populate the urls array with url's of each division for API fetch's
+
 for (let i = 0; i < nbaDivisions.value.length; i++) {
   for (let n = 0; n < nbaDivisions.value[i].length; n++) {
     urls.push(

@@ -16,7 +16,7 @@ export function useFetches(urls) {
   const doFetches = async () => {
     // reset state before fetching ..
     teamStandings.value = null;
-    console.log("Im in useFetches", typeof urls);
+    console.log("Im in useFetches", urls);
 
     // ======= fetch the NBA team standings ============ //
     Promise.all(urls)
