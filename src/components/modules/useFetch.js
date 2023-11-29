@@ -1,9 +1,9 @@
 import { ref, isRef, unref, watchEffect } from "vue";
 
 /**
- * @Description - Vue  composable function to fetch data 
- * @param {string} url 
- * @returns {object} - Reactive variables 
+ * @Description - Vue  composable function to fetch data
+ * @param {string} url
+ * @returns {object} - Reactive variables
  * @importedBy - nba-scores.vue
  */
 export function useFetch(url) {

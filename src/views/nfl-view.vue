@@ -1,4 +1,12 @@
 <template>
-  <h1>Under Construction</h1>
-  <img src="@/assets/img/under_construction.webp" alt="Under Construction" />
+  <img src="@/assets/img/nfl_logo.svg" alt="NFL logo" />
+
+  <router-view></router-view>
 </template>
+
+
+<style scoped>
+img {
+  width: 150px;
+}
+</style>

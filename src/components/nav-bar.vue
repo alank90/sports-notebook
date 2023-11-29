@@ -9,27 +9,29 @@
         NBA
         <ul class="sub-menu">
           <li>
-            <router-link class="nav-link" to="/nba/standings" href="/nba"
-              >Standings</router-link
-            >
+            <router-link class="nav-link" to="/nba/standings" href="/nba">Standings</router-link>
           </li>
           <li>
-            <router-link class="nav-link" to="/nba/scores" href="/nba"
-              >Scores</router-link
-            >
+            <router-link class="nav-link" to="/nba/scores" href="/nba">Scores</router-link>
           </li>
         </ul>
       </li>
       <li>
-        <router-link class="nav-link" to="/nfl" href="/nfl">NFL</router-link>
+        NFL
+        <ul class="sub-menu">
+          <li>
+            <router-link class="nav-link" to="/nfl/standings" href="/nfl">Standings</router-link>
+          </li>
+          <li>
+            <router-link class="nav-link" to="/nfl/scores" href="/nfl">Scores</router-link>
+          </li>
+        </ul>
       </li>
       <li>
         <router-link class="nav-link" to="/mlb" href="/mlb"> MLB</router-link>
       </li>
       <li>
-        <router-link class="nav-link" to="/about" href="/about"
-          >About</router-link
-        >
+        <router-link class="nav-link" to="/about" href="/about">About</router-link>
       </li>
     </ul>
   </nav>
@@ -40,9 +42,11 @@
   width: 100%;
   margin: 0;
 }
+
 .router-link-active {
   color: #fff;
 }
+
 ul.menu {
   display: flex;
   flex-direction: row;
@@ -54,14 +58,15 @@ ul.menu {
   box-shadow: 0 1px 8px #ddd;
   max-height: 1.8rem;
 }
-.menu > li {
+
+.menu>li {
   color: #000;
   cursor: pointer;
   font-size: 1.4rem;
   font-weight: 550;
 }
 
-.menu > li:first-child {
+.menu>li:first-child {
   flex-grow: 3;
   text-align: left;
 }
@@ -71,6 +76,7 @@ ul.menu {
   transform-origin: top center;
   transition: all 300ms ease-in-out;
 }
+
 .sub-menu li {
   font-size: 0.9rem;
   padding: 8px 0;
@@ -84,10 +90,12 @@ ul.menu {
 .sub-menu li:last-child {
   border-bottom: 0;
 }
-.menu > li:hover .sub-menu li {
+
+.menu>li:hover .sub-menu li {
   transform: scale(1);
 }
-.menu > li:hover .sub-menu {
+
+.menu>li:hover .sub-menu {
   transform: scale(1);
 }
 

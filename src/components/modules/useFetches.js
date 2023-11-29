@@ -16,13 +16,11 @@ export function useFetches(urls) {
   const doFetches = async () => {
     // reset state before fetching ..
     teamStandings.value = null;
-    console.log("Im in useFetches", urls);
 
     // ======= fetch the NBA team standings ============ //
     Promise.all(urls)
       .then((data) => {
         teamStandings.value = data;
-        console.log("teamstandings :", data);
       })
       .catch((err) => {
         console.error(err);
