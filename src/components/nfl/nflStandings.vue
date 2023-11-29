@@ -1,17 +1,17 @@
 <template>
-    <h1>NFL Standings</h1>
-    <div v-if="error">
-        <p>Oops! Error encountered: {{ error.message }}</p>
-    </div>
-    <div v-else-if="nflStandings" class="container">
-        <template v-for="team in nflStandings.response">
-          <!-- eslint-disable-next-line vue/require-v-for-key  -->
-            <table>
-                <tr> {{ team }} </tr> 
-            </table>
-        </template>
-    
-    </div>
+  <h1>NFL Standings</h1>
+  <div v-if="error">
+    <p>Oops! Error encountered: {{ error.message }}</p>
+  </div>
+  <div v-else-if="nflStandings" class="container">
+    <template v-for="team in nflStandings.response">
+      <!-- eslint-disable-next-line vue/require-v-for-key  -->
+      <table>
+        <tr> {{ team }} </tr>
+      </table>
+    </template>
+
+  </div>
 </template>
 
 <script setup>
@@ -25,7 +25,7 @@ const urlNFLStandings = `https://v1.american-football.api-sports.io/standings?le
 
 const { data: nflStandings, error } = useFetch(urlNFLStandings);
 
-console.log(nflStandings.response);
+console.log(nflStandings);
 // ============================================================================= //
 // =============== Computed values for team standings by Division ============== //
 // ============================================================================= //
@@ -41,7 +41,7 @@ console.log(nflStandings.response);
 
 <style scoped>
 h1 {
-    font-size: 1.5rem;
+  font-size: 1.5rem;
 }
 
 .container {
