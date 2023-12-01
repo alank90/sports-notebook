@@ -4,10 +4,32 @@
     <p>Oops! Error encountered: {{ error.message }}</p>
   </div>
   <div v-else-if="nflStandings" class="container">
-    <template v-for="team in nflStandings.response">
+    <template v-for="team in afcEastStandings">
       <!-- eslint-disable-next-line vue/require-v-for-key  -->
       <table>
-        <tr> {{ team }} </tr>
+        <thead>
+          <tr>
+            <th scope="col" colspan="2">
+            </th>
+            <th scope="col">W</th>
+            <th scope="col">L</th>
+            <th scope="col">PCT</th>
+            <th>GB</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <th scope="row" colspan="2">
+              <img :src="team.team.logo" />{{ team.team.name }}
+            </th>
+            <td>{{ team.won }}</td>
+            <td>{{ team.lost }}</td>
+            <td v-if="team.ties">{{ team.ties }}</td>
+            <td>{{ (parseInt(team.won + (.5 * (team.ties))) / (parseInt(team.won) + parseInt(team.lost +
+              parseInt(team.ties))) * 100).toFixed(1) }}%</td>
+          </tr>
+        </tbody>
       </table>
     </template>
 
@@ -15,7 +37,7 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { ref, computed } from "vue";
 import { useFetch } from '../modules/useFetch.js';
 
 // ======= Variable Declarations ============ //
@@ -25,16 +47,22 @@ const urlNFLStandings = `https://v1.american-football.api-sports.io/standings?le
 
 const { data: nflStandings, error } = useFetch(urlNFLStandings);
 
-console.log(nflStandings);
+
 // ============================================================================= //
 // =============== Computed values for team standings by Division ============== //
 // ============================================================================= //
+const afcEastStandings = computed(() => {
+  return nflStandings.value.response.filter((team) => team.division === "AFC East");
+})
 
-
+/* const afcNorthStandings = computed(() => {
+  return nflStandings.value.response.filter((team) => team.division === "AFC North");
+}) */
 
 // ============================================================================= //
 // =============== End of Computed values for team standings by Division ======= //
 // ============================================================================= //
+const afc = ref([afcEastStandings]);
 
 </script>
 
