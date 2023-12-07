@@ -4,40 +4,44 @@
     <p>Oops! Error encountered: {{ error.message }}</p>
   </div>
   <div v-else-if="nflStandings" class="container">
-    <template v-for="team in afcEastStandings">
+    <template v-for="n in 4">
       <!-- eslint-disable-next-line vue/require-v-for-key  -->
       <table>
         <thead>
           <tr>
-            <th scope="col" colspan="2">
-            </th>
+            <th scope="col" colspan="2"></th>
             <th scope="col">W</th>
             <th scope="col">L</th>
             <th scope="col">PCT</th>
-            <th>GB</th>
+            <th scope="col">GB</th>
           </tr>
         </thead>
 
-        <tbody>
-          <tr>
-            <th scope="row" colspan="2">
-              <img :src="team.team.logo" />{{ team.team.name }}
-            </th>
-            <td>{{ team.won }}</td>
-            <td>{{ team.lost }}</td>
-            <td v-if="team.ties">{{ team.ties }}</td>
-            <td>{{ (parseInt(team.won + (.5 * (team.ties))) / (parseInt(team.won) + parseInt(team.lost +
-              parseInt(team.ties))) * 100).toFixed(1) }}%</td>
-          </tr>
-        </tbody>
+        <template v-for="i in 4">
+          <!-- eslint-disable-next-line vue/require-v-for-key  -->
+          <tbody>
+            <tr>
+              <th scope="row" colspan="2">
+                <img :src="afc[n - 1].value[i - 1].team.logo" />{{ afc[n - 1].value[i - 1].team.name }}
+              </th>
+              <td>{{ afc[n - 1].value[i - 1].won }}</td>
+              <td>{{ afc[n - 1].value[i - 1].lost }}</td>
+              <td v-if="afc[n - 1].value[i - 1].ties">{{ afc[n - 1].value[i - 1].ties }}</td>
+              <td>{{ (parseInt(afc[n - 1].value[i - 1].won + (.5 * (afc[n - 1].value[i - 1].ties))) /
+                (parseInt(afc[n - 1].value[i - 1].won) + parseInt(afc[n - 1].value[i - 1].lost +
+                  parseInt(afc[n - 1].value[i - 1].ties))) * 100).toFixed(1) }}%</td>
+            </tr>
+          </tbody>
+        </template>
       </table>
     </template>
+
 
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import { useFetch } from '../modules/useFetch.js';
 
 // ======= Variable Declarations ============ //
@@ -55,14 +59,47 @@ const afcEastStandings = computed(() => {
   return nflStandings.value.response.filter((team) => team.division === "AFC East");
 })
 
-/* const afcNorthStandings = computed(() => {
+const afcNorthStandings = computed(() => {
   return nflStandings.value.response.filter((team) => team.division === "AFC North");
-}) */
+})
+
+const afcSouthStandings = computed(() => {
+  return nflStandings.value.response.filter((team) => team.division === "AFC South");
+})
+
+const afcWestStandings = computed(() => {
+  return nflStandings.value.response.filter((team) => team.division === "AFC West");
+})
+
 
 // ============================================================================= //
 // =============== End of Computed values for team standings by Division ======= //
 // ============================================================================= //
-const afc = ref([afcEastStandings]);
+
+
+
+
+// ------------------------------ Functions ------------------------------------------------------ //
+
+const calculateGamesBack = (divisionArray) => {
+  let gamesBack = Number;
+
+  setTimeout(() => {
+    console.log(divisionArray.value[0].value[0].division);
+
+  }, 3000);
+
+
+}
+// ------------------------------ End Functions ---------------------------------------------------- //
+
+const afc = ref([afcEastStandings, afcNorthStandings, afcSouthStandings, afcWestStandings]);
+watch(afc, (newValue) => {
+  if (newValue.length > 0) {
+    calculateGamesBack(newValue);
+  }
+}
+)
 
 </script>
 
