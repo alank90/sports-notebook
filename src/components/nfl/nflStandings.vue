@@ -3,7 +3,7 @@
   <div v-if="error">
     <p>Oops! Error encountered: {{ error.message }}</p>
   </div>
-  <div v-else-if="nflStandings" class="container">
+  <div v-else-if="nflStandings !== null && nflStandings.errors === null" class="container">
     <template v-for="n in 4">
       <!-- eslint-disable-next-line vue/require-v-for-key  -->
       <table>
@@ -36,8 +36,8 @@
       </table>
     </template>
 
-
   </div>
+  <div v-else-if="nflStandings !== null">{{ nflStandings.errors.requests }}</div>
 </template>
 
 <script setup>
@@ -47,13 +47,13 @@ import { useFetch } from '../modules/useFetch.js';
 // ======= Variable Declarations ============ //
 const currentNFLSeason = "2023";
 const urlNFLStandings = `https://v1.american-football.api-sports.io/standings?league=1&season=${currentNFLSeason}`
-
+let afc = ref();
 
 const { data: nflStandings, error } = useFetch(urlNFLStandings);
 
 
 // ============================================================================= //
-// =============== Computed values for team standings by Division ============== //
+// =============== Computed  & Watch values for team standings by Division ============== //
 // ============================================================================= //
 const afcEastStandings = computed(() => {
   return nflStandings.value.response.filter((team) => team.division === "AFC East");
@@ -71,6 +71,12 @@ const afcWestStandings = computed(() => {
   return nflStandings.value.response.filter((team) => team.division === "AFC West");
 })
 
+watch(nflStandings, () => {
+  if (nflStandings.value.response.length > 0) {
+    calculateGamesBack(afc.value);
+  }
+}
+)
 
 // ============================================================================= //
 // =============== End of Computed values for team standings by Division ======= //
@@ -78,28 +84,32 @@ const afcWestStandings = computed(() => {
 
 
 
-
 // ------------------------------ Functions ------------------------------------------------------ //
 
 const calculateGamesBack = (divisionArray) => {
   let gamesBack = Number;
+  console.log("divisionArray", divisionArray[3].value[3].team.name);
 
-  setTimeout(() => {
-    console.log(divisionArray.value[0].value[0].division);
+  // Determine first place team in each division
+  const firstPlaceTeam = {
+    wins: divisionArray[0].value[0].won,
+    losses: divisionArray[0].value[0].lost
+  }
 
-  }, 3000);
-
+  divisionArray.forEach((division, index) => {
+    console.log(division.value[index].position);
+    if (division.value[index].position === 1) {
+      division.value[index].gmsBk = "--";
+    } else {
+      console.log(division[index].team.name)
+    }
+  })
 
 }
 // ------------------------------ End Functions ---------------------------------------------------- //
 
-const afc = ref([afcEastStandings, afcNorthStandings, afcSouthStandings, afcWestStandings]);
-watch(afc, (newValue) => {
-  if (newValue.length > 0) {
-    calculateGamesBack(newValue);
-  }
-}
-)
+afc.value = [afcEastStandings, afcNorthStandings, afcSouthStandings, afcWestStandings];
+
 
 </script>
 
