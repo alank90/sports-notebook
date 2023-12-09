@@ -3,7 +3,7 @@
   <div v-if="error">
     <p>Oops! Error encountered: {{ error.message }}</p>
   </div>
-  <div v-else-if="nflStandings !== null && nflStandings.errors === null" class="container">
+  <div v-else-if="nflStandings !== null && nflStandings.errors.length === 0" class="container">
     <template v-for="n in 4">
       <!-- eslint-disable-next-line vue/require-v-for-key  -->
       <table>
@@ -101,7 +101,7 @@ const calculateGamesBack = (divisionArray) => {
     if (division.value[index].position === 1) {
       division.value[index].gmsBk = "--";
     } else {
-      console.log(division[index].team.name)
+      console.log(division.value[index].team.name)
     }
   })
 
