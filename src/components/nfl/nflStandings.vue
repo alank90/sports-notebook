@@ -73,6 +73,7 @@ const afcWestStandings = computed(() => {
 
 watch(nflStandings, () => {
   if (nflStandings.value.response.length > 0) {
+    console.log(afc.value);
     calculateGamesBack(afc.value);
   }
 }
@@ -86,10 +87,15 @@ watch(nflStandings, () => {
 
 // ------------------------------ Functions ------------------------------------------------------ //
 
+/** @Description - Function to calculate how many games back a team is
+ *  @param {two-dimensional array} divisionalArray - a two-dimensional array of conference teams by division
+ *  @extends {nflStandings.response} - Adds the gmsBk property to each team
+ *  @calledBy - From a watch effect.  
+ */
 const calculateGamesBack = (divisionArray) => {
   let gamesBack = Number;
-  console.log("divisionArray", divisionArray[3].value[3].team.name);
-
+  //console.log("divisionArray", divisionArray[3].value[3].team.name);
+  console.log(divisionArray);
   // Determine first place team in each division
   const firstPlaceTeam = {
     wins: divisionArray[0].value[0].won,
@@ -97,11 +103,10 @@ const calculateGamesBack = (divisionArray) => {
   }
 
   divisionArray.forEach((division, index) => {
-    console.log(division.value[index].position);
     if (division.value[index].position === 1) {
       division.value[index].gmsBk = "--";
     } else {
-      console.log(division.value[index].team.name)
+      //console.log(division.value[index].team.name)
     }
   })
 
