@@ -19,6 +19,7 @@
             <th scope="col">GB</th>
             <th scope="col">Streak</th>
             <th scope="col">Div</th>
+            <th scope="col">Home</th>
           </tr>
         </thead>
 
@@ -38,6 +39,7 @@
               <td>{{ afc[n - 1].value[i - 1].gmsBk }} </td>
               <td>{{ afc[n - 1].value[i - 1].streak }}</td>
               <td>{{ afc[n - 1].value[i - 1].records.division }} </td>
+              <td>{{ afc[n - 1].value[i - 1].records.home }} </td>
             </tr>
           </tbody>
         </template>
@@ -59,7 +61,7 @@
             <th scope="col">GB</th>
             <th scope="col">Streak</th>
             <th scope="col">Div</th>
-
+            <th scope="col">Home</th>
           </tr>
         </thead>
 
@@ -79,7 +81,7 @@
               <td>{{ nfc[n - 1].value[i - 1].gmsBk }} </td>
               <td>{{ nfc[n - 1].value[i - 1].streak }}</td>
               <td>{{ nfc[n - 1].value[i - 1].records.division }} </td>
-
+              <td>{{ nfc[n - 1].value[i - 1].records.home }} </td>
             </tr>
           </tbody>
         </template>
