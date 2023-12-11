@@ -4,16 +4,21 @@
     <p>Oops! Error encountered: {{ error.message }}</p>
   </div>
   <div v-else-if="nflStandings !== null && nflStandings.errors.length === 0" class="container">
+    <h2>{{ afc[0].value[0].conference }}</h2>
+
+    <!------------------------------ AFC Template ---------------------------------------------------------------- -->
     <template v-for="n in 4">
       <!-- eslint-disable-next-line vue/require-v-for-key  -->
       <table>
         <thead>
           <tr>
-            <th scope="col" colspan="2"></th>
+            <th scope="col" colspan="2">{{ afc[n - 1].value[0].division }}</th>
             <th scope="col">W</th>
             <th scope="col">L</th>
             <th scope="col">PCT</th>
             <th scope="col">GB</th>
+            <th scope="col">Streak</th>
+            <th scope="col">Div</th>
           </tr>
         </thead>
 
@@ -30,6 +35,51 @@
               <td>{{ (parseInt(afc[n - 1].value[i - 1].won + (.5 * (afc[n - 1].value[i - 1].ties))) /
                 (parseInt(afc[n - 1].value[i - 1].won) + parseInt(afc[n - 1].value[i - 1].lost +
                   parseInt(afc[n - 1].value[i - 1].ties))) * 100).toFixed(1) }}%</td>
+              <td>{{ afc[n - 1].value[i - 1].gmsBk }} </td>
+              <td>{{ afc[n - 1].value[i - 1].streak }}</td>
+              <td>{{ afc[n - 1].value[i - 1].records.division }} </td>
+            </tr>
+          </tbody>
+        </template>
+      </table>
+    </template>
+
+    <!------------------------------ NFC Template ---------------------------------------------------------------- -->
+    <h2>{{ nfc[0].value[0].conference }}</h2>
+
+    <template v-for="n in 4">
+      <!-- eslint-disable-next-line vue/require-v-for-key  -->
+      <table>
+        <thead>
+          <tr>
+            <th scope="col" colspan="2">{{ nfc[n - 1].value[0].division }}</th>
+            <th scope="col">W</th>
+            <th scope="col">L</th>
+            <th scope="col">PCT</th>
+            <th scope="col">GB</th>
+            <th scope="col">Streak</th>
+            <th scope="col">Div</th>
+
+          </tr>
+        </thead>
+
+        <template v-for="i in 4">
+          <!-- eslint-disable-next-line vue/require-v-for-key  -->
+          <tbody>
+            <tr>
+              <th scope="row" colspan="2">
+                <img :src="nfc[n - 1].value[i - 1].team.logo" />{{ nfc[n - 1].value[i - 1].team.name }}
+              </th>
+              <td>{{ nfc[n - 1].value[i - 1].won }}</td>
+              <td>{{ nfc[n - 1].value[i - 1].lost }}</td>
+              <td v-if="nfc[n - 1].value[i - 1].ties">{{ nfc[n - 1].value[i - 1].ties }}</td>
+              <td>{{ (parseInt(nfc[n - 1].value[i - 1].won + (.5 * (nfc[n - 1].value[i - 1].ties))) /
+                (parseInt(nfc[n - 1].value[i - 1].won) + parseInt(nfc[n - 1].value[i - 1].lost +
+                  parseInt(nfc[n - 1].value[i - 1].ties))) * 100).toFixed(1) }}%</td>
+              <td>{{ nfc[n - 1].value[i - 1].gmsBk }} </td>
+              <td>{{ nfc[n - 1].value[i - 1].streak }}</td>
+              <td>{{ nfc[n - 1].value[i - 1].records.division }} </td>
+
             </tr>
           </tbody>
         </template>
@@ -48,13 +98,14 @@ import { useFetch } from '../modules/useFetch.js';
 const currentNFLSeason = "2023";
 const urlNFLStandings = `https://v1.american-football.api-sports.io/standings?league=1&season=${currentNFLSeason}`
 let afc = ref();
+let nfc = ref();
 
 const { data: nflStandings, error } = useFetch(urlNFLStandings);
 
 
-// ============================================================================= //
+// ======================================================================================= //
 // =============== Computed  & Watch values for team standings by Division ============== //
-// ============================================================================= //
+// ====================================================================================== //
 const afcEastStandings = computed(() => {
   return nflStandings.value.response.filter((team) => team.division === "AFC East");
 })
@@ -71,10 +122,26 @@ const afcWestStandings = computed(() => {
   return nflStandings.value.response.filter((team) => team.division === "AFC West");
 })
 
+const nfcEastStandings = computed(() => {
+  return nflStandings.value.response.filter((team) => team.division === "NFC East");
+})
+
+const nfcNorthStandings = computed(() => {
+  return nflStandings.value.response.filter((team) => team.division === "NFC North");
+})
+
+const nfcSouthStandings = computed(() => {
+  return nflStandings.value.response.filter((team) => team.division === "NFC South");
+})
+
+const nfcWestStandings = computed(() => {
+  return nflStandings.value.response.filter((team) => team.division === "NFC West");
+})
+
 watch(nflStandings, () => {
   if (nflStandings.value.response.length > 0) {
-    console.log(afc.value);
     calculateGamesBack(afc.value);
+    calculateGamesBack(nfc.value);
   }
 }
 )
@@ -92,29 +159,47 @@ watch(nflStandings, () => {
  *  @extends {nflStandings.response} - Adds the gmsBk property to each team
  *  @calledBy - From a watch effect.  
  */
-const calculateGamesBack = (divisionArray) => {
+const calculateGamesBack = (conferenceArrayByDivision) => {
   let gamesBack = Number;
-  //console.log("divisionArray", divisionArray[3].value[3].team.name);
-  console.log(divisionArray);
-  // Determine first place team in each division
-  const firstPlaceTeam = {
-    wins: divisionArray[0].value[0].won,
-    losses: divisionArray[0].value[0].lost
+  //console.log("conferenceArrayByDivision", conferenceArrayByDivision[1].value[2].team.name);
+  let firstPlaceTeam = {
+    wins: null,
+    losses: null,
+    ties: null
   }
 
-  divisionArray.forEach((division, index) => {
-    if (division.value[index].position === 1) {
-      division.value[index].gmsBk = "--";
-    } else {
-      //console.log(division.value[index].team.name)
-    }
+  conferenceArrayByDivision.forEach((divisionalArrayByTeams) => {
+    divisionalArrayByTeams.value.forEach((divisionalTeam) => {
+      if (divisionalTeam.position === 1) {
+        divisionalTeam.gmsBk = "--";
+        // designate first place team in each division
+        firstPlaceTeam.wins = divisionalTeam.won;
+        firstPlaceTeam.losses = divisionalTeam.lost;
+        firstPlaceTeam.ties = divisionalTeam.ties
+      } else {
+        gamesBack =
+          (firstPlaceTeam.wins -
+            firstPlaceTeam.losses -
+            (divisionalTeam.won - divisionalTeam.lost)) /
+          2;
+
+        if (gamesBack === 0) {
+          divisionalTeam.gmsBk = "--";
+          return;
+        }
+        divisionalTeam.gmsBk = gamesBack;
+      }
+
+    })
   })
 
 }
 // ------------------------------ End Functions ---------------------------------------------------- //
 
-afc.value = [afcEastStandings, afcNorthStandings, afcSouthStandings, afcWestStandings];
 
+// ============ Construct the Conference arrays ============================ //
+afc.value = [afcEastStandings, afcNorthStandings, afcSouthStandings, afcWestStandings];
+nfc.value = [nfcEastStandings, nfcNorthStandings, nfcSouthStandings, nfcWestStandings];
 
 </script>
 
@@ -142,7 +227,7 @@ table {
 }
 
 table:last-child {
-  margin-top: 30px;
+  margin-bottom: 50px;
 }
 
 thead {
