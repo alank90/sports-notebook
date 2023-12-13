@@ -20,6 +20,7 @@
             <th scope="col">Streak</th>
             <th scope="col">Div</th>
             <th scope="col">Home</th>
+            <th scope="col">Away</th>
           </tr>
         </thead>
 
@@ -40,6 +41,8 @@
               <td>{{ afc[n - 1].value[i - 1].streak }}</td>
               <td>{{ afc[n - 1].value[i - 1].records.division }} </td>
               <td>{{ afc[n - 1].value[i - 1].records.home }} </td>
+              <td>{{ afc[n - 1].value[i - 1].records.road }} </td>
+
             </tr>
           </tbody>
         </template>
@@ -62,6 +65,7 @@
             <th scope="col">Streak</th>
             <th scope="col">Div</th>
             <th scope="col">Home</th>
+            <th scope="col">Away</th>
           </tr>
         </thead>
 
@@ -82,6 +86,8 @@
               <td>{{ nfc[n - 1].value[i - 1].streak }}</td>
               <td>{{ nfc[n - 1].value[i - 1].records.division }} </td>
               <td>{{ nfc[n - 1].value[i - 1].records.home }} </td>
+              <td>{{ nfc[n - 1].value[i - 1].records.road }} </td>
+
             </tr>
           </tbody>
         </template>
@@ -212,7 +218,8 @@ h1 {
 }
 
 .container {
-  width: 100%;
+  width: 85%;
+  max-width: 900px;
   margin: 0 auto 5% auto;
 }
 

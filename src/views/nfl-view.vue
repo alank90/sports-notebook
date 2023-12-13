@@ -4,6 +4,11 @@
   <router-view></router-view>
 </template>
 
+<script setup>
+import { provide } from "vue";
+
+provide("currentNFLSeason", 2023)
+</script>
 
 <style scoped>
 img {

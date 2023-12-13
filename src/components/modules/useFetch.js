@@ -4,7 +4,7 @@ import { ref, isRef, unref, watchEffect } from "vue";
  * @Description - Vue  composable function to fetch data
  * @param {string} url
  * @returns {object} - Reactive variables
- * @importedBy - nba-scores.vue
+ * @importedBy - nba-scores.vue, nfl-scores.vue
  */
 export function useFetch(url) {
   // ======= Variable Declarations ============ //
@@ -23,9 +23,9 @@ export function useFetch(url) {
     data.value = null;
     error.value = null;
 
-    // resolve the url value synchrously so it's tracked as a
-    // dependency by watchEffect()
-    const urlValue = unref(url);
+    // unref() will return the ref value if it's a ref
+    // otherwise the value will be returned as-is
+    const unrefedUrlValue = unref(url);
 
     try {
       const requestOptions = {
@@ -33,10 +33,8 @@ export function useFetch(url) {
         headers: myHeaders,
         redirect: "follow",
       };
-      // unref() will return the ref value if it's a ref
-      // otherwise the value will be returned as-is
 
-      const res = await fetch(urlValue, requestOptions);
+      const res = await fetch(unrefedUrlValue, requestOptions);
       data.value = await res.json();
     } catch (e) {
       error.value = e;
@@ -44,6 +42,8 @@ export function useFetch(url) {
   }
 
   // Will refetch data if input url changes when url is a ref
+  // resolve the url value synchrously so it's tracked as a
+  // dependency by watchEffect()
   if (isRef(url)) {
     // setup reactive re-fetch if input URL is a ref
     watchEffect(doFetch);
