@@ -1,15 +1,76 @@
 <template>
     <h1>NFL Scores</h1>
     <h2>For {{ yesterdayLocaleString }}</h2>
-    <h3>NFL Scores here</h3>
-
-    <div v-if="gameScores.errors.length !== 0">
-        OOPS!. Error {{ gameScores.errors }}
+    <h3>{{ gameScores.response[0].game.week }}</h3>
+    <div v-if="!gameScores && gameScores?.errors.length !== 0">
+        <p>Loading...</p>
+        <img src="@/assets/img/loading.gif" alt="Loading Data" />
     </div>
     <div v-else-if="gameScores.results > 0" class="container">
-        <div>{{ gameScores.response }}</div>
+        <template v-for="team in gameScores.response">
+            <div class="table-wrapper">
+                <!-- eslint-disable-next-line vue/require-v-for-key  -->
+                <table id="scores">
+                    <thead>
+                        <tr>
+                            <th scope="row">{{ team.game.status.short }}</th>
+                            <th colspan="2"></th>
+                            <th>Q1</th>
+                            <th>Q2</th>
+                            <th>Q3</th>
+                            <th>Q4</th>
+                            <th v-if="team.game.status.long === 'Final/OT'">O/T</th>
+                            <th scope="col" colspan="3">Final</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td><img :src="team.teams.away.logo" /></td>
+                            <td scope="row" colspan="2">
+                                {{ team.teams.away.name }}
+                            </td>
+                            <td>{{ team.scores.away.quarter_1 }}</td>
+                            <td>{{ team.scores.away.quarter_2 }}</td>
+                            <td>{{ team.scores.away.quarter_3 }}</td>
+                            <td>{{ team.scores.away.quarter_4 }}</td>
+                            <td v-if="team.game.status.long === 'Final/OT'">
+                                {{ team.scores.away.overtime }}
+                            </td>
+                            <td :class="{
+                                winner: team.scores.away.total > team.scores.home.total,
+                            }" scope="col" colspan="3">
+                                {{ team.scores.away.total }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><img :src="team.teams.home.logo" /></td>
+                            <td scope="row" colspan="2">
+                                {{ team.teams.home.name }}
+                            </td>
+                            <td>{{ team.scores.home.quarter_1 }}</td>
+                            <td>{{ team.scores.home.quarter_2 }}</td>
+                            <td>{{ team.scores.home.quarter_3 }}</td>
+                            <td>{{ team.scores.home.quarter_4 }}</td>
+                            <td v-if="team.game.status.long === 'Final/OT'">
+                                {{ team.scores.home.overtime }}
+                            </td>
+                            <td :class="{
+                                winner: team.scores.home.total > team.scores.away.total,
+                            }" scope="col" colspan="3">
+                                {{ team.scores.home.total }}
+                            </td>
+                        </tr>
+                        <tr>Venue - {{ team.game.venue.city }} - {{ team.game.venue.name }}</tr>
+                    </tbody>
+                </table>
+            </div>
+        </template>
     </div>
-    <div v-else>No data.</div>
+    <div v-else-if="gameScores?.errors.length !== 0">
+        OOPS!. Error {{ gameScores?.errors }}
+    </div>
+    <div v-else>Sorry. Your request failed.</div>
 </template>
 
 <script setup>
@@ -22,7 +83,6 @@ import { useFetch } from "../modules/useFetch.js";
 
 // ======= Variable Declarations ============ //
 const currentNFLSeason = inject("currentNFLSeason");
-console.log("currentSeason", currentNFLSeason);
 const urlNFLScores = `https://v1.american-football.api-sports.io/games?league=1&season=${currentNFLSeason}&date=2023-12-10&timezone=America/New_York`;
 
 // Fetch scores
@@ -74,8 +134,12 @@ td {
     border-collapse: collapse;
     padding: 0.3em;
     font-weight: 500;
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     caption-side: bottom;
+}
+
+th {
+    font-weight: bold;
 }
 
 th:first-child {
@@ -111,6 +175,36 @@ td>img {
     float: left;
     padding: 5px;
 }
+
+/* Table stylings */
+#scores td,
+#scores th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+#scores tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+#scores tr:hover {
+    background-color: #ddd;
+}
+
+#scores th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #1181b2;
+    color: white;
+}
+
+.table-wrapper {
+    width: 100%;
+    max-width: 1020px;
+    overflow-x: auto;
+}
+
 
 .winner {
     color: #a19923;

@@ -1,7 +1,9 @@
 <template>
   <h1>NFL Standings</h1>
-  <div v-if="error">
-    <p>Oops! Error encountered: {{ error.message }}</p>
+
+  <div v-if="!nflStandings?.results && nflStandings?.errors.length !== 0">
+    <p>Loading...</p>
+    <img src="@/assets/img/loading.gif" alt="Loading Data" />
   </div>
   <div v-else-if="nflStandings !== null && nflStandings.errors.length === 0" class="container">
     <h2>{{ afc[0].value[0].conference }}</h2>
@@ -9,7 +11,7 @@
     <!------------------------------ AFC Template ---------------------------------------------------------------- -->
     <template v-for="n in 4">
       <!-- eslint-disable-next-line vue/require-v-for-key  -->
-      <table>
+      <table id="standings">
         <thead>
           <tr>
             <th scope="col" colspan="2">{{ afc[n - 1].value[0].division }}</th>
@@ -96,6 +98,7 @@
 
   </div>
   <div v-else-if="nflStandings !== null">{{ nflStandings.errors.requests }}</div>
+  <div v-else>Sorry. Your request failed.</div>
 </template>
 
 <script setup>
@@ -285,4 +288,32 @@ th>img {
   max-width: 20px;
   margin-right: 5px;
 }
-</style>
+
+/* Table Stylings */
+#standings {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#standings td,
+#standings th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#standings tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+#standings tr:hover {
+  background-color: #ddd;
+}
+
+#standings th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #1181b2;
+  color: white;
+}</style>
