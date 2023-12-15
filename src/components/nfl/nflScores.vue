@@ -1,13 +1,14 @@
 <template>
     <h1>NFL Scores</h1>
     <h2>For {{ yesterdayLocaleString }}</h2>
-    <h3>{{ gameScores.response[0].game.week }}</h3>
+    <h3>{{ gameScores ? gameScores.response[0]?.game.week : '' }}</h3>
     <div v-if="!gameScores && gameScores?.errors.length !== 0">
         <p>Loading...</p>
         <img src="@/assets/img/loading.gif" alt="Loading Data" />
     </div>
     <div v-else-if="gameScores.results > 0" class="container">
         <template v-for="team in gameScores.response">
+            <!-- eslint-disable-next-line vue/require-v-for-key  -->
             <div class="table-wrapper">
                 <!-- eslint-disable-next-line vue/require-v-for-key  -->
                 <table id="scores">
@@ -76,14 +77,20 @@
 <script setup>
 import { inject } from "vue";
 import {
-    yesterdayISOString,
     yesterdayLocaleString,
+    today
 } from "../modules/getDate.js";
+import { transformDate } from "../modules/getFootballDates.js";
 import { useFetch } from "../modules/useFetch.js";
 
 // ======= Variable Declarations ============ //
 const currentNFLSeason = inject("currentNFLSeason");
-const urlNFLScores = `https://v1.american-football.api-sports.io/games?league=1&season=${currentNFLSeason}&date=2023-12-10&timezone=America/New_York`;
+// Get Sunday's date
+const { previousSundaysDateISOString } = transformDate(today);
+console.log(previousSundaysDateISOString);
+const urlNFLScores = `https://v1.american-football.api-sports.io/games?league=1&season=${currentNFLSeason}&date=${previousSundaysDateISOString}&timezone=America/New_York`;
+
+
 
 // Fetch scores
 const { data: gameScores, error } = useFetch(urlNFLScores);

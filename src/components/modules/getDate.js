@@ -26,4 +26,5 @@ export {
   yesterdayISOString,
   todayLocaleString,
   yesterdayLocaleString,
+  today,
 };
