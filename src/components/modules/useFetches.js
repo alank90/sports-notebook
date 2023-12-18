@@ -4,23 +4,23 @@ import { ref } from "vue";
  * @Description - Vue composable function to do multiple fetches asynchrounosly
  * w/Promise.all
  * @param {array} urls
- * @returns {object} - Reactive variables: teamStandings, loadingState, error
- * @importedBy - nba-scores.vue & nba-standings-by-division.vue
+ * @returns {object} - Reactive variables: apiData, loadingState, error
+ * @importedBy - nba-standings-by-division.vue, nba-standings-by-conference.vue, nfl-scores.vue
  */
 
 export function useFetches(urls) {
-  let teamStandings = ref(null);
+  let apiData = ref(null);
   let error = ref(null);
   let loadingState = ref(true);
 
   const doFetches = async () => {
     // reset state before fetching ..
-    teamStandings.value = null;
+    apiData.value = null;
 
     // ======= fetch the NBA team standings ============ //
     Promise.all(urls)
       .then((data) => {
-        teamStandings.value = data;
+        apiData.value = data;
       })
       .catch((err) => {
         console.error(err);
@@ -35,5 +35,5 @@ export function useFetches(urls) {
 
   doFetches();
 
-  return { teamStandings, loadingState, error };
+  return { apiData, loadingState, error };
 }

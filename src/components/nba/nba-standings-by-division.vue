@@ -105,7 +105,7 @@ for (let i = 0; i < nbaDivisions.value.length; i++) {
 }
 
 let {
-  teamStandings: teamStandingsByDivision,
+  apiData: teamStandingsByDivision,
   loadingState,
   error,
 } = useFetches(urls);

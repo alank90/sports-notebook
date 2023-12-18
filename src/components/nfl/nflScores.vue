@@ -80,14 +80,14 @@ import {
     yesterdayLocaleString,
     today
 } from "../modules/getDate.js";
-import { transformDate } from "../modules/getFootballDates.js";
+import { getPreviousWeeksDates } from "../modules/getFootballDates.js";
 import { useFetch } from "../modules/useFetch.js";
 
 // ======= Variable Declarations ============ //
 const currentNFLSeason = inject("currentNFLSeason");
 // Get Sunday's date
-const { previousSundaysDateISOString } = transformDate(today);
-console.log(previousSundaysDateISOString);
+const { previousSundaysDateISOString, previousMondaysDateISOString, previousThursdaysDateISOString, previousSaturdaysDateISOString } = getPreviousWeeksDates(today);
+console.log(previousSundaysDateISOString, previousMondaysDateISOString, previousThursdaysDateISOString, previousSaturdaysDateISOString);
 const urlNFLScores = `https://v1.american-football.api-sports.io/games?league=1&season=${currentNFLSeason}&date=${previousSundaysDateISOString}&timezone=America/New_York`;
 
 

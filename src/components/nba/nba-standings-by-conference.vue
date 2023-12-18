@@ -131,7 +131,7 @@ for (let i = 0; i < nbaConferences.length; i++) {
 
 // ======= fetch the NBA item standings ============ //
 let {
-  teamStandings: teamStandingsByConference,
+  apiData: teamStandingsByConference,
   loadingState,
   error,
 } = useFetches(urls);
