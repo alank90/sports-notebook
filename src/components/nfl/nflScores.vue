@@ -1,17 +1,23 @@
 <template>
     <h1>NFL Scores</h1>
     <h2>For {{ yesterdayLocaleString }}</h2>
-    <h3>{{ gameScores ? gameScores.response[0]?.game.week : '' }}</h3>
-    <div v-if="!gameScores && gameScores?.errors.length !== 0">
+    <div v-if="loadingState">
         <p>Loading...</p>
         <img src="@/assets/img/loading.gif" alt="Loading Data" />
     </div>
-    <div v-else-if="gameScores.results > 0" class="container">
-        <template v-for="team in gameScores.response">
+    <div v-else-if="gameScores.length > 0">
+        <template v-for="n in gameScores.length">
             <!-- eslint-disable-next-line vue/require-v-for-key  -->
-            <div class="table-wrapper">
+            <h3> {{ new Date(gameScores[n -
+                1].parameters.date).toLocaleDateString('en-us', {
+                    weekday: 'long'
+                }) }} Games - {{ gameScores
+        ? gameScores[n - 1].response[0]?.game.week : '' }}</h3>
+
+            <!-- eslint-disable-next-line vue/require-v-for-key  -->
+            <div class=" container table-wrapper">
                 <!-- eslint-disable-next-line vue/require-v-for-key  -->
-                <table id="scores">
+                <table v-for="team in gameScores[n - 1].response" id="scores">
                     <thead>
                         <tr>
                             <th scope="row">{{ team.game.status.short }}</th>
@@ -68,7 +74,7 @@
             </div>
         </template>
     </div>
-    <div v-else-if="gameScores?.errors.length !== 0">
+    <div v-else-if="gameScores[n - 1]?.errors.length !== 0">
         OOPS!. Error {{ gameScores?.errors }}
     </div>
     <div v-else>Sorry. Your request failed.</div>
@@ -81,19 +87,45 @@ import {
     today
 } from "../modules/getDate.js";
 import { getPreviousWeeksDates } from "../modules/getFootballDates.js";
-import { useFetch } from "../modules/useFetch.js";
+import { useFetches } from "../modules/useFetches.js";
 
 // ======= Variable Declarations ============ //
 const currentNFLSeason = inject("currentNFLSeason");
-// Get Sunday's date
+const API_KEY = import.meta.env.VITE_API_SPORTS_KEY;
+const HOST_NAME = import.meta.env.VITE_API_HOST;
+
+let myHeaders = new Headers();
+myHeaders.append("x-apisports-key", API_KEY);
+myHeaders.append("x-rapidapi-host", HOST_NAME);
+
+const requestOptions = {
+    method: "GET",
+    headers: myHeaders,
+    redirect: "follow",
+};
+
+let urls = [];
+
+// Get Football game dates date
 const { previousSundaysDateISOString, previousMondaysDateISOString, previousThursdaysDateISOString, previousSaturdaysDateISOString } = getPreviousWeeksDates(today);
 console.log(previousSundaysDateISOString, previousMondaysDateISOString, previousThursdaysDateISOString, previousSaturdaysDateISOString);
-const urlNFLScores = `https://v1.american-football.api-sports.io/games?league=1&season=${currentNFLSeason}&date=${previousSundaysDateISOString}&timezone=America/New_York`;
-
+const fetchPreviousSundaysNFLScores = fetch(`https://v1.american-football.api-sports.io/games?league=1&season=${currentNFLSeason}&date=${previousSundaysDateISOString}&timezone=America/New_York`,
+    requestOptions).then((res) => res.json());
+const fetchPreviousMondaysNFLScores = fetch(`https://v1.american-football.api-sports.io/games?league=1&season=${currentNFLSeason}&date=${previousMondaysDateISOString}&timezone=America/New_York`,
+    requestOptions).then((res) => res.json());
+const fetchPreviousThursdaysNFLScores = fetch(`https://v1.american-football.api-sports.io/games?league=1&season=${currentNFLSeason}&date=${previousThursdaysDateISOString}&timezone=America/New_York`,
+    requestOptions).then((res) => res.json());
+const fetchPreviousSaturdaysNFLScores = fetch(`https://v1.american-football.api-sports.io/games?league=1&season=${currentNFLSeason}&date=${previousSaturdaysDateISOString}&timezone=America/New_York`,
+    requestOptions).then((res) => res.json());
+urls.push(fetchPreviousThursdaysNFLScores);
+urls.push(fetchPreviousSaturdaysNFLScores);
+urls.push(fetchPreviousSundaysNFLScores);
+urls.push(fetchPreviousMondaysNFLScores);
+console.log(urls);
 
 
 // Fetch scores
-const { data: gameScores, error } = useFetch(urlNFLScores);
+const { apiData: gameScores, loadingState, error } = useFetches(urls);
 </script>
 
 <style scoped>
@@ -115,7 +147,7 @@ h2 {
     gap: 15px 50px;
     justify-items: start;
     align-items: start;
-    width: max(95vw);
+    max-width: 1200px;
     margin-bottom: 50px;
 }
 

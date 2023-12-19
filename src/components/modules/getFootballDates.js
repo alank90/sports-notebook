@@ -57,7 +57,7 @@ export function getPreviousWeeksDates(date) {
   } else if (todaysDayOfWeek < thursdayNumericalValue) {
     previousThursdaysDate = new Date(
       new Date().setDate(
-        new Date().getDate() - (thursdayNumericalValue - (todaysDayOfWeek - 1))
+        new Date().getDate() - (thursdayNumericalValue + (todaysDayOfWeek - 1))
       )
     );
   } else if (todaysDayOfWeek > thursdayNumericalValue) {
