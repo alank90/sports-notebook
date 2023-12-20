@@ -78,7 +78,7 @@
 </template>
 
 <script setup>
-import { ref, inject } from "vue";
+import { inject } from "vue";
 import {
     yesterdayLocaleString,
     today
@@ -102,7 +102,7 @@ const requestOptions = {
 };
 
 let urls = [];
-const weekDays = ref(["Thursday", "Saturday", "Sunday", "Monday"])
+const weekDays = ["Thursday", "Saturday", "Sunday", "Monday"];
 
 // Get Football game dates date
 const { previousSundaysDateISOString, previousMondaysDateISOString, previousThursdaysDateISOString, previousSaturdaysDateISOString } = getPreviousWeeksDates(today);
