@@ -5,14 +5,11 @@
         <p>Loading...</p>
         <img src="@/assets/img/loading.gif" alt="Loading Data" />
     </div>
-    <div v-else-if="gameScores.length > 0">
+    <div v-else-if="gameScores.length > 0 && gameScores !== null">
         <template v-for="n in gameScores.length">
             <!-- eslint-disable-next-line vue/require-v-for-key  -->
-            <h3> {{ new Date(gameScores[n -
-                1].parameters.date).toLocaleDateString('en-us', {
-                    weekday: 'long'
-                }) }} Games - {{ gameScores
-        ? gameScores[n - 1].response[0]?.game.week : '' }}</h3>
+            <h3> {{ weekDays[n - 1] }} Games - {{ gameScores
+                ? gameScores[n - 1].response[0]?.game.week : '' }}</h3>
 
             <!-- eslint-disable-next-line vue/require-v-for-key  -->
             <div class=" container table-wrapper">
@@ -81,7 +78,7 @@
 </template>
 
 <script setup>
-import { inject } from "vue";
+import { ref, inject } from "vue";
 import {
     yesterdayLocaleString,
     today
@@ -105,6 +102,7 @@ const requestOptions = {
 };
 
 let urls = [];
+const weekDays = ref(["Thursday", "Saturday", "Sunday", "Monday"])
 
 // Get Football game dates date
 const { previousSundaysDateISOString, previousMondaysDateISOString, previousThursdaysDateISOString, previousSaturdaysDateISOString } = getPreviousWeeksDates(today);
@@ -126,6 +124,8 @@ console.log(urls);
 
 // Fetch scores
 const { apiData: gameScores, loadingState, error } = useFetches(urls);
+
+
 </script>
 
 <style scoped>
