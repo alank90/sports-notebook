@@ -37,9 +37,7 @@ export function getPreviousWeeksDates(date) {
     );
   } else {
     previousMondaysDate = new Date(
-      new Date().setDate(
-        new Date().getDate() - (todaysDayOfWeek - (todaysDayOfWeek - 1))
-      )
+      new Date().setDate(new Date().getDate() - (todaysDayOfWeek - 1))
     );
   }
 

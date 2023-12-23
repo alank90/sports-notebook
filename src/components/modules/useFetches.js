@@ -27,10 +27,10 @@ export function useFetches(urls) {
         error.value = err;
       })
       .finally(() => {
+        loadingState.value = false;
         console.log("fetch process completed");
       });
 
-    loadingState.value = false;
   };
 
   doFetches();
