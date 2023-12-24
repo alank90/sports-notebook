@@ -10,7 +10,7 @@
  * @Description - Function to create the previous Sunday's date from
  *   the date parameter passed into the function
  * @param {string} - today's date in string form yyyy-mm-dd
- * @returns - The previous Sunday's date in yyyy-mm-dd format
+ * @returns - The previous week's date's for S,M,T,Sa in yyyy-mm-dd format
  * @calledby - nfl-scores.vue
  */
 export function getPreviousWeeksDates(date) {
@@ -18,7 +18,6 @@ export function getPreviousWeeksDates(date) {
   let previousMondaysDate, previousThursdaysDate, previousSaturdaysDate;
   const thursdayNumericalValue = 4;
   const saturdaysNumericalvalue = 6;
-  console.log("todaysDate", todaysDayOfWeek);
 
   const previousSundaysDate = new Date(
     new Date().setDate(new Date().getDate() - todaysDayOfWeek)
@@ -31,11 +30,18 @@ export function getPreviousWeeksDates(date) {
   console.log("previouusSunday", previousSundaysDateISOString);
 
   // Find the previous Monday's date for MNF...
-  if (todaysDayOfWeek === 1) {
+  if (todaysDayOfWeek === 0) {
+    // Today is Sunday
+    previousMondaysDate = new Date(
+      new Date().setDate(new Date().getDate() - 6)
+    );
+  } else if (todaysDayOfWeek === 1) {
+    // Today is Monday
     previousMondaysDate = new Date(
       new Date().setDate(new Date().getDate() - 7)
     );
   } else {
+    // Any other day of week
     previousMondaysDate = new Date(
       new Date().setDate(new Date().getDate() - (todaysDayOfWeek - 1))
     );

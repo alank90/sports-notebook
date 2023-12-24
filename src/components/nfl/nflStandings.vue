@@ -214,8 +214,9 @@ nfc.value = [nfcEastStandings, nfcNorthStandings, nfcSouthStandings, nfcWestStan
 
 </script>
 
-
 <style scoped>
+@import "../modules/table.css";
+
 h1 {
   font-size: 1.5rem;
 }
@@ -229,91 +230,4 @@ h1 {
 div>p {
   font-size: 1.8rem;
 }
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  border: 1px solid black;
-  text-align: center;
-  vertical-align: middle;
-}
-
-table:last-child {
-  margin-bottom: 50px;
-}
-
-thead {
-  background-color: #333;
-  color: white;
-  font-size: 1.4rem;
-  text-transform: uppercase;
-  letter-spacing: 2%;
-}
-
-th,
-td {
-  font-size: 1.2rem;
-  border: 1px solid black;
-  padding: 8px;
-}
-
-thead th {
-  width: 25;
-}
-
-tbody th {
-  background-color: #3e7cb1;
-  color: #fff;
-  text-align: left;
-}
-
-tbody tr:nth-child(odd) {
-  background-color: #fff;
-}
-
-tbody tr:nth-child(even) {
-  background-color: #eee;
-}
-
-tbody tr:nth-child(even) th {
-  background-color: #81a4cd;
-}
-
-tbody tr:nth-child(6),
-tbody tr:nth-child(10) {
-  border-bottom: 10px solid #0880f9;
-}
-
-th>img {
-  max-width: 20px;
-  margin-right: 5px;
-}
-
-/* Table Stylings */
-#standings {
-  font-family: Arial, Helvetica, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
-}
-
-#standings td,
-#standings th {
-  border: 1px solid #ddd;
-  padding: 8px;
-}
-
-#standings tr:nth-child(even) {
-  background-color: #f2f2f2;
-}
-
-#standings tr:hover {
-  background-color: #ddd;
-}
-
-#standings th {
-  padding-top: 12px;
-  padding-bottom: 12px;
-  text-align: left;
-  background-color: #1181b2;
-  color: white;
-}</style>
+</style>
