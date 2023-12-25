@@ -16,6 +16,7 @@ export function useFetch(url) {
   myHeaders.append("x-rapidapi-host", HOST_NAME);
 
   const data = ref(null);
+  const loadingState = ref(true);
   const error = ref(null);
 
   async function doFetch() {
@@ -35,6 +36,7 @@ export function useFetch(url) {
       };
 
       const res = await fetch(unrefedUrlValue, requestOptions);
+      loadingState.value = false;
       data.value = await res.json();
     } catch (e) {
       error.value = e;
@@ -51,5 +53,5 @@ export function useFetch(url) {
     // otherwise, just fetch once
     doFetch();
   }
-  return { data, error };
+  return { data, loadingState, error };
 }

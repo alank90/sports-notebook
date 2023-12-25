@@ -9,10 +9,6 @@ table {
   width: 100%;
 }
 
-table:last-child {
-  margin-bottom: 50px;
-}
-
 thead {
   background-color: #333;
   color: white;
@@ -98,8 +94,6 @@ td > img {
   padding: 5px;
 }
 
-
-
 /* Scores Table stylings */
 #scores td,
 #scores th {
@@ -132,7 +126,7 @@ td > img {
   font-size: 1rem;
 }
 
-/* Standings Table */
+/* Standings Table stylings */
 #standings {
   font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;

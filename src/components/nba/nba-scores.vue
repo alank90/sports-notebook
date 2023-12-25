@@ -2,22 +2,28 @@
   <h1>NBA Scoreboard</h1>
   <h2>For {{ yesterdayLocaleString }}</h2>
 
-  <div v-if="error">
-    <p>Oops! Error encountered: {{ error.message }}</p>
+  <div v-if="loadingState">
+    <p>Loading...</p>
+    <img src="@/assets/img/loading.gif" alt="Loading Data" />
   </div>
-  <div v-else-if="gameScores" class="container">
+
+  <div v-if="gameScores !== null && gameScores.response.length === 0 && gameScores.errors.length === 0">
+    <p>Sorry no results. Perhaps no NBA games yesterday??</p>
+  </div>
+  <div v-if="error">
+    <p>Oops! Error encountered: {{ error }}</p>
+  </div>
+  <div v-else-if="gameScores !== null" class="container">
     <template v-for="team in gameScores.response">
       <!-- eslint-disable-next-line vue/require-v-for-key  -->
       <table>
         <template v-if="team.status.short !== 'FT' && team.status.short !== 'AOT'">
-          <!-- eslint-disable-next-line vue/require-v-for-key  -->
           <thead>
             <tr>
               <th scope="row" colspan="2">{{ team.status.long }}</th>
             </tr>
           </thead>
 
-          <!-- eslint-disable-next-line vue/require-v-for-key  -->
           <tbody>
             <tr>
               <td><img :src="team.teams.away.logo" /></td>
@@ -33,7 +39,6 @@
         </template>
 
         <template v-else>
-          <!-- eslint-disable-next-line vue/require-v-for-key  -->
           <thead>
             <tr>
               <th scope="row">{{ team.status.short }}</th>
@@ -46,7 +51,6 @@
               <th scope="col" colspan="3">Final</th>
             </tr>
           </thead>
-          <!-- eslint-disable-next-line vue/require-v-for-key  -->
           <tbody>
             <tr>
               <td><img :src="team.teams.away.logo" /></td>
@@ -89,10 +93,6 @@
       </table>
     </template>
   </div>
-  <div v-else>
-    <p>Loading...</p>
-    <img src="@/assets/img/loading.gif" alt="Loading Data" />
-  </div>
 </template>
 
 <script setup>
@@ -108,7 +108,7 @@ const currentNBASeason = inject("currentNBASeason");
 const urlNBAScores = `https://v1.basketball.api-sports.io/games/?league=12&season=${currentNBASeason}&date=${yesterdayISOString}&timezone=America/New_York`;
 
 // Fetch scores
-const { data: gameScores, error } = useFetch(urlNBAScores);
+const { data: gameScores, loadingState, error } = useFetch(urlNBAScores);
 </script>
 
 <style scoped>

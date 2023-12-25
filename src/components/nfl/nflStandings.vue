@@ -56,7 +56,7 @@
 
     <template v-for="n in 4">
       <!-- eslint-disable-next-line vue/require-v-for-key  -->
-      <table>
+      <table id="standings">
         <thead>
           <tr>
             <th scope="col" colspan="2">{{ nfc[n - 1].value[0].division }}</th>
@@ -98,7 +98,7 @@
 
   </div>
   <div v-else-if="nflStandings !== null">{{ nflStandings.errors.requests }}</div>
-  <div v-else>Sorry. Your request failed.</div>
+  <div v-else>Sorry. Your request failed. {{ error }}</div>
 </template>
 
 <script setup>
@@ -225,6 +225,10 @@ h1 {
   width: 85%;
   max-width: 900px;
   margin: 0 auto 5% auto;
+}
+
+table:not(:first-child) {
+  margin-top: 20px;
 }
 
 div>p {

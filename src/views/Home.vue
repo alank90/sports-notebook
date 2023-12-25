@@ -4,7 +4,7 @@
 
   <div class="container">
     <img src="@/assets/img/aaron-judge.webp" alt="Aaron Judge Photo" />
-    <img src="@/assets/img/kevin-durant.webp" alt="Kevin Durant Photo" />
+    <img src="@/assets/img/mikhal-bridges.webp" alt="Kevin Durant Photo" />
     <img src="@/assets/img/josh-allen.webp" alt="Josh Allen Photo" />
   </div>
 </template>
@@ -15,7 +15,6 @@
   flex-wrap: nowrap;
   justify-content: center;
   padding: 20px 50px;
-  width: 100%;
   max-width: 1200px;
   height: auto;
   margin: 0 auto;
