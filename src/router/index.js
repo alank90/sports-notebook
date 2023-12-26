@@ -3,8 +3,8 @@ import { createRouter, createWebHistory } from "vue-router";
 import Home from "@/views/Home.vue";
 import nbaStandings from "@/components/nba/nba-standings.vue";
 import nbaScores from "@/components/nba/nba-scores.vue";
-import nflStandings from "@/components/nfl/nflStandings.vue";
-import nflScores from "@/components/nfl/nflScores.vue";
+import nflStandings from "@/components/nfl/nfl-standings.vue";
+import nflScores from "@/components/nfl/nfl-scores.vue";
 
 const routes = [
   { path: "/", name: "Home", component: Home },

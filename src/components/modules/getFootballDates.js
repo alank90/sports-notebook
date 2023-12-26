@@ -1,19 +1,12 @@
 /**
- * Description - module creates previous Sunday date from todays date
- * @export {string} - return's previous Sundays date in MM-DD-YYYY format etc...
- *
- * @importedBy - nba-scores.vue
- */
-
-// ========= Vars ========================== //
-/**
- * @Description - Function to create the previous Sunday's date from
+ * @Description - Function to create the previous week's date's from
  *   the date parameter passed into the function
  * @param {string} - today's date in string form yyyy-mm-dd
  * @returns - The previous week's date's for S,M,T,Sa in yyyy-mm-dd format
- * @calledby - nfl-scores.vue
+ * @importedBy - nfl-scores.vue
  */
 export function getPreviousWeeksDates(date) {
+  // ========= Vars ========================== //
   const todaysDayOfWeek = date.getDay();
   let previousMondaysDate, previousThursdaysDate, previousSaturdaysDate;
   const thursdayNumericalValue = 4;
@@ -26,8 +19,6 @@ export function getPreviousWeeksDates(date) {
   const previousSundaysDateISOString = previousSundaysDate
     .toISOString()
     .slice(0, 10);
-
-  console.log("previouusSunday", previousSundaysDateISOString);
 
   // Find the previous Monday's date for MNF...
   if (todaysDayOfWeek === 0) {
@@ -50,8 +41,6 @@ export function getPreviousWeeksDates(date) {
   const previousMondaysDateISOString = previousMondaysDate
     .toISOString()
     .slice(0, 10);
-
-  console.log("previousMonday", previousMondaysDateISOString);
 
   // Find the previous Thursday's date for TNF...
   if (todaysDayOfWeek === thursdayNumericalValue) {
@@ -76,8 +65,6 @@ export function getPreviousWeeksDates(date) {
     .toISOString()
     .slice(0, 10);
 
-  console.log("previousThursday", previousThursdaysDateISOString);
-
   // Find the previous Saturday's date ...
   if (todaysDayOfWeek === saturdaysNumericalvalue) {
     previousSaturdaysDate = new Date(
@@ -93,7 +80,6 @@ export function getPreviousWeeksDates(date) {
     .toISOString()
     .slice(0, 10);
 
-  console.log("previousSatursday", previousSaturdaysDateISOString);
   return {
     previousSundaysDate,
     previousSundaysDateISOString,
