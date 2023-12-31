@@ -15,7 +15,7 @@
     <div v-else-if="gameScores !== null">
         <template v-for="n in gameScores.length">
             <div v-if="gameScores[n - 1]?.results > 0" :key="n">
-                <h3> {{ weekDays[n - 1] }} Game(s) - {{ gameScores
+                <h3> Game(s) - {{ gameScores
                     ? gameScores[n - 1].response[0]?.game.week : '' }}</h3>
 
                 <div class=" container table-wrapper">
@@ -87,7 +87,7 @@
 </template>
 
 <script setup>
-import { inject } from "vue";
+import { inject, watch, ref } from "vue";
 import {
     todayLocaleString,
     today,
@@ -111,8 +111,7 @@ const requestOptions = {
 };
 
 let urls = [];
-const weekDays = ["Thursday", "Saturday", "Sunday", "Monday"];
-
+const day = ref("");
 // Get Football game dates date
 const { previousSundaysDateISOString, previousMondaysDateISOString, previousThursdaysDateISOString, previousSaturdaysDateISOString } = getPreviousWeeksDates(today);
 const fetchPreviousSundaysNFLScores = fetch(`https://v1.american-football.api-sports.io/games?league=1&season=${currentNFLSeason}&date=${previousSundaysDateISOString}&timezone=America/New_York`,
@@ -131,6 +130,12 @@ urls.push(fetchPreviousMondaysNFLScores);
 // Fetch scores
 const { apiData: gameScores, loadingState, error } = useFetches(urls);
 
+watch(gameScores, () => {
+    gameScores.value.forEach((gameDay) => {
+        console.log(gameDay.response[0]?.game.date.date);
+
+    })
+})
 
 </script>
 
