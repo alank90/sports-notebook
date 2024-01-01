@@ -8,15 +8,15 @@
     </div>
 
     <!-- ========  If the fetch failed =========================== -->
-    <div v-if="error">Oops. Looks like there was an error: {{ error }}</div>
+    <div v-if="error">Oops. Looks like there was an error: {{ error }} </div>
 
     <!-- ===== Else lets generate the markup =============-->
     <!-- ===== Wrapper Div ============== -->
     <div v-else-if="gameScores !== null">
         <template v-for="n in gameScores.length">
             <div v-if="gameScores[n - 1]?.results > 0" :key="n">
-                <h3> Game(s) - {{ gameScores
-                    ? gameScores[n - 1].response[0]?.game.week : '' }}</h3>
+                <h3> {{ gameScores[n - 1].response[0]?.game.date.dayOfWeek }} Game(s) - {{ gameScores
+                    ? gameScores[n - 1].response[0].game.week : '' }}</h3>
 
                 <div class=" container table-wrapper">
                     <table v-for="gameInfo in gameScores[n - 1].response" id="scores" :key="gameInfo.game.id">
@@ -79,7 +79,7 @@
                 </div>
             </div>
             <!-- ====== If an error for that particular day occurred print it out ===================== -->
-            <div v-else-if="gameScores[n - 1]?.errors.length !== 0" :key="gameScores[n - 1].response.game.id">
+            <div v-else-if="gameScores[n - 1]?.errors.length !== 0" :key="gameScores[n - 1].response?.game.id">
                 OOPS!. Error {{ gameScores?.errors }}
             </div>
         </template>
@@ -111,7 +111,6 @@ const requestOptions = {
 };
 
 let urls = [];
-const day = ref("");
 // Get Football game dates date
 const { previousSundaysDateISOString, previousMondaysDateISOString, previousThursdaysDateISOString, previousSaturdaysDateISOString } = getPreviousWeeksDates(today);
 const fetchPreviousSundaysNFLScores = fetch(`https://v1.american-football.api-sports.io/games?league=1&season=${currentNFLSeason}&date=${previousSundaysDateISOString}&timezone=America/New_York`,
@@ -132,8 +131,10 @@ const { apiData: gameScores, loadingState, error } = useFetches(urls);
 
 watch(gameScores, () => {
     gameScores.value.forEach((gameDay) => {
-        console.log(gameDay.response[0]?.game.date.date);
-
+        const getCorrectedDay = new Date(gameDay.response[0]?.game.date.date);
+        getCorrectedDay.setDate(getCorrectedDay.getDate() + 1);
+        const tempDayValue = getCorrectedDay.toLocaleDateString('en-US', { weekday: 'long' });
+        gameDay.response[0].game.date.dayOfWeek = tempDayValue;
     })
 })
 
