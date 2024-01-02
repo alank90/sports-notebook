@@ -80,14 +80,14 @@
             </div>
             <!-- ====== If an error for that particular day occurred print it out ===================== -->
             <div v-else-if="gameScores[n - 1]?.errors.length !== 0" :key="gameScores[n - 1].response?.game.id">
-                OOPS!. Error {{ gameScores?.errors }}
+                OOPS!. Error {{ gameScores[n - 1]?.errors }}
             </div>
         </template>
     </div>
 </template>
 
 <script setup>
-import { inject, watch, ref } from "vue";
+import { inject, watch } from "vue";
 import {
     todayLocaleString,
     today,
@@ -131,10 +131,12 @@ const { apiData: gameScores, loadingState, error } = useFetches(urls);
 
 watch(gameScores, () => {
     gameScores.value.forEach((gameDay) => {
-        const getCorrectedDay = new Date(gameDay.response[0]?.game.date.date);
-        getCorrectedDay.setDate(getCorrectedDay.getDate() + 1);
-        const tempDayValue = getCorrectedDay.toLocaleDateString('en-US', { weekday: 'long' });
-        gameDay.response[0].game.date.dayOfWeek = tempDayValue;
+        if (gameDay.results > 0) {
+            const getCorrectedDay = new Date(gameDay.response[0]?.game.date.date);
+            getCorrectedDay.setDate(getCorrectedDay.getDate() + 1);
+            const tempDayValue = getCorrectedDay.toLocaleDateString('en-US', { weekday: 'long' });
+            gameDay.response[0].game.date.dayOfWeek = tempDayValue;
+        }
     })
 })
 
