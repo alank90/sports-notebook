@@ -156,7 +156,7 @@ h1 {
 
 .container {
   width: 75vw;
-  max-width: 100px;
+  max-width: 1000px;
   margin: 0 auto 5% auto;
 }
 
