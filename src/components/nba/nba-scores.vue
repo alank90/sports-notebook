@@ -130,8 +130,8 @@ h2 {
   gap: 15px 50px;
   justify-items: start;
   align-items: start;
-  width: max(95vw);
-  margin-bottom: 50px;
+  width: max(75vw);
+  margin: 0 auto 50px;
 }
 
 table {
