@@ -1,4 +1,16 @@
 <template>
-    <h1>Under Construction</h1>
-    <img src="@/assets/img/under_construction.webp" alt="Under Construction">
-</template>           
+  <img src="@/assets/img/mlb_logo.svg" alt="MLB Logo" />
+  <router-view></router-view>
+</template>
+
+<script setup>
+  import { provide } from "vue";
+
+  provide("currentMLBSeason", "2023");
+</script>
+
+<style scoped>
+  img {
+    width: 150px;
+  }
+</style>

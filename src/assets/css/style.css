@@ -13,3 +13,7 @@ body {
 p {
   color: var(--main-dark);
 }
+
+img[src$=".svg"] {
+  margin-top: 5px;
+}
