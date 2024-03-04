@@ -98,7 +98,7 @@ import { useFetches } from "../modules/useFetches.js";
 // ======= Variable Declarations ============ //
 const currentNFLSeason = inject("currentNFLSeason");
 const API_KEY = import.meta.env.VITE_API_SPORTS_KEY;
-const HOST_NAME = import.meta.env.VITE_API_HOST;
+const HOST_NAME = import.meta.env.VITE_API_HOST_BASKETBALL;
 
 let myHeaders = new Headers();
 myHeaders.append("x-apisports-key", API_KEY);

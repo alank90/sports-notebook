@@ -69,7 +69,7 @@
 
   // ======= Variable Declarations ============ //
   const API_KEY = import.meta.env.VITE_API_SPORTS_KEY;
-  const HOST_NAME = import.meta.env.VITE_API_HOST;
+  const HOST_NAME = import.meta.env.VITE_API_HOST_BASKETBALL;
   const currentNBASeason = inject("currentNBASeason");
   const nbaDivisions = ref([
     ["Atlantic", "Southeast", "Central"],

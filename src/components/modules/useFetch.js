@@ -6,10 +6,10 @@ import { ref, isRef, unref, watchEffect } from "vue";
  * @returns {object} - Reactive variables
  * @importedBy - nba-scores.vue
  */
-export function useFetch(url) {
+export function useFetch(url, hostName) {
   // ======= Variable Declarations ============ //
   const API_KEY = import.meta.env.VITE_API_SPORTS_KEY;
-  const HOST_NAME = import.meta.env.VITE_API_HOST;
+  const HOST_NAME = hostName;
   let myHeaders = new Headers();
 
   myHeaders.append("x-apisports-key", API_KEY);
@@ -36,10 +36,11 @@ export function useFetch(url) {
       };
 
       const res = await fetch(unrefedUrlValue, requestOptions);
-      loadingState.value = false;
       data.value = await res.json();
     } catch (e) {
       error.value = e;
+    } finally {
+      loadingState.value = false;
     }
   }
 
