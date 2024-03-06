@@ -111,6 +111,7 @@
   } = useFetches(urls);
 
   if (error.value) console.log("Error returned from doFetch() =>", error);
+  
   // ======== Computed Values ======================= //
   easternConferenceTeams = computed(() => {
     return teamStandingsByDivision.value.filter((team) => {
