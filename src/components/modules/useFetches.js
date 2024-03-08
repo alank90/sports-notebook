@@ -5,7 +5,7 @@ import { ref } from "vue";
  * w/Promise.all
  * @param {array} urls
  * @returns {object} - Reactive variables: apiData, loadingState, error
- * @importedBy - nba-standings-by-division.vue, nba-standings-by-conference.vue, nfl-scores.vue
+ * @importedBy - nba-standings-by-division.vue, nba-standings-by-conference.vue, nfl-scores.vue, mlb- standings
  */
 
 export function useFetches(urls) {
@@ -30,7 +30,6 @@ export function useFetches(urls) {
         loadingState.value = false;
         console.log("fetch process completed");
       });
-
   };
 
   doFetches();
