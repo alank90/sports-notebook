@@ -1,7 +1,39 @@
 <template>
     <h1>MLB Standings</h1>
-
-    <p>{{ teamStandings }}</p>
+    <div v-if="!loadingState && teamStandings">
+        <table>
+            <template v-for="(league, index) in baseballLeagues">
+                <!-- eslint-disable-next-line vue/require-v-for-key  -->
+                <thead>
+                    <tr>
+                        <th>{{ league }} {{ index }}</th>
+                    </tr>
+                    <tr>
+                        <th scope="col" colspan="2">Team</th>
+                        <th scope="col">W</th>
+                        <th scope="col">L</th>
+                        <th scope="col">PCT</th>
+                    </tr>
+                </thead>
+                <!-- eslint-disable-next-line vue/require-v-for-key  -->
+                <tbody>
+                    <tr
+                        v-for="team in teamStandings[index].response[0]"
+                        :key="team.team.id"
+                    >
+                        <th scope="row" colspan="2">
+                            <img :src="team.team.logo" />{{ team.team.name }}
+                        </th>
+                        <td>{{ team.games.win.total }}</td>
+                        <td>{{ team.games.lose.total }}</td>
+                        <td>
+                            {{ team.games.win.percentage.replace(/^0+/, "") }}
+                        </td>
+                    </tr>
+                </tbody>
+            </template>
+        </table>
+    </div>
 </template>
 
 <script setup>
@@ -23,36 +55,43 @@ const requestOptions = {
 const currentMLBSeason = inject("currentMLBSeason");
 let urls = [];
 
-const baseballGroups = ["Cactus", "Grapefruit"];
+const baseballLeagues = ["Cactus", "Grapefruit"];
 
 // ---------- Create fetch array for the Baseball groups( Cactus, Grapefruit) ---------- //
-baseballGroups.forEach((group) => {
+baseballLeagues.forEach((group) => {
     urls.push(
         fetch(
-            `https://v1.baseball.api-sports.io/standings/?group=${group}&league=1&season=2024`,
+            `https://v1.baseball.api-sports.io/standings/?group=${group}&league=1&season=${currentMLBSeason}`,
             requestOptions
         ).then((res) => res.json())
     );
 });
-console.log(urls);
 // ------------ Fetch the data from the endpoint -------------- //
-/* let {
-      data: teamMLBGroups,
-      loadingState,
-      error,
-    } = useFetch(urlGroups, hostName);
-    let {
-      data: teamStandings,
-      loadingState,
-      error,
-    } = useFetch(urlStandings, hostName); */
+
+let { apiData: teamStandings, loadingState, error } = useFetches(urls);
+console.log(teamStandings);
+
 // -------------- End fetches --------------------------------- //
 </script>
 
 <style scoped>
+@import "../../assets/css/table.css";
+
 h1 {
     font-size: 1.3rem;
     font-weight: 600;
     margin: 0 auto;
+}
+
+thead > tr:first-child {
+    font-weight: 550;
+    font-size: 1.3rem;
+    text-align: left;
+    background-color: #002d72;
+    text-decoration: underline;
+}
+
+.spacer {
+    height: 25px;
 }
 </style>

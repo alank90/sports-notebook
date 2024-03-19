@@ -6,7 +6,7 @@
 <script setup>
   import { provide } from "vue";
 
-  provide("currentMLBSeason", "2023");
+  provide("currentMLBSeason", "2024");
 </script>
 
 <style scoped>

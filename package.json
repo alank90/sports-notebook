@@ -7,7 +7,7 @@
         "serve": "vite preview"
     },
     "dependencies": {
-        "netlify-cli": "^17.17.1",
+        "netlify-cli": "^17.19.5",
         "vue": "^3.4.21",
         "vue-router": "^4.3.0"
     },
@@ -17,9 +17,9 @@
         "eslint": "^8.57.0",
         "eslint-config-airbnb-base": "^15.0.0",
         "eslint-config-prettier": "^9.1.0",
-        "eslint-plugin-vue": "^9.22.0",
+        "eslint-plugin-vue": "^9.23.0",
         "prettier": "^3.2.5",
-        "vite": "^5.1.4",
-        "vite-plugin-pwa": "^0.19.2"
+        "vite": "^5.1.6",
+        "vite-plugin-pwa": "^0.19.5"
     }
 }
