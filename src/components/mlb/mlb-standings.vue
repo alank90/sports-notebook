@@ -1,13 +1,13 @@
 <template>
     <h1>MLB Standings</h1>
-    <div v-if="!loadingState && teamStandings">
+    <div v-if="!loadingState && teamStandings && !error">
         <table>
             <template v-for="(league, index) in baseballLeagues">
                 <!-- eslint-disable-next-line vue/require-v-for-key  -->
                 <thead>
-                    <tr>
-                        <th>{{ league }} {{ index }}</th>
-                    </tr>
+                    <tr class="spacer"></tr>
+
+                    <th>{{ league }} {{ index }}</th>
                     <tr>
                         <th scope="col" colspan="2">Team</th>
                         <th scope="col">W</th>
@@ -69,7 +69,6 @@ baseballLeagues.forEach((group) => {
 // ------------ Fetch the data from the endpoint -------------- //
 
 let { apiData: teamStandings, loadingState, error } = useFetches(urls);
-console.log(teamStandings);
 
 // -------------- End fetches --------------------------------- //
 </script>
@@ -83,12 +82,11 @@ h1 {
     margin: 0 auto;
 }
 
-thead > tr:first-child {
+thead > th:first-of-type {
     font-weight: 550;
     font-size: 1.3rem;
     text-align: left;
     background-color: #002d72;
-    text-decoration: underline;
 }
 
 .spacer {
