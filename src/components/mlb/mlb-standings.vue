@@ -2,7 +2,7 @@
     <h1>MLB Standings</h1>
     <div v-if="!loadingState && teamStandings && !error">
         <table>
-            <template v-for="(league, index) in baseballLeagues">
+            <template v-for="(league, index) in baseballLeaguesST">
                 <!-- eslint-disable-next-line vue/require-v-for-key  -->
                 <thead>
                     <tr class="spacer"></tr>
@@ -55,10 +55,18 @@ const requestOptions = {
 const currentMLBSeason = inject("currentMLBSeason");
 let urls = [];
 
-const baseballLeagues = ["Cactus", "Grapefruit"];
+const baseballLeaguesST = ["Cactus", "Grapefruit"];
 
 // ---------- Create fetch array for the Baseball groups( Cactus, Grapefruit) ---------- //
-baseballLeagues.forEach((group) => {
+fetch(
+    `https://v1.baseball.api-sports.io/standings/groups?&league=1&season=${currentMLBSeason}`,
+    requestOptions
+)
+    .then((response) => response.text())
+    .then((result) => console.log(result))
+    .catch((error) => console.log("error", error));
+
+baseballLeaguesST.forEach((group) => {
     urls.push(
         fetch(
             `https://v1.baseball.api-sports.io/standings/?group=${group}&league=1&season=${currentMLBSeason}`,

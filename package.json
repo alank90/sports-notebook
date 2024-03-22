@@ -21,5 +21,6 @@
         "prettier": "^3.2.5",
         "vite": "^5.1.6",
         "vite-plugin-pwa": "^0.19.5"
-    }
+    },
+    "type": "module"
 }
