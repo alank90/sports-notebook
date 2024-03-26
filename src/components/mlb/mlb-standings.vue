@@ -1,6 +1,6 @@
 <template>
     <h1>MLB Standings</h1>
-    <div v-if="!loadingState && teamStandings && !error">
+    <div v-if="!loadingState && teamStandings && !error" class="container">
         <table>
             <template v-for="(league, index) in baseballLeaguesST">
                 <!-- eslint-disable-next-line vue/require-v-for-key  -->
@@ -82,13 +82,15 @@ let { apiData: teamStandings, loadingState, error } = useFetches(urls);
 </script>
 
 <style scoped>
-@import "../../assets/css/table.css";
+@import "../../assets/css/tableStandings.css";
 
 h1 {
     font-size: 1.3rem;
     font-weight: 600;
     margin: 0 auto;
 }
+
+
 
 thead > th:first-of-type {
     font-weight: 550;

@@ -1,19 +1,20 @@
 :root {
-  --main-dark: #212221;
-  --blue: #1181b2;
-  --light-blue: #ddedf4;
-  --purple: #44449b;
-  --main-bg: #edeef0;
+    --main-dark: #212221;
+    --blue: #1181b2;
+    --light-blue: #ddedf4;
+    --purple: #44449b;
+    --main-bg: #edeef0;
 }
 
 body {
-  background-color: var(--main-bg);
+    background-color: var(--main-bg);
 }
 
 p {
-  color: var(--main-dark);
+    color: var(--main-dark);
 }
 
 img[src$=".svg"] {
-  margin-top: 5px;
+    margin-top: 5px;
 }
+

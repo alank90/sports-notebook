@@ -1,7 +1,9 @@
 // prettier.config.js or .prettierrc.js
-module.exports = {
+const config = {
     trailingComma: "es5",
     tabWidth: 4,
     semi: true,
     singleQuote: false,
 };
+
+export default config;
