@@ -1,17 +1,18 @@
 <template>
     <h1>MLB Scores</h1>
     <h2>For {{ yesterdayLocaleString }}</h2>
+
     <div v-if="loadingState">
         <p>Loading...</p>
         <img src="@/assets/img/loading.gif" alt="Loading Data" />
     </div>
 
     <!-- ======= Check for response and print out table ========= -->
-    <div v-if="gameScores && gameScores.errors?.token">
-        {{ gameScores.errors.token }}Error Test
+    <div v-if="gameScores.errors?.token">
+        {{ gameScores.errors.token }}
     </div>
 
-    <div v-else-if="gameScores" class="container">
+    <div v-else-if="gameScores.results > 0" class="container">
         <template
             v-for="(team, index) in gameScores.response"
             :key="gameScores.response[index].id"
@@ -108,7 +109,11 @@
             </table>
         </template>
     </div>
+    <div v-else class="fallback-response">
+        <p>Sorry, no game scores available for {{ yesterdayLocaleString }}.</p>
+    </div>
     <!-- End v-else -->
+
     <!-- ======= End of print out table ========= -->
 </template>
 
@@ -142,8 +147,20 @@ h1 {
 }
 
 h2 {
+    font-size: 1.2rem;
+    font-weight: 650;
+    margin: 0 auto;
+}
+
+td:nth-last-child(3),
+th:nth-last-child(3) {
+    font-weight: 600;
     font-size: 1.4rem;
+    padding-left: 1.3rem;
+}
+
+.fallback-response {
+    font-size: medium;
     font-weight: 550;
-    margin-left: -150px;
 }
 </style>

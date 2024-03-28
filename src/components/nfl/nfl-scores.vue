@@ -143,7 +143,7 @@ watch(gameScores, () => {
 </script>
 
 <style scoped>
-@import "../modules/table.css";
+@import "../../assets/css/table.css";
 
 h1 {
     font-size: 2rem;

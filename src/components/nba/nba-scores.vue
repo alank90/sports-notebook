@@ -157,4 +157,11 @@ h2 {
     font-weight: 550;
     margin-left: -150px;
 }
+
+td:last-child,
+th:last-child {
+    font-weight: 700;
+    font-size: 1.4rem;
+    padding-left: 1.3rem;
+}
 </style>

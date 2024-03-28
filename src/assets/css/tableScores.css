@@ -42,13 +42,6 @@ td:first-child {
     padding: 5px;
 }
 
-td:nth-last-child(3),
-th:nth-last-child(3) {
-    font-weight: 700;
-    font-size: 1.4rem;
-    padding-left: 1.3rem;
-}
-
 th {
     background: #eee;
 }
