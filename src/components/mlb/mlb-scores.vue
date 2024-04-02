@@ -8,11 +8,11 @@
     </div>
 
     <!-- ======= Check for response and print out table ========= -->
-    <div v-if="gameScores.errors?.token">
+    <div v-if="gameScores && gameScores.errors?.token">
         {{ gameScores.errors.token }}
     </div>
 
-    <div v-else-if="gameScores.results > 0" class="container">
+    <div v-else-if="gameScores && gameScores.results > 0" class="container">
         <template
             v-for="(team, index) in gameScores.response"
             :key="gameScores.response[index].id"
@@ -31,8 +31,8 @@
                         <th>7</th>
                         <th>8</th>
                         <th>9</th>
+                        <th v-if="team.scores.away.innings?.extra">10+</th>
 
-                        <th v-if="team.scores.home.extra">Extra Innings</th>
                         <th scope="col" colspan="1">R</th>
                         <th scope="col" colspan="1">H</th>
                         <th scope="col" colspan="1">E</th>
@@ -54,10 +54,18 @@
                         <td>{{ team.scores.away.innings[6] }}</td>
                         <td>{{ team.scores.away.innings[7] }}</td>
                         <td>{{ team.scores.away.innings[8] }}</td>
-                        <td>{{ team.scores.away.innings[9] }}</td>
+                        <td
+                            v-if="
+                                team.scores.away.innings[9] === 0 ||
+                                team.scores.away.innings[9]
+                            "
+                        >
+                            {{ team.scores.away.innings[9] }}
+                        </td>
+                        <td v-else>-</td>
 
-                        <td v-if="team.scores.away.extra">
-                            {{ team.scores.away.extra }}
+                        <td v-if="team.scores.away.innings.extra">
+                            {{ team.scores.away.innings.extra }}
                         </td>
                         <td
                             :class="{
@@ -86,10 +94,17 @@
                         <td>{{ team.scores.home.innings[6] }}</td>
                         <td>{{ team.scores.home.innings[7] }}</td>
                         <td>{{ team.scores.home.innings[8] }}</td>
-                        <td>{{ team.scores.home.innings[9] }}</td>
-
-                        <td v-if="team.scores.home.extra">
-                            {{ team.scores.home.extra }}
+                        <td
+                            v-if="
+                                team.scores.home.innings[9] === 0 ||
+                                team.scores.home.innings[9]
+                            "
+                        >
+                            {{ team.scores.home.innings[9] }}
+                        </td>
+                        <td v-else>-</td>
+                        <td v-if="team.scores.home.innings.extra">
+                            {{ team.scores.home.innings.extra }}
                         </td>
                         <td
                             :class="{
@@ -114,7 +129,7 @@
     </div>
     <!-- End v-else -->
 
-    <!-- ======= End of print out table ========= -->
+    <!-- ======= End of print out of baseball scores table ========= -->
 </template>
 
 <script setup>
