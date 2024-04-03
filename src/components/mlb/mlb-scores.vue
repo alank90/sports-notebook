@@ -19,7 +19,7 @@
         >
             <table>
                 <thead>
-                    <tr>
+                    <tr v-if="team.status.short !== 'POST'">
                         <th scope="row">{{ team.status.short }}</th>
                         <th colspan="2"></th>
                         <th>1</th>
@@ -39,7 +39,30 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                    <!-- =========== Print out if game postponed ========= -->
+                    <tr v-if="team.status.short === 'POST'">
+                        <td>
+                            <img :src="team.teams.away.logo" alt="Team Logo" />
+                        </td>
+                        <td scope="row" colspan="1">
+                            <div class="td-size">
+                                {{ team.teams.away.name }}
+                            </div>
+                        </td>
+                        <td>{{ team.status.long }}</td>
+                    </tr>
+                    <tr v-if="team.status.short === 'POST'">
+                        <td><img :src="team.teams.home.logo" /></td>
+                        <td scope="row" colspan="1">
+                            <div class="td-size">
+                                {{ team.teams.home.name }}
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- ==================================================== -->
+
+                    <!-- ======== Print out table, game not postponed ========== -->
+                    <tr v-if="team.status.short !== 'POST'">
                         <td>
                             <img :src="team.teams.away.logo" alt="Team Logo" />
                         </td>
@@ -54,17 +77,12 @@
                         <td>{{ team.scores.away.innings[6] }}</td>
                         <td>{{ team.scores.away.innings[7] }}</td>
                         <td>{{ team.scores.away.innings[8] }}</td>
-                        <td
-                            v-if="
-                                team.scores.away.innings[9] === 0 ||
-                                team.scores.away.innings[9]
-                            "
-                        >
+                        <td v-if="team.scores.away.innings[9] !== null">
                             {{ team.scores.away.innings[9] }}
                         </td>
-                        <td v-else>-</td>
+                        <td v-else><em>-</em></td>
 
-                        <td v-if="team.scores.away.innings.extra">
+                        <td v-if="team.scores.away.innings.extra !== null">
                             {{ team.scores.away.innings.extra }}
                         </td>
                         <td
@@ -81,7 +99,7 @@
                         <td>{{ team.scores.away.hits }}</td>
                         <td>{{ team.scores.away.errors }}</td>
                     </tr>
-                    <tr>
+                    <tr v-if="team.status.short !== 'POST'">
                         <td><img :src="team.teams.home.logo" /></td>
                         <td scope="row" colspan="2">
                             {{ team.teams.home.name }}
@@ -94,16 +112,11 @@
                         <td>{{ team.scores.home.innings[6] }}</td>
                         <td>{{ team.scores.home.innings[7] }}</td>
                         <td>{{ team.scores.home.innings[8] }}</td>
-                        <td
-                            v-if="
-                                team.scores.home.innings[9] === 0 ||
-                                team.scores.home.innings[9]
-                            "
-                        >
+                        <td v-if="team.scores.home.innings[9] !== null">
                             {{ team.scores.home.innings[9] }}
                         </td>
-                        <td v-else>-</td>
-                        <td v-if="team.scores.home.innings.extra">
+                        <td v-else><em>-</em></td>
+                        <td v-if="team.scores.home.innings.extra !== null">
                             {{ team.scores.home.innings.extra }}
                         </td>
                         <td
@@ -120,6 +133,7 @@
                         <td>{{ team.scores.home.hits }}</td>
                         <td>{{ team.scores.home.errors }}</td>
                     </tr>
+                    <!-- ==================================================== -->
                 </tbody>
             </table>
         </template>
@@ -164,7 +178,7 @@ h1 {
 h2 {
     font-size: 1.2rem;
     font-weight: 650;
-    margin: 0 auto;
+    margin: 1% auto 2%;
 }
 
 td:nth-last-child(3),
@@ -172,6 +186,15 @@ th:nth-last-child(3) {
     font-weight: 600;
     font-size: 1.4rem;
     padding-left: 1.3rem;
+}
+
+.visibility {
+    display: none;
+}
+
+.td-size {
+    float: left;
+    width: 25%;
 }
 
 .fallback-response {
