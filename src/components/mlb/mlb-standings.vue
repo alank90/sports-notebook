@@ -54,11 +54,15 @@ const requestOptions = {
 };
 const currentMLBSeason = inject("currentMLBSeason");
 let urls = [];
+const urlForMLBStandings = [
+    `https://v1.baseball.api-sports.io/standings/?&league=1&season=${currentMLBSeason}`,
+];
 
-const baseballLeaguesST = ["Cactus", "Grapefruit"];
+// const baseballLeaguesST = ["Cactus", "Grapefruit"];
 
-// ---------- Create fetch array for the Baseball groups( Cactus, Grapefruit) ---------- //
-fetch(
+// ---------- Create fetch array for the Baseball standings) ---------- //
+
+/* fetch(
     `https://v1.baseball.api-sports.io/standings/groups?&league=1&season=${currentMLBSeason}`,
     requestOptions
 )
@@ -73,10 +77,14 @@ baseballLeaguesST.forEach((group) => {
             requestOptions
         ).then((res) => res.json())
     );
-});
+}); */
 // ------------ Fetch the data from the endpoint -------------- //
 
-let { apiData: teamStandings, loadingState, error } = useFetches(urls);
+let {
+    apiData: teamStandings,
+    loadingState,
+    error,
+} = useFetches(urlForMLBStandings);
 
 // -------------- End fetches --------------------------------- //
 </script>
@@ -89,8 +97,6 @@ h1 {
     font-weight: 600;
     margin: 0 auto;
 }
-
-
 
 thead > th:first-of-type {
     font-weight: 550;
