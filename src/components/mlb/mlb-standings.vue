@@ -1,9 +1,8 @@
 <template>
     <h1>MLB Standings</h1>
-    <div v-if="!loadingState && teamStandings && !error" class="container">
+    <!-- <div v-if="!loadingState && teamStandings && !error" class="container">
         <table>
             <template v-for="(league, index) in baseballLeaguesST">
-                <!-- eslint-disable-next-line vue/require-v-for-key  -->
                 <thead>
                     <tr class="spacer"></tr>
 
@@ -15,7 +14,6 @@
                         <th scope="col">PCT</th>
                     </tr>
                 </thead>
-                <!-- eslint-disable-next-line vue/require-v-for-key  -->
                 <tbody>
                     <tr
                         v-for="team in teamStandings[index].response[0]"
@@ -33,11 +31,11 @@
                 </tbody>
             </template>
         </table>
-    </div>
+    </div> -->
 </template>
 
 <script setup>
-import { inject } from "vue";
+import { ref, inject } from "vue";
 import { useFetches } from "../modules/useFetches";
 
 // ========= Variable Declarations =================== //
@@ -53,38 +51,39 @@ const requestOptions = {
     redirect: "follow",
 };
 const currentMLBSeason = inject("currentMLBSeason");
-let urls = [];
-const urlForMLBStandings = [
-    `https://v1.baseball.api-sports.io/standings/?&league=1&season=${currentMLBSeason}`,
-];
 
-// const baseballLeaguesST = ["Cactus", "Grapefruit"];
+const mlbDivisions = ref([
+    ["AL East", "AL Central", "AL West"],
+    ["NL East", "NL Central", "NL West"],
+]);
+let urls = [];
 
 // ---------- Create fetch array for the Baseball standings) ---------- //
 
 /* fetch(
-    `https://v1.baseball.api-sports.io/standings/groups?&league=1&season=${currentMLBSeason}`,
+    `https://v1.baseball.api-sports.io/standings/?league=1&group=${mlbLeagues[0]}&season=${currentMLBSeason}`,
     requestOptions
 )
-    .then((response) => response.text())
+    .then((response) => response.json())
     .then((result) => console.log(result))
-    .catch((error) => console.log("error", error));
+    .catch((error) => console.log("error", error)); */
 
-baseballLeaguesST.forEach((group) => {
-    urls.push(
-        fetch(
-            `https://v1.baseball.api-sports.io/standings/?group=${group}&league=1&season=${currentMLBSeason}`,
-            requestOptions
-        ).then((res) => res.json())
-    );
-}); */
+// Create an array of fetches for each MLB division to send to useFetches.js with urls array for the
+// Promise.all call
+for (let i = 0; i < mlbDivisions.value.length; i++) {
+    for (let n = 0; n < mlbDivisions.value[i].length; n++) {
+        urls.push(
+            fetch(
+                `https://v1.baseball.api-sports.io/standings/?league=1&group=${mlbDivisions.value[i][n]}&season=${currentMLBSeason}`,
+                requestOptions
+            ).then((res) => res.json())
+        );
+    }
+}
+console.log(urls);
 // ------------ Fetch the data from the endpoint -------------- //
 
-let {
-    apiData: teamStandings,
-    loadingState,
-    error,
-} = useFetches(urlForMLBStandings);
+//let { apiData: teamStandings, loadingState, error } = useFetches(urls);
 
 // -------------- End fetches --------------------------------- //
 </script>
