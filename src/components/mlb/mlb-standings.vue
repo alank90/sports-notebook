@@ -57,6 +57,7 @@ const mlbDivisions = ref([
     ["NL East", "NL Central", "NL West"],
 ]);
 let urls = [];
+const mlbLeagues = ["American League", "National League"];
 
 // ---------- Create fetch array for the Baseball standings) ---------- //
 
@@ -70,20 +71,18 @@ let urls = [];
 
 // Create an array of fetches for each MLB division to send to useFetches.js with urls array for the
 // Promise.all call
-for (let i = 0; i < mlbDivisions.value.length; i++) {
-    for (let n = 0; n < mlbDivisions.value[i].length; n++) {
-        urls.push(
-            fetch(
-                `https://v1.baseball.api-sports.io/standings/?league=1&group=${mlbDivisions.value[i][n]}&season=${currentMLBSeason}`,
-                requestOptions
-            ).then((res) => res.json())
-        );
-    }
+for (let i = 0; i < mlbLeagues.length; i++) {
+    urls.push(
+        fetch(
+            `https://v1.baseball.api-sports.io/standings/?league=1&group=${mlbLeagues[i]}&season=${currentMLBSeason}`,
+            requestOptions
+        ).then((res) => res.json())
+    );
 }
 console.log(urls);
 // ------------ Fetch the data from the endpoint -------------- //
 
-//let { apiData: teamStandings, loadingState, error } = useFetches(urls);
+let { apiData: teamStandings, loadingState, error } = useFetches(urls);
 
 // -------------- End fetches --------------------------------- //
 </script>
