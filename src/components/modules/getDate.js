@@ -4,7 +4,7 @@
  * @export {string} - return's both today & yesterday's ISO and locale strings in
  *                    MM-DD-YYYY format etc...
  *
- * @importedBy - nba-scores.vue, nfl-scores.vue
+ * @importedBy - nba-scores.vue, nfl-scores.vue, mlb-scores.vue
  */
 
 const today = new Date();

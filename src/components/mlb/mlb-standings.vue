@@ -37,6 +37,7 @@
 <script setup>
 import { ref, inject } from "vue";
 import { useFetches } from "../modules/useFetches";
+import { useCreateDivisions } from "../modules/createMLBDivisions";
 
 // ========= Variable Declarations =================== //
 const API_KEY = import.meta.env.VITE_API_SPORTS_KEY;
@@ -52,25 +53,13 @@ const requestOptions = {
 };
 const currentMLBSeason = inject("currentMLBSeason");
 
-const mlbDivisions = ref([
-    ["AL East", "AL Central", "AL West"],
-    ["NL East", "NL Central", "NL West"],
-]);
 let urls = [];
 const mlbLeagues = ["American League", "National League"];
 
 // ---------- Create fetch array for the Baseball standings) ---------- //
 
-/* fetch(
-    `https://v1.baseball.api-sports.io/standings/?league=1&group=${mlbLeagues[0]}&season=${currentMLBSeason}`,
-    requestOptions
-)
-    .then((response) => response.json())
-    .then((result) => console.log(result))
-    .catch((error) => console.log("error", error)); */
-
-// Create an array of fetches for each MLB division to send to useFetches.js with urls array for the
-// Promise.all call
+// Create an array of fetches for each MLB division to send to useFetches.js with urls
+// array for the Promise.all call
 for (let i = 0; i < mlbLeagues.length; i++) {
     urls.push(
         fetch(
@@ -79,12 +68,15 @@ for (let i = 0; i < mlbLeagues.length; i++) {
         ).then((res) => res.json())
     );
 }
-console.log(urls);
+
 // ------------ Fetch the data from the endpoint -------------- //
 
 let { apiData: teamStandings, loadingState, error } = useFetches(urls);
 
 // -------------- End fetches --------------------------------- //
+
+// Create an object array with teams broken down by division
+const { teamStandingsByDivision } = useCreateDivisions(teamStandings);
 </script>
 
 <style scoped>
