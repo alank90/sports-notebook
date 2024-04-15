@@ -35,7 +35,7 @@
 </template>
 
 <script setup>
-import { ref, inject } from "vue";
+import { ref, inject, watch } from "vue";
 import { useFetches } from "../modules/useFetches";
 import { useCreateDivisions } from "../modules/createMLBDivisions";
 
@@ -55,6 +55,7 @@ const currentMLBSeason = inject("currentMLBSeason");
 
 let urls = [];
 const mlbLeagues = ["American League", "National League"];
+let teamStandingsByDivision = ref(null);
 
 // ---------- Create fetch array for the Baseball standings) ---------- //
 
@@ -70,13 +71,18 @@ for (let i = 0; i < mlbLeagues.length; i++) {
 }
 
 // ------------ Fetch the data from the endpoint -------------- //
-
 let { apiData: teamStandings, loadingState, error } = useFetches(urls);
-
 // -------------- End fetches --------------------------------- //
 
+watch(teamStandings, async (newTeamStandings, oldTeamStandings) => {
+    console.log("Old value:", oldTeamStandings);
+    console.log("New value:", newTeamStandings);
+
+    teamStandingsByDivision.value = useCreateDivisions(teamStandings);
+});
+
 // Create an object array with teams broken down by division
-const { teamStandingsByDivision } = useCreateDivisions(teamStandings);
+// const { teamStandingsByDivision } = useCreateDivisions(teamStandings);
 </script>
 
 <style scoped>

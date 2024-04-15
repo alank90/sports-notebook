@@ -8,13 +8,46 @@ import { ref } from "vue";
 
 export function useCreateDivisions(teamStandingsByLeague) {
     // ============ Vars ================= //
-    const teamStandingsByDivision = ref(["Test1"]);
-    const mlbDivisions = ref([
-        ["AL East", "AL Central", "AL West"],
-        ["NL East", "NL Central", "NL West"],
-    ]);
-    console.log(teamStandingsByLeague);
+    const teamStandingsByDivision = ref({
+        "AL East": [],
+        "AL Central": [],
+        "AL West": [],
+        "NL East": [],
+        "NL Central": [],
+        "NL West": [],
+    });
 
-    
+    const mlbDivisions = ref([
+        {
+            division: "AL East",
+            teams: ["Yankees", "Orioles", "Red Sox", "Rays", "Blue Jays"],
+        },
+        {
+            division: "AL Central",
+            teams: ["Guardians", "Royals", "Tigers", "Twins", "White Sox"],
+        },
+        {
+            division: "AL West",
+            teams: ["Angels", "Astros", "Athletics", "Mariners", "Rangers"],
+        },
+        {
+            division: "NL East",
+            teams: ["Braves", "Marlins", "Mets", "Nationals", "Phillies"],
+        },
+        {
+            division: "NL Central",
+            teams: ["Brewers", "Cardinals", "Cubs", "Pirates", "Reds"],
+        },
+        {
+            division: "NL West",
+            teams: ["Diamondbacks", "Dodgers", "Giants", "Padres", "Rockies"],
+        },
+    ]);
+    console.log(teamStandingsByLeague.value);
+
+    /* teamStandingsByLeague[0].response.forEach((league) => {
+        console.log(league);
+    }); */
+
     return { teamStandingsByDivision };
 }
