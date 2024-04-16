@@ -75,9 +75,6 @@ let { apiData: teamStandings, loadingState, error } = useFetches(urls);
 // -------------- End fetches --------------------------------- //
 
 watch(teamStandings, async (newTeamStandings, oldTeamStandings) => {
-    console.log("Old value:", oldTeamStandings);
-    console.log("New value:", newTeamStandings);
-
     teamStandingsByDivision.value = useCreateDivisions(teamStandings);
 });
 

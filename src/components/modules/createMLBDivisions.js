@@ -17,7 +17,7 @@ export function useCreateDivisions(teamStandingsByLeague) {
         "NL West": [],
     });
 
-    const mlbDivisions = ref([
+    const mlbDivisions = [
         {
             division: "AL East",
             teams: ["Yankees", "Orioles", "Red Sox", "Rays", "Blue Jays"],
@@ -42,12 +42,25 @@ export function useCreateDivisions(teamStandingsByLeague) {
             division: "NL West",
             teams: ["Diamondbacks", "Dodgers", "Giants", "Padres", "Rockies"],
         },
-    ]);
-    console.log(teamStandingsByLeague.value);
+    ];
 
-    /* teamStandingsByLeague[0].response.forEach((league) => {
-        console.log(league);
-    }); */
+    teamStandingsByLeague.value.forEach((league) => {
+        // Iterate thru teamStandingsByLeague array and place each team in the
+        // appropriate teamStandingsByDivision object aray
+        league.response[0].forEach((team) => {
+            mlbDivisions.forEach((item) => {
+                // Check if the current team(team.team.name) is in the
+                // current teamStandingsByDivision object aray
+                item.teams.forEach((array_item) => {
+                    if (team.team.name.includes(array_item)) {
+                        teamStandingsByDivision.value[item.division].push(
+                            team.team.name
+                        );
+                    }
+                });
+            });
+        });
+    });
 
     return { teamStandingsByDivision };
 }
