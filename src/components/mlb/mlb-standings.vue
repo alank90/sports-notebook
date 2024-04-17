@@ -1,43 +1,39 @@
 <template>
     <h1>MLB Standings</h1>
-    <!-- <div v-if="!loadingState && teamStandings && !error" class="container">
-        <table>
-            <template v-for="(league, index) in baseballLeaguesST">
-                <thead>
-                    <tr class="spacer"></tr>
 
-                    <th>{{ league }} {{ index }}</th>
-                    <tr>
-                        <th scope="col" colspan="2">Team</th>
-                        <th scope="col">W</th>
-                        <th scope="col">L</th>
-                        <th scope="col">PCT</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr
-                        v-for="team in teamStandings[index].response[0]"
-                        :key="team.team.id"
-                    >
-                        <th scope="row" colspan="2">
-                            <img :src="team.team.logo" />{{ team.team.name }}
-                        </th>
-                        <td>{{ team.games.win.total }}</td>
-                        <td>{{ team.games.lose.total }}</td>
-                        <td>
-                            {{ team.games.win.percentage.replace(/^0+/, "") }}
-                        </td>
-                    </tr>
-                </tbody>
-            </template>
+    <div class="container">
+        <table v-for="division in divisions">
+            <thead>
+                <tr class="spacer"></tr>
+
+                <th>American League</th>
+                <tr>
+                    <th scope="col" colspan="2">Team</th>
+                    <th scope="col">W</th>
+                    <th scope="col">L</th>
+                    <th scope="col">PCT</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="team in division">
+                    <th scope="row" colspan="2">
+                        <img :src="team.team.logo" />{{ team.team.name }}
+                    </th>
+                    <td>{{ team.games.win.total }}</td>
+                    <td>{{ team.games.lose.total }}</td>
+                    <td>
+                        {{ team.games.win.percentage.replace(/^0+/, "") }}
+                    </td>
+                </tr>
+            </tbody>
         </table>
-    </div> -->
+    </div>
 </template>
 
 <script setup>
 import { ref, inject, watch } from "vue";
 import { useFetches } from "../modules/useFetches";
-import { useCreateDivisions } from "../modules/createMLBDivisions";
+import { useCreateDivisions, divisions } from "../modules/createMLBDivisions";
 
 // ========= Variable Declarations =================== //
 const API_KEY = import.meta.env.VITE_API_SPORTS_KEY;
@@ -55,9 +51,8 @@ const currentMLBSeason = inject("currentMLBSeason");
 
 let urls = [];
 const mlbLeagues = ["American League", "National League"];
-let teamStandingsByDivision = ref(null);
 
-// ---------- Create fetch array for the Baseball standings) ---------- //
+// ---------- End of Vars ---------- //
 
 // Create an array of fetches for each MLB division to send to useFetches.js with urls
 // array for the Promise.all call
@@ -74,12 +69,15 @@ for (let i = 0; i < mlbLeagues.length; i++) {
 let { apiData: teamStandings, loadingState, error } = useFetches(urls);
 // -------------- End fetches --------------------------------- //
 
-watch(teamStandings, async (newTeamStandings, oldTeamStandings) => {
-    teamStandingsByDivision.value = useCreateDivisions(teamStandings);
-});
-
-// Create an object array with teams broken down by division
-// const { teamStandingsByDivision } = useCreateDivisions(teamStandings);
+// ================ Watch Function ============================ //
+watch(
+    teamStandings,
+    (newTeamStandings, oldTeamStandings) => {
+        // Create an object array with teams broken down by division
+        useCreateDivisions(teamStandings);
+    },
+    { once: true }
+);
 </script>
 
 <style scoped>
