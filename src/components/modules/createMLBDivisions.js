@@ -52,11 +52,11 @@ export function useCreateDivisions(teamStandingsByLeague) {
             // Now, check if the current team(team.team.name) is in the
             // current mlbDivisions.teams object array
             mlbDivisions.forEach((division) => {
-                division.teams.forEach((array_item) => {
+                for (const array_item of division.teams) {
                     if (team.team.name.includes(array_item)) {
                         divisions.value[division.division].push(team);
                     }
-                });
+                }
             });
         });
     });

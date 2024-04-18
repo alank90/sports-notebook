@@ -2,13 +2,12 @@
     <h1>MLB Standings</h1>
 
     <div class="container">
-        <table v-for="division in divisions">
+        <table v-for="(division, index) in divisions">
             <thead>
                 <tr class="spacer"></tr>
 
-                <th>American League</th>
                 <tr>
-                    <th scope="col" colspan="2">Team</th>
+                    <th scope="col" colspan="2">{{ index }}</th>
                     <th scope="col">W</th>
                     <th scope="col">L</th>
                     <th scope="col">PCT</th>
