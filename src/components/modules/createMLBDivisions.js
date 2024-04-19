@@ -1,9 +1,9 @@
 import { ref } from "vue";
 
-/** Description - Function takes in teamStandings.response array and breaks the array into
- *      each leagues respective teams by division
+/** Description - Function takes in teamStandings.response array and breaks the object array(divisions)
+ *   into baseball divisions.
  *  @params - { array } - response array of team standings by league returned from API fetch
- *  @return - { object array } - object array of teams in each league boken down into divisions
+ *  @return - { object array } - object array of teams in each league broken down into divisions
  */
 
 let divisions = ref({

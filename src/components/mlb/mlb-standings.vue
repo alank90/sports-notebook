@@ -1,11 +1,16 @@
 <template>
     <h1>MLB Standings</h1>
 
-    <div class="container">
+    <div v-if="!loadingState && divisions" class="container">
         <table v-for="(division, index) in divisions">
             <thead>
+                <tr v-if="index === 'AL East'" class="spacer">
+                    American League
+                </tr>
+                <tr v-if="index === 'NL East'" class="spacer">
+                    National League
+                </tr>
                 <tr class="spacer"></tr>
-
                 <tr>
                     <th scope="col" colspan="2">{{ index }}</th>
                     <th scope="col">W</th>
@@ -88,14 +93,25 @@ h1 {
     margin: 0 auto;
 }
 
+table {
+    border: none;
+}
+
+table:nth-child(4) {
+    margin-top: 2.2rem;
+}
+
 thead > th:first-of-type {
     font-weight: 550;
     font-size: 1.3rem;
     text-align: left;
     background-color: #002d72;
 }
-
 .spacer {
-    height: 25px;
+    height: 2rem;
+    vertical-align: middle;
+    display: table-cell;
+    background-color: #edeef0;
+    color: black;
 }
 </style>

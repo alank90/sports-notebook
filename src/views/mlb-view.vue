@@ -1,16 +1,16 @@
 <template>
-  <img src="@/assets/img/mlb_logo.svg" alt="MLB Logo" />
-  <router-view></router-view>
+    <img src="@/assets/img/mlb_logo.svg" alt="MLB Logo" />
+    <router-view></router-view>
 </template>
 
 <script setup>
-  import { provide } from "vue";
+import { provide } from "vue";
 
-  provide("currentMLBSeason", "2024");
+provide("currentMLBSeason", "2024");
 </script>
 
 <style scoped>
-  img {
+img {
     width: 150px;
-  }
+}
 </style>
