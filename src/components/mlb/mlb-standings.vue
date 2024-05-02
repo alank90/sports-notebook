@@ -1,7 +1,9 @@
 <template>
     <h1>MLB Standings</h1>
 
-    <div v-if="!loadingState && divisions" class="container">
+    <div v-if="error">{{ error }}</div>
+
+    <div v-else-if="!loadingState && divisions" class="container">
         <table v-for="(division, index) in divisions">
             <thead>
                 <tr v-if="index === 'AL East'" class="spacer">
