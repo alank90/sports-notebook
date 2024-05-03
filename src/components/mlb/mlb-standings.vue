@@ -76,14 +76,14 @@ let { apiData: teamStandings, loadingState, error } = useFetches(urls);
 // -------------- End fetches --------------------------------- //
 
 // ================ Watch Function ============================ //
-watch(
-    teamStandings,
-    (newTeamStandings, oldTeamStandings) => {
-        // Create an object array with teams broken down by division
-        useCreateDivisions(teamStandings);
-    },
-    { once: true }
-);
+// Because of the asynchronous nature of useFetches() function  we need
+// to create a watch function that watches when teamstandings becomes populated
+// with fetch results and then we can call useCreateDivisions() to build an
+// an array object of teams by division.
+watch(teamStandings, (newTeamStandings, oldTeamStandings) => {
+    // Create an object array with teams broken down by division
+    useCreateDivisions(teamStandings);
+});
 </script>
 
 <style scoped>
