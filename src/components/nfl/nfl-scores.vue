@@ -8,27 +8,48 @@
     </div>
 
     <!-- ========  If the fetch failed =========================== -->
-    <div v-if="error">Oops. Looks like there was an error: {{ error }} </div>
+    <div v-if="error">Oops. Looks like there was an error: {{ error }}</div>
 
     <!-- ===== Else lets generate the markup =============-->
     <!-- ===== Wrapper Div ============== -->
     <div v-else-if="gameScores !== null">
         <template v-for="n in gameScores.length">
             <div v-if="gameScores[n - 1]?.results > 0" :key="n">
-                <h3> {{ gameScores[n - 1].response[0]?.game.date.dayOfWeek }} Game(s) - {{ gameScores
-                    ? gameScores[n - 1].response[0].game.week : '' }}</h3>
+                <h3>
+                    {{
+                        gameScores[n - 1].response[0]?.game.date.dayOfWeek
+                    }}
+                    Game(s) -
+                    {{
+                        gameScores
+                            ? gameScores[n - 1].response[0].game.week
+                            : ""
+                    }}
+                </h3>
 
-                <div class=" container table-wrapper">
-                    <table v-for="gameInfo in gameScores[n - 1].response" id="scores" :key="gameInfo.game.id">
+                <div class="container table-wrapper">
+                    <table
+                        v-for="gameInfo in gameScores[n - 1].response"
+                        id="scores"
+                        :key="gameInfo.game.id"
+                    >
                         <thead>
                             <tr>
-                                <th scope="row">{{ gameInfo.game.status.short }}</th>
+                                <th scope="row">
+                                    {{ gameInfo.game.status.short }}
+                                </th>
                                 <th colspan="2"></th>
                                 <th>Q1</th>
                                 <th>Q2</th>
                                 <th>Q3</th>
                                 <th>Q4</th>
-                                <th v-if="gameInfo.game.status.long === 'Final/OT'">O/T</th>
+                                <th
+                                    v-if="
+                                        gameInfo.game.status.long === 'Final/OT'
+                                    "
+                                >
+                                    O/T
+                                </th>
                                 <th scope="col" colspan="3">Final</th>
                             </tr>
                         </thead>
@@ -43,12 +64,22 @@
                                 <td>{{ gameInfo.scores.away.quarter_2 }}</td>
                                 <td>{{ gameInfo.scores.away.quarter_3 }}</td>
                                 <td>{{ gameInfo.scores.away.quarter_4 }}</td>
-                                <td v-if="gameInfo.game.status.long === 'Final/OT'">
+                                <td
+                                    v-if="
+                                        gameInfo.game.status.long === 'Final/OT'
+                                    "
+                                >
                                     {{ gameInfo.scores.away.overtime }}
                                 </td>
-                                <td :class="{
-                                    winner: gameInfo.scores.away.total > gameInfo.scores.home.total,
-                                }" scope="col" colspan="3">
+                                <td
+                                    :class="{
+                                        winner:
+                                            gameInfo.scores.away.total >
+                                            gameInfo.scores.home.total,
+                                    }"
+                                    scope="col"
+                                    colspan="3"
+                                >
                                     {{ gameInfo.scores.away.total }}
                                 </td>
                             </tr>
@@ -61,25 +92,42 @@
                                 <td>{{ gameInfo.scores.home.quarter_2 }}</td>
                                 <td>{{ gameInfo.scores.home.quarter_3 }}</td>
                                 <td>{{ gameInfo.scores.home.quarter_4 }}</td>
-                                <td v-if="gameInfo.game.status.long === 'Final/OT'">
+                                <td
+                                    v-if="
+                                        gameInfo.game.status.long === 'Final/OT'
+                                    "
+                                >
                                     {{ gameInfo.scores.home.overtime }}
                                 </td>
-                                <td :class="{
-                                    winner: gameInfo.scores.home.total > gameInfo.scores.away.total,
-                                }" scope="col" colspan="3">
+                                <td
+                                    :class="{
+                                        winner:
+                                            gameInfo.scores.home.total >
+                                            gameInfo.scores.away.total,
+                                    }"
+                                    scope="col"
+                                    colspan="3"
+                                >
                                     {{ gameInfo.scores.home.total }}
                                 </td>
                             </tr>
                         </tbody>
                         <tfoot valign="center">
-                            <td colspan="8">Venue - {{ gameInfo.game.venue.city }} - {{ gameInfo.game.venue.name }}</td>
+                            <tr>
+                                <td colspan="8">
+                                    Venue - {{ gameInfo.game.venue.city }} -
+                                    {{ gameInfo.game.venue.name }}
+                                </td>
+                            </tr>
                         </tfoot>
-
                     </table>
                 </div>
             </div>
             <!-- ====== If an error for that particular day occurred print it out ===================== -->
-            <div v-else-if="gameScores[n - 1]?.errors.length !== 0" :key="gameScores[n - 1].response?.game.id">
+            <div
+                v-else-if="gameScores[n - 1]?.errors.length !== 0"
+                :key="gameScores[n - 1].response?.game.id"
+            >
                 OOPS!. Error {{ gameScores[n - 1]?.errors }}
             </div>
         </template>
@@ -88,10 +136,7 @@
 
 <script setup>
 import { inject, watch } from "vue";
-import {
-    todayLocaleString,
-    today,
-} from "../modules/getDate.js";
+import { todayLocaleString, today } from "../modules/getDate.js";
 import { getPreviousWeeksDates } from "../modules/getFootballDates.js";
 import { useFetches } from "../modules/useFetches.js";
 
@@ -112,15 +157,28 @@ const requestOptions = {
 
 let urls = [];
 // Get Football game dates date
-const { previousSundaysDateISOString, previousMondaysDateISOString, previousThursdaysDateISOString, previousSaturdaysDateISOString } = getPreviousWeeksDates(today);
-const fetchPreviousSundaysNFLScores = fetch(`https://v1.american-football.api-sports.io/games?league=1&season=${currentNFLSeason}&date=${previousSundaysDateISOString}&timezone=America/New_York`,
-    requestOptions).then((res) => res.json());
-const fetchPreviousMondaysNFLScores = fetch(`https://v1.american-football.api-sports.io/games?league=1&season=${currentNFLSeason}&date=${previousMondaysDateISOString}&timezone=America/New_York`,
-    requestOptions).then((res) => res.json());
-const fetchPreviousThursdaysNFLScores = fetch(`https://v1.american-football.api-sports.io/games?league=1&season=${currentNFLSeason}&date=${previousThursdaysDateISOString}&timezone=America/New_York`,
-    requestOptions).then((res) => res.json());
-const fetchPreviousSaturdaysNFLScores = fetch(`https://v1.american-football.api-sports.io/games?league=1&season=${currentNFLSeason}&date=${previousSaturdaysDateISOString}&timezone=America/New_York`,
-    requestOptions).then((res) => res.json());
+const {
+    previousSundaysDateISOString,
+    previousMondaysDateISOString,
+    previousThursdaysDateISOString,
+    previousSaturdaysDateISOString,
+} = getPreviousWeeksDates(today);
+const fetchPreviousSundaysNFLScores = fetch(
+    `https://v1.american-football.api-sports.io/games?league=1&season=${currentNFLSeason}&date=${previousSundaysDateISOString}&timezone=America/New_York`,
+    requestOptions
+).then((res) => res.json());
+const fetchPreviousMondaysNFLScores = fetch(
+    `https://v1.american-football.api-sports.io/games?league=1&season=${currentNFLSeason}&date=${previousMondaysDateISOString}&timezone=America/New_York`,
+    requestOptions
+).then((res) => res.json());
+const fetchPreviousThursdaysNFLScores = fetch(
+    `https://v1.american-football.api-sports.io/games?league=1&season=${currentNFLSeason}&date=${previousThursdaysDateISOString}&timezone=America/New_York`,
+    requestOptions
+).then((res) => res.json());
+const fetchPreviousSaturdaysNFLScores = fetch(
+    `https://v1.american-football.api-sports.io/games?league=1&season=${currentNFLSeason}&date=${previousSaturdaysDateISOString}&timezone=America/New_York`,
+    requestOptions
+).then((res) => res.json());
 urls.push(fetchPreviousThursdaysNFLScores);
 urls.push(fetchPreviousSaturdaysNFLScores);
 urls.push(fetchPreviousSundaysNFLScores);
@@ -132,14 +190,17 @@ const { apiData: gameScores, loadingState, error } = useFetches(urls);
 watch(gameScores, () => {
     gameScores.value.forEach((gameDay) => {
         if (gameDay.results > 0) {
-            const getCorrectedDay = new Date(gameDay.response[0]?.game.date.date);
+            const getCorrectedDay = new Date(
+                gameDay.response[0]?.game.date.date
+            );
             getCorrectedDay.setDate(getCorrectedDay.getDate() + 1);
-            const tempDayValue = getCorrectedDay.toLocaleDateString('en-US', { weekday: 'long' });
+            const tempDayValue = getCorrectedDay.toLocaleDateString("en-US", {
+                weekday: "long",
+            });
             gameDay.response[0].game.date.dayOfWeek = tempDayValue;
         }
-    })
-})
-
+    });
+});
 </script>
 
 <style scoped>

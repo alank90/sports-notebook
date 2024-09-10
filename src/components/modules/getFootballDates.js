@@ -2,7 +2,7 @@
  * @Description - Function to create the previous week's date's from
  *   the date parameter passed into the function
  * @param {string} - today's date in string form yyyy-mm-dd
- * @returns - The previous week's date's for S,M,T,Sa in yyyy-mm-dd format
+ * @returns - The previous week's date's for S,M,Th,Sa in yyyy-mm-dd format
  * @importedBy - nfl-scores.vue
  */
 export function getPreviousWeeksDates(date) {
