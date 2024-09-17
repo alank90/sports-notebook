@@ -16,9 +16,7 @@
         <template v-for="n in gameScores.length">
             <div v-if="gameScores[n - 1]?.results > 0" :key="n">
                 <h3>
-                    {{
-                        gameScores[n - 1].response[0]?.game.date.dayOfWeek
-                    }}
+                    {{ gameScores[n - 1].response[0]?.game.date.dayOfWeek }}
                     Game(s) -
                     {{
                         gameScores
@@ -143,7 +141,7 @@ import { useFetches } from "../modules/useFetches.js";
 // ======= Variable Declarations ============ //
 const currentNFLSeason = inject("currentNFLSeason");
 const API_KEY = import.meta.env.VITE_API_SPORTS_KEY;
-const HOST_NAME = import.meta.env.VITE_API_HOST_BASKETBALL;
+const HOST_NAME = import.meta.env.VITE_API_HOST_FOOTBALL;
 
 let myHeaders = new Headers();
 myHeaders.append("x-apisports-key", API_KEY);
@@ -163,6 +161,7 @@ const {
     previousThursdaysDateISOString,
     previousSaturdaysDateISOString,
 } = getPreviousWeeksDates(today);
+
 const fetchPreviousSundaysNFLScores = fetch(
     `https://v1.american-football.api-sports.io/games?league=1&season=${currentNFLSeason}&date=${previousSundaysDateISOString}&timezone=America/New_York`,
     requestOptions

@@ -21,6 +21,7 @@ export function useFetches(urls) {
         Promise.all(urls)
             .then((data) => {
                 apiData.value = data;
+                // Check if request returned an error
                 if (apiData.value[0].errors?.requests) {
                     error.value = apiData.value[0].errors.requests;
                 }

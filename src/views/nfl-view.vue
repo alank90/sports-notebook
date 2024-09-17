@@ -7,7 +7,7 @@
 <script setup>
 import { provide } from "vue";
 
-provide("currentNFLSeason", 2023)
+provide("currentNFLSeason", 2024)
 </script>
 
 <style scoped>

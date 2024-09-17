@@ -162,11 +162,11 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from "vue";
+import { ref, computed, watch, inject } from "vue";
 import { useFetch } from "../modules/useFetch.js";
 
 // ======= Variable Declarations ============ //
-const currentNFLSeason = "2023";
+const currentNFLSeason = inject("currentNFLSeason");
 const urlNFLStandings = `https://v1.american-football.api-sports.io/standings?league=1&season=${currentNFLSeason}`;
 const hostName = import.meta.env.VITE_API_HOST_FOOTBALL;
 

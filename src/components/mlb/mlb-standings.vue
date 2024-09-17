@@ -42,6 +42,7 @@ import { useFetches } from "../modules/useFetches";
 import { useCreateDivisions, divisions } from "../modules/createMLBDivisions";
 
 // ========= Variable Declarations =================== //
+const currentMLBSeason = inject("currentMLBSeason");
 const API_KEY = import.meta.env.VITE_API_SPORTS_KEY;
 const HOST_NAME = import.meta.env.VITE_API_HOST_BASEBALL;
 let myHeaders = new Headers();
@@ -53,7 +54,6 @@ const requestOptions = {
     headers: myHeaders,
     redirect: "follow",
 };
-const currentMLBSeason = inject("currentMLBSeason");
 
 let urls = [];
 const mlbLeagues = ["American League", "National League"];
