@@ -40,6 +40,7 @@
 import { ref, inject, watch } from "vue";
 import { useFetches } from "../modules/useFetches";
 import { useCreateDivisions, divisions } from "../modules/createMLBDivisions";
+import gamesBack from "../modules/calculateGamesBack.js";
 
 // ========= Variable Declarations =================== //
 const currentMLBSeason = inject("currentMLBSeason");
@@ -74,6 +75,9 @@ for (let i = 0; i < mlbLeagues.length; i++) {
 // ------------ Fetch the data from the endpoint -------------- //
 let { apiData: teamStandings, loadingState, error } = useFetches(urls);
 // -------------- End fetches --------------------------------- //
+
+// ------------ Add the games back property to divisions object array ------- //
+divisions.value = gamesBack(divisions.value);
 
 // ================ Watch Function ============================ //
 // Because of the asynchronous nature of useFetches() function  we need

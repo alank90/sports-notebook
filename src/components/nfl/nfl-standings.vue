@@ -245,8 +245,8 @@ watch(nflStandings, () => {
  *  @calledBy - From a watch effect.
  */
 const calculateGamesBack = (conferenceArrayByDivision) => {
+    /* ======== Vars ============ */
     let gamesBack = Number;
-    //console.log("conferenceArrayByDivision", conferenceArrayByDivision[1].value[2].team.name);
     let firstPlaceTeam = {
         wins: null,
         losses: null,
