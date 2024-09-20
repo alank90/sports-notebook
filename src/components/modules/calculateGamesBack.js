@@ -4,7 +4,6 @@
   @returns {object} - Updated object array with added property of
                       games back value.
  */
-
 export default function gamesBack(teams) {
     /* ======== Vars ============ */
     let offTheLead = Number;
@@ -16,10 +15,15 @@ export default function gamesBack(teams) {
 
     const divisions = Object.keys(teams);
     const updatedTeamsWithGB = Object.values(teams);
-    console.log("divisions:", divisions);
-    console.log("UpdatedTeams:", updatedTeamsWithGB);
+    console.log("teams", teams);
+    console.log("updated", updatedTeamsWithGB);
 
-    updatedTeamsWithGB.forEach((division) => {
+    updatedTeamsWithGB.forEach((division, index) => {
+        console.log("division", division);
+    });
+
+    /* divisions.forEach((division) => {
+        console.log("division", division);
         division.forEach((team, index) => {
             if (index === 0) {
                 // designate first place team in each division
@@ -37,8 +41,7 @@ export default function gamesBack(teams) {
                 console.log(`team ${index}: ${team.team.name}`);
             }
         });
-    });
-    console.log("Division.values(teams):", teams);
-    console.log("UpdatedTeams:", updatedTeamsWithGB);
+    }); */
+
     return teams;
 }

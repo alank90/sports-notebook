@@ -23,7 +23,7 @@
             <tbody>
                 <tr v-for="team in division">
                     <th scope="row" colspan="2">
-                        <img :src="team.team.logo" />{{ team.team.name }}
+                        <img :src="team?.team.logo" />{{ team?.team.name }}
                     </th>
                     <td>{{ team.games.win.total }}</td>
                     <td>{{ team.games.lose.total }}</td>
