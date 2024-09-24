@@ -18,18 +18,20 @@
                     <th scope="col">W</th>
                     <th scope="col">L</th>
                     <th scope="col">PCT</th>
+                    <th scope="col">GB</th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="team in division">
                     <th scope="row" colspan="2">
-                        <img :src="team?.team.logo" />{{ team?.team.name }}
+                        <img :src="team.team.logo" />{{ team.team.name }}
                     </th>
                     <td>{{ team.games.win.total }}</td>
                     <td>{{ team.games.lose.total }}</td>
                     <td>
                         {{ team.games.win.percentage.replace(/^0+/, "") }}
                     </td>
+                    <td>{{ team.gamesBack }}</td>
                 </tr>
             </tbody>
         </table>
@@ -76,9 +78,6 @@ for (let i = 0; i < mlbLeagues.length; i++) {
 let { apiData: teamStandings, loadingState, error } = useFetches(urls);
 // -------------- End fetches --------------------------------- //
 
-// ------------ Add the games back property to divisions object array ------- //
-divisions.value = gamesBack(divisions.value);
-
 // ================ Watch Function ============================ //
 // Because of the asynchronous nature of useFetches() function  we need
 // to create a watch function that watches when teamstandings becomes populated
@@ -87,6 +86,8 @@ divisions.value = gamesBack(divisions.value);
 watch(teamStandings, (newTeamStandings, oldTeamStandings) => {
     // Create an object array with teams broken down by division
     useCreateDivisions(teamStandings);
+    // Also then add gamesBack property to each team's object
+    gamesBack(divisions.value);
 });
 </script>
 
