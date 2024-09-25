@@ -32,6 +32,4 @@ export default function gamesBack(teams) {
             }
         });
     });
-
-    return teams;
 }

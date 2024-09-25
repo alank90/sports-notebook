@@ -87,6 +87,9 @@ watch(teamStandings, (newTeamStandings, oldTeamStandings) => {
     // Create an object array with teams broken down by division
     useCreateDivisions(teamStandings);
     // Also then add gamesBack property to each team's object
+    // Note: The divisions variable is reactive from a composable function(useCreateDivisions)
+    //       so changes by gamesBack() will get updated in the DOM(in this instance the
+    //       addition of gamesBack property to divisions.value)
     gamesBack(divisions.value);
 });
 </script>
