@@ -82,6 +82,15 @@
                                 </td>
                             </tr>
                             <tr>
+                                <details
+                                    @click="getTeamGameStats(gameInfo.game.id)"
+                                >
+                                    <summary>Click for Game Stats</summary>
+                                    game stats here:
+                                </details>
+                                <td>{{ gameStats }}</td>
+                            </tr>
+                            <tr>
                                 <td><img :src="gameInfo.teams.home.logo" /></td>
                                 <td scope="row" colspan="2">
                                     {{ gameInfo.teams.home.name }}
@@ -109,6 +118,17 @@
                                     {{ gameInfo.scores.home.total }}
                                 </td>
                             </tr>
+                            <tr>
+                                <details
+                                    @click="getTeamGameStats(gameInfo.game.id)"
+                                >
+                                    <summary>Click for Game Stats</summary>
+                                    game stats here:
+                                </details>
+                                <td v-if="gameStats">
+                                    {{ gameStats.team.name }}
+                                </td>
+                            </tr>
                         </tbody>
                         <tfoot valign="center">
                             <tr>
@@ -133,15 +153,17 @@
 </template>
 
 <script setup>
-import { inject, watch } from "vue";
+import { inject, watch, ref } from "vue";
 import { todayLocaleString, today } from "../modules/getDate.js";
 import { getPreviousWeeksDates } from "../modules/getFootballDates.js";
 import { useFetches } from "../modules/useFetches.js";
+import { useGetTeamStats } from "../modules/getTeamGameStats.js";
 
 // ======= Variable Declarations ============ //
 const currentNFLSeason = inject("currentNFLSeason");
 const API_KEY = import.meta.env.VITE_API_SPORTS_KEY;
 const HOST_NAME = import.meta.env.VITE_API_HOST_FOOTBALL;
+let gameStats = ref(null);
 
 let myHeaders = new Headers();
 myHeaders.append("x-apisports-key", API_KEY);
@@ -200,6 +222,17 @@ watch(gameScores, () => {
         }
     });
 });
+
+// ============================== Methods ============================================= //
+/** Description - Retrieves the game stats from  /games/statistics/teams endpoint
+ *  @parameter {number} - the game id
+ *  @returns { object } - This is a composable function that exposes the game statistics object
+ */
+function getTeamGameStats(gameID) {
+    const url = `https://v1.american-football.api-sports.io/games/statistics/teams?id=${gameID}`;
+    gameStats = useGetTeamStats(url);
+    console.log("gameStats: ", gameStats);
+}
 </script>
 
 <style scoped>
@@ -229,6 +262,29 @@ h2 {
 .winner {
     color: #a19923;
 }
+
+/* --- Dialog styles ----- */
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: 0.5em 0.5em 0;
+}
+
+summary {
+    font-weight: bold;
+    margin: -0.5em -0.5em 0;
+    padding: 0.5em;
+}
+
+details[open] {
+    padding: 0.5em;
+}
+
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: 0.5em;
+}
+/* End Dialog styles */
 
 /* Responsive Styling */
 @media screen and (max-width: 760px) {
