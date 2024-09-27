@@ -53,7 +53,12 @@
                         </thead>
 
                         <tbody>
-                            <tr>
+                            <tr
+                                @click="
+                                    getTeamGameStats(gameInfo.game.id, $event)
+                                "
+                                title="Click for Game Stats"
+                            >
                                 <td><img :src="gameInfo.teams.away.logo" /></td>
                                 <td scope="row" colspan="2">
                                     {{ gameInfo.teams.away.name }}
@@ -81,16 +86,23 @@
                                     {{ gameInfo.scores.away.total }}
                                 </td>
                             </tr>
-                            <tr>
-                                <details
-                                    @click="getTeamGameStats(gameInfo.game.id)"
+                            <tr class="gameStatsRow">
+                                Click for game stats
+                                <td
+                                    class="gameStatsItem"
+                                    scope="row"
+                                    colspan="5"
                                 >
-                                    <summary>Click for Game Stats</summary>
-                                    game stats here:
-                                </details>
-                                <td>{{ gameStats }}</td>
+                                    Stats here I{{ showGameStatsRow }}
+                                </td>
                             </tr>
-                            <tr>
+
+                            <tr
+                                @click="
+                                    getTeamGameStats(gameInfo.game.id, $event)
+                                "
+                                title="Click for Game Stats"
+                            >
                                 <td><img :src="gameInfo.teams.home.logo" /></td>
                                 <td scope="row" colspan="2">
                                     {{ gameInfo.teams.home.name }}
@@ -118,19 +130,19 @@
                                     {{ gameInfo.scores.home.total }}
                                 </td>
                             </tr>
-                            <tr>
-                                <details
-                                    @click="getTeamGameStats(gameInfo.game.id)"
+                            <tr class="gameStatsRow">
+                                Click for game stats
+                                <td
+                                    class="gameStatsItem"
+                                    scope="row"
+                                    colspan="5"
                                 >
-                                    <summary>Click for Game Stats</summary>
-                                    game stats here:
-                                </details>
-                                <td v-if="gameStats">
-                                    {{ gameStats.team.name }}
+                                    Stats here II{{ showGameStatsRow }}
                                 </td>
                             </tr>
                         </tbody>
-                        <tfoot valign="center">
+
+                        <tfoot v-align="center">
                             <tr>
                                 <td colspan="8">
                                     Venue - {{ gameInfo.game.venue.city }} -
@@ -228,10 +240,21 @@ watch(gameScores, () => {
  *  @parameter {number} - the game id
  *  @returns { object } - This is a composable function that exposes the game statistics object
  */
-function getTeamGameStats(gameID) {
-    const url = `https://v1.american-football.api-sports.io/games/statistics/teams?id=${gameID}`;
-    gameStats = useGetTeamStats(url);
-    console.log("gameStats: ", gameStats);
+function getTeamGameStats(gameID, event) {
+    const el = event.currentTarget;
+    console.log("el: ", el);
+    if (el.nextElementSibling.style.visibility === "visible") {
+        el.nextElementSibling.style.visibility = "collapse";
+        console.log("stats", el.nextElementSibling.style.visibility);
+        return;
+    } else {
+        el.nextElementSibling.style.visibility = "visible";
+        console.log("stats", el.nextElementSibling.style.visibility);
+
+        const url = `https://v1.american-football.api-sports.io/games/statistics/teams?id=${gameID}`;
+        //gameStats = useGetTeamStats(url);
+        //console.log("gameStats: ", gameStats);
+    }
 }
 </script>
 
@@ -261,6 +284,14 @@ h2 {
 
 .winner {
     color: #a19923;
+}
+
+.gameStatsRow {
+    visibility: collapse;
+    font-size: 0.6rem;
+}
+.gameStatsItem {
+    font-size: 0.4rem;
 }
 
 /* --- Dialog styles ----- */
