@@ -10,7 +10,7 @@ import { useFetch } from "./useFetch";
 // --------- Vars --------------------- //
 const gameStats = ref();
 
-export function useGetTeamStats(url) {
+export function useGetTeamStats(url, hostName) {
     const { data: gameStats, loadingState, error } = useFetch(url);
 
     return { gameStats };

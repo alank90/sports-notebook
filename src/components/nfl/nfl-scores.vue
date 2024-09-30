@@ -86,16 +86,33 @@
                                     {{ gameInfo.scores.away.total }}
                                 </td>
                             </tr>
+
+                            <!--======================================================-->
+                            <!--============ Game Stats row for away team ============-->
+                            <!--======================================================-->
                             <tr class="gameStatsRow">
-                                Click for game stats
+                                <th scope="row">Passing Comp</th>
+                                <th>Pass Total</th>
+                                <th>YPP</th>
+                            </tr>
+
+                            <tr>
                                 <td
+                                    v-if="gameStats"
                                     class="gameStatsItem"
                                     scope="row"
-                                    colspan="5"
                                 >
-                                    Stats here I{{ showGameStatsRow }}
+                                    {{
+                                        gameStats.gameStats.response[0]
+                                            .statistics.passing.comp_att
+                                    }}
                                 </td>
+                                <td>{{ total }}</td>
+                                <td>{{ yards_per_pass }}</td>
                             </tr>
+                            <!--======================================================-->
+                            <!--============ End Game Stats row for away team ========-->
+                            <!--======================================================-->
 
                             <tr
                                 @click="
@@ -130,6 +147,10 @@
                                     {{ gameInfo.scores.home.total }}
                                 </td>
                             </tr>
+
+                            <!--======================================================-->
+                            <!--============ Game Stats row for home team ============-->
+                            <!--======================================================-->
                             <tr class="gameStatsRow">
                                 Click for game stats
                                 <td
@@ -140,6 +161,9 @@
                                     Stats here II{{ showGameStatsRow }}
                                 </td>
                             </tr>
+                            <!--======================================================-->
+                            <!--========= End of Game Stats row for home team ========-->
+                            <!--======================================================-->
                         </tbody>
 
                         <tfoot v-align="center">
@@ -252,8 +276,8 @@ function getTeamGameStats(gameID, event) {
         console.log("stats", el.nextElementSibling.style.visibility);
 
         const url = `https://v1.american-football.api-sports.io/games/statistics/teams?id=${gameID}`;
-        //gameStats = useGetTeamStats(url);
-        //console.log("gameStats: ", gameStats);
+        gameStats.value = useGetTeamStats(url, HOST_NAME);
+        console.log("gameStats: ", gameStats.value.gameStats);
     }
 }
 </script>
