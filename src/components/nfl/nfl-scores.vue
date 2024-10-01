@@ -96,19 +96,29 @@
                                 <th>YPP</th>
                             </tr>
 
-                            <tr>
+                            <tr v-if="gameStats !== null">
                                 <td
-                                    v-if="gameStats"
+                                    v-if="gameStats.gamestats !== null"
                                     class="gameStatsItem"
                                     scope="row"
                                 >
                                     {{
-                                        gameStats.gameStats.response[0]
+                                        gameStats.gameStats.response[1]
                                             .statistics.passing.comp_att
                                     }}
                                 </td>
-                                <td>{{ total }}</td>
-                                <td>{{ yards_per_pass }}</td>
+                                <td class="gameStatsItem" scope="row">
+                                    {{
+                                        gameStats.gameStats.response[1]
+                                            .statistics.passing.total
+                                    }}
+                                </td>
+                                <td class="gameStatsItem" scope="row">
+                                    {{
+                                        gameStats.gameStats.response[1]
+                                            .statistics.passing.yards_per_pass
+                                    }}
+                                </td>
                             </tr>
                             <!--======================================================-->
                             <!--============ End Game Stats row for away team ========-->
@@ -152,13 +162,32 @@
                             <!--============ Game Stats row for home team ============-->
                             <!--======================================================-->
                             <tr class="gameStatsRow">
-                                Click for game stats
+                                <th scope="row">Passing Comp</th>
+                                <th>Pass Total</th>
+                                <th>YPP</th>
+                            </tr>
+                            <tr v-if="gameStats !== null">
                                 <td
+                                    v-if="gameStats.gamestats !== null"
                                     class="gameStatsItem"
                                     scope="row"
-                                    colspan="5"
                                 >
-                                    Stats here II{{ showGameStatsRow }}
+                                    {{
+                                        gameStats.gameStats.response[0]
+                                            .statistics.passing.comp_att
+                                    }}
+                                </td>
+                                <td class="gameStatsItem" scope="row">
+                                    {{
+                                        gameStats.gameStats.response[0]
+                                            .statistics.passing.total
+                                    }}
+                                </td>
+                                <td class="gameStatsItem" scope="row">
+                                    {{
+                                        gameStats.gameStats.response[0]
+                                            .statistics.passing.yards_per_pass
+                                    }}
                                 </td>
                             </tr>
                             <!--======================================================-->
@@ -266,18 +295,15 @@ watch(gameScores, () => {
  */
 function getTeamGameStats(gameID, event) {
     const el = event.currentTarget;
-    console.log("el: ", el);
+
     if (el.nextElementSibling.style.visibility === "visible") {
         el.nextElementSibling.style.visibility = "collapse";
-        console.log("stats", el.nextElementSibling.style.visibility);
         return;
     } else {
         el.nextElementSibling.style.visibility = "visible";
-        console.log("stats", el.nextElementSibling.style.visibility);
 
         const url = `https://v1.american-football.api-sports.io/games/statistics/teams?id=${gameID}`;
         gameStats.value = useGetTeamStats(url, HOST_NAME);
-        console.log("gameStats: ", gameStats.value.gameStats);
     }
 }
 </script>
@@ -314,8 +340,8 @@ h2 {
     visibility: collapse;
     font-size: 0.6rem;
 }
-.gameStatsItem {
-    font-size: 0.4rem;
+.gameStatsRow > .gameStatsItem {
+    font-size: 0.9rem;
 }
 
 /* --- Dialog styles ----- */
