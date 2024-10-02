@@ -90,13 +90,13 @@
                             <!--======================================================-->
                             <!--============ Game Stats row for away team ============-->
                             <!--======================================================-->
-                            <tr class="gameStatsRow">
+                            <tr class="gameStatsRowHeaders">
                                 <th scope="row">Passing Comp</th>
                                 <th>Pass Total</th>
                                 <th>YPP</th>
                             </tr>
 
-                            <tr v-if="gameStats !== null">
+                            <tr v-if="gameStats !== null" class="gameStatsRow">
                                 <td
                                     v-if="gameStats.gamestats !== null"
                                     class="gameStatsItem"
@@ -161,12 +161,12 @@
                             <!--======================================================-->
                             <!--============ Game Stats row for home team ============-->
                             <!--======================================================-->
-                            <tr class="gameStatsRow">
+                            <tr class="gameStatsRowHeaders">
                                 <th scope="row">Passing Comp</th>
                                 <th>Pass Total</th>
                                 <th>YPP</th>
                             </tr>
-                            <tr v-if="gameStats !== null">
+                            <tr v-if="gameStats !== null" class="gameStatsRow">
                                 <td
                                     v-if="gameStats.gamestats !== null"
                                     class="gameStatsItem"
@@ -290,20 +290,29 @@ watch(gameScores, () => {
 
 // ============================== Methods ============================================= //
 /** Description - Retrieves the game stats from  /games/statistics/teams endpoint
- *  @parameter {number} - the game id
+ *  @parameters {number, } - the game id, the event object
  *  @returns { object } - This is a composable function that exposes the game statistics object
  */
 function getTeamGameStats(gameID, event) {
     const el = event.currentTarget;
+    const firstStatRow = document.querySelector(".gameStatsRowHeaders");
+    let secondStatRow = null;
 
-    if (el.nextElementSibling.style.visibility === "visible") {
-        el.nextElementSibling.style.visibility = "collapse";
+    if (firstStatRow === "visible") {
+        secondStatRow = document.querySelector(".gameStatsRow");
+        firstStatRow.style.visibility = "collapse";
+        secondStatRow.style.visibility = "collapse";
+
         return;
     } else {
-        el.nextElementSibling.style.visibility = "visible";
-
         const url = `https://v1.american-football.api-sports.io/games/statistics/teams?id=${gameID}`;
         gameStats.value = useGetTeamStats(url, HOST_NAME);
+
+        secondStatRow = document.querySelector(".gameStatsRow");
+        console.log("gameRow: ", firstStatRow);
+
+        firstStatRow.style.visibility = "visible";
+        secondStatRow.style.visibility = "visible";
     }
 }
 </script>
@@ -336,8 +345,12 @@ h2 {
     color: #a19923;
 }
 
-.gameStatsRow {
+.gameStatsRow,
+.gameStatsRowHeaders {
     visibility: collapse;
+}
+
+.gameStatsRow {
     font-size: 0.6rem;
 }
 .gameStatsRow > .gameStatsItem {
