@@ -37,6 +37,7 @@
                                 <th scope="row">
                                     {{ gameInfo.game.status.short }}
                                 </th>
+                                <th></th>
                                 <th colspan="2"></th>
                                 <th>Q1</th>
                                 <th>Q2</th>
@@ -63,21 +64,14 @@
                                 <td>
                                     <button
                                         type="button"
+                                        class="button"
                                         id="btnMSb"
                                         aria-expanded="false"
                                         aria-controls="MS01b MS02b MS03b"
                                         aria-label="3 more from"
                                         aria-labelledby="btnMSb lblMSb"
                                     >
-                                        <svg
-                                            xmlns='\http://www.w3.org/2000/svg"'
-                                            viewBox="0 0 80 80"
-                                            focusable="false"
-                                        >
-                                            <path
-                                                d="M70.3 13.8L40 66.3 9.7 13.8z"
-                                            ></path>
-                                        </svg>
+                                        Stats
                                     </button>
                                 </td>
                                 <td><img :src="gameInfo.teams.away.logo" /></td>
@@ -163,21 +157,14 @@
                                 <td>
                                     <button
                                         type="button"
+                                        class="button"
                                         id="btnMSb"
                                         aria-expanded="false"
                                         aria-controls="MS01b MS02b MS03b"
                                         aria-label="3 more from"
                                         aria-labelledby="btnMSb lblMSb"
                                     >
-                                        <svg
-                                            xmlns='\http://www.w3.org/2000/svg"'
-                                            viewBox="0 0 80 80"
-                                            focusable="false"
-                                        >
-                                            <path
-                                                d="M70.3 13.8L40 66.3 9.7 13.8z"
-                                            ></path>
-                                        </svg>
+                                        Stats
                                     </button>
                                 </td>
                                 <td><img :src="gameInfo.teams.home.logo" /></td>
@@ -231,21 +218,14 @@
                                 <td>
                                     <button
                                         type="button"
+                                        class="button"
                                         id="btnMSb"
                                         aria-expanded="false"
                                         aria-controls="MS01b MS02b MS03b"
                                         aria-label="3 more from"
                                         aria-labelledby="btnMSb lblMSb"
                                     >
-                                        <svg
-                                            xmlns='\http://www.w3.org/2000/svg"'
-                                            viewBox="0 0 80 80"
-                                            focusable="false"
-                                        >
-                                            <path
-                                                d="M70.3 13.8L40 66.3 9.7 13.8z"
-                                            ></path>
-                                        </svg>
+                                        Stats
                                     </button>
                                 </td>
                                 <td
@@ -375,20 +355,27 @@ watch(gameScores, () => {
  */
 function getTeamGameStats(gameID, event) {
     const el = event.currentTarget;
+    const elTarget = event.target;
+    let elSibling = el.nextElementSibling;
     console.log("el.currentTarget: ", el);
+    console.log("elTarget: ", elTarget);
     let elSiblings = [];
     console.log("element attr: ", el.getAttribute("aria-expanded"));
-    console.log("Target tagName: ", el.target.tagName);
-    // Get the siblings of el DOM object
-    while ((el = el.nextElementSibling)) {
-        elSiblings.push(el);
-    }
+    console.log("Target tagName: ", elTarget.tagName);
+
+    do {
+        // push sibling to array
+
+        elSiblings.push(elSibling);
+    } while ((elSibling = elSibling.nextElementSibling));
+
     console.log("Siblings: ", elSiblings);
 
     if (
-        el.target.tagName === "BUTTON" &&
+        elTarget.tagName === "BUTTON" &&
         el.getAttribute("aria-expanded") === "false"
     ) {
+        console.log("In if loop");
         // Fetch the Gamestats for given gameID
         const url = `https://v1.american-football.api-sports.io/games/statistics/teams?id=${gameID}`;
         gameStats.value = useGetTeamStats(url, HOST_NAME);
@@ -410,7 +397,7 @@ function getTeamGameStats(gameID, event) {
             child.classList.remove("shown");
         }
         // Now set the button to collapsed
-        el.target.setAttribute("aria-expanded", "false");
+        elTarget.setAttribute("aria-expanded", "false");
     }
 }
 </script>
@@ -486,75 +473,8 @@ tr.hidden {
     display: none;
 }
 
-.row button {
-    background-color: transparent;
-    border: 0.1em solid transparent;
-    font: inherit;
-    padding: 0.25em 0.5em 0.25em 0.25em;
-    width: 100%;
-    text-align: left;
-}
-
-.row button:focus,
-.row button:hover {
-    background-color: #ddd;
-    outline: 0.2em solid #00f;
-}
-
-.row button svg {
-    width: 0.8em;
-    height: 0.8em;
-    margin: 0 0 -0.05em 0;
-    fill: #66f;
-    transition: transform 0.25s ease-in;
-    transform-origin: center 45%;
-}
-
-.row button:hover svg,
-.row button:focus svg {
-    fill: #00c;
-}
-
-/* Lean on programmatic state for styling */
-.row button[aria-expanded="true"] svg {
-    transform: rotate(180deg);
-}
-
-.cell button {
-    font-size: 60%;
-    color: #000;
-    background-color: #00f;
-    padding: 0.3em 0.2em 0 0.2em;
-    border: 0.2em solid #00f;
-    border-radius: 50%;
-    line-height: 1;
-    text-align: center;
-    text-indent: 0;
-    transform: rotate(270deg);
-}
-
-.cell button svg {
-    width: 1.25em;
-    height: 1.25em;
-    fill: #fff;
-    transition: transform 0.25s ease-in;
-    transform-origin: center 45%;
-}
-
-.cell button:hover,
-.cell button:focus {
-    background-color: #fff;
-    outline: none;
-}
-
-.cell button:hover svg,
-.cell button:focus svg {
-    fill: #00f;
-}
-
-/* Lean on programmatic state for styling */
-.cell button[aria-expanded="true"] svg {
-    transform: rotate(90deg);
+.button {
+    color: rgba(0, 0, 0, 0.75);
 }
 
 /* ----------- End of Table Stylings -------------- */
