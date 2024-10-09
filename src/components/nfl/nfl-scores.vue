@@ -55,6 +55,7 @@
                         </thead>
 
                         <tbody>
+                            <!-- ------- Away team score line ----------- -->
                             <tr
                                 @click="
                                     getTeamGameStats(gameInfo.game.id, $event)
@@ -101,22 +102,19 @@
                                     {{ gameInfo.scores.away.total }}
                                 </td>
                             </tr>
+                            <!-- ------- Away team score line End----------- -->
 
                             <!--======================================================-->
                             <!--============ Game Stats row for away team ============-->
                             <!--======================================================-->
-                            <thead class="hidden">
-                                <tr class="gameStatsRowHeaders">
-                                    <th>
-                                        <span class="visually-hidden"
-                                            >Toggle</span
-                                        >
-                                    </th>
-                                    <th>Passing Comp</th>
-                                    <th>Pass Total</th>
-                                    <th>YPP</th>
-                                </tr>
-                            </thead>
+                            <tr class="hidden gameStatsRowHeaders">
+                                <th>
+                                    <span class="visually-hidden">Toggle</span>
+                                </th>
+                                <th>Passing Comp</th>
+                                <th>Pass Total</th>
+                                <th>YPP</th>
+                            </tr>
 
                             <tr
                                 v-if="gameStats !== null"
@@ -145,9 +143,10 @@
                                 </td>
                             </tr>
                             <!--======================================================-->
-                            <!--============ End Game Stats row for away team ========-->
+                            <!--============ Game Stats row for away team end ========-->
                             <!--======================================================-->
 
+                            <!-- ------- Home team score line ----------- -->
                             <tr
                                 @click="
                                     getTeamGameStats(gameInfo.game.id, $event)
@@ -194,40 +193,24 @@
                                     {{ gameInfo.scores.home.total }}
                                 </td>
                             </tr>
+                            <!-- ------- Home team score line End----------- -->
 
                             <!--======================================================-->
                             <!--============ Game Stats row for home team ============-->
                             <!--======================================================-->
-                            <thead class="hidden">
-                                <tr class="gameStatsRowHeaders">
-                                    <th>
-                                        <span class="visually-hidden"
-                                            >Toggle</span
-                                        >
-                                    </th>
-                                    <th>Passing Comp</th>
-                                    <th>Pass Total</th>
-                                    <th>YPP</th>
-                                </tr>
-                            </thead>
+                            <tr class="hidden gameStatsRowHeaders">
+                                <th>
+                                    <span class="visually-hidden">Toggle</span>
+                                </th>
+                                <th>Passing Comp</th>
+                                <th>Pass Total</th>
+                                <th>YPP</th>
+                            </tr>
 
                             <tr
                                 v-if="gameStats !== null"
                                 class="gameStatsRow hidden"
                             >
-                                <td>
-                                    <button
-                                        type="button"
-                                        class="button"
-                                        id="btnMSb"
-                                        aria-expanded="false"
-                                        aria-controls="MS01b MS02b MS03b"
-                                        aria-label="3 more from"
-                                        aria-labelledby="btnMSb lblMSb"
-                                    >
-                                        Stats
-                                    </button>
-                                </td>
                                 <td
                                     v-if="gameStats.gamestats !== null"
                                     class="gameStatsItem"
@@ -357,23 +340,26 @@ function getTeamGameStats(gameID, event) {
     const el = event.currentTarget;
     const elTarget = event.target;
     let elSibling = el.nextElementSibling;
-    console.log("el.currentTarget: ", el);
-    console.log("elTarget: ", elTarget);
+
     let elSiblings = [];
-    console.log("element attr: ", el.getAttribute("aria-expanded"));
-    console.log("Target tagName: ", elTarget.tagName);
+    console.log("currentTarget: ", el);
+    console.log("Next sibling of currentTarget <tr>: ", elSibling);
+    console.log("elTarget: ", elTarget);
+    console.log("element attr: ", elTarget.getAttribute("aria-expanded"));
 
-    do {
+    for (let i = 0; i < 2; i++) {
         // push sibling to array
-
+        console.log("Row sibling of <tr> scores row: ", elSibling);
         elSiblings.push(elSibling);
-    } while ((elSibling = elSibling.nextElementSibling));
+
+        elSibling = elSibling.nextElementSibling;
+    }
 
     console.log("Siblings: ", elSiblings);
 
-    if (
+    /* if (
         elTarget.tagName === "BUTTON" &&
-        el.getAttribute("aria-expanded") === "false"
+        elTarget.getAttribute("aria-expanded") === "false"
     ) {
         console.log("In if loop");
         // Fetch the Gamestats for given gameID
@@ -388,7 +374,7 @@ function getTeamGameStats(gameID, event) {
         }
 
         // Now set the button to expanded
-        el.target.setAttribute("aria-expanded", "true");
+        elTarget.setAttribute("aria-expanded", "true");
         // Otherwise button is not expanded...
     } else {
         // Loop thru stats and hide them
@@ -398,7 +384,7 @@ function getTeamGameStats(gameID, event) {
         }
         // Now set the button to collapsed
         elTarget.setAttribute("aria-expanded", "false");
-    }
+    } */
 }
 </script>
 
@@ -430,11 +416,6 @@ h2 {
     color: #a19923;
 }
 /* ----------- Table Stylings --------------------- */
-
-/* .gameStatsRow,
-.gameStatsRowHeaders {
-    visibility: collapse;
-} */
 
 .gameStatsRow {
     font-size: 0.6rem;
