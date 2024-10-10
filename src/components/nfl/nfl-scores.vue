@@ -108,20 +108,14 @@
                             <!--============ Game Stats row for away team ============-->
                             <!--======================================================-->
                             <tr class="hidden gameStatsRowHeaders">
-                                <th>
-                                    <span class="visually-hidden">Toggle</span>
-                                </th>
                                 <th>Passing Comp</th>
                                 <th>Pass Total</th>
                                 <th>YPP</th>
                             </tr>
 
-                            <tr
-                                v-if="gameStats !== null"
-                                class="gameStatsRow hidden"
-                            >
+                            <tr class="hidden gameStatsRow">
                                 <td
-                                    v-if="gameStats.gamestats !== null"
+                                    v-if="gameStats !== null"
                                     class="gameStatsItem"
                                 >
                                     {{
@@ -129,13 +123,19 @@
                                             .statistics.passing.comp_att
                                     }}
                                 </td>
-                                <td class="gameStatsItem">
+                                <td
+                                    v-if="gameStats !== null"
+                                    class="gameStatsItem"
+                                >
                                     {{
                                         gameStats.gameStats.response[1]
                                             .statistics.passing.total
                                     }}
                                 </td>
-                                <td class="gameStatsItem">
+                                <td
+                                    v-if="gameStats !== null"
+                                    class="gameStatsItem"
+                                >
                                     {{
                                         gameStats.gameStats.response[1]
                                             .statistics.passing.yards_per_pass
@@ -199,9 +199,6 @@
                             <!--============ Game Stats row for home team ============-->
                             <!--======================================================-->
                             <tr class="hidden gameStatsRowHeaders">
-                                <th>
-                                    <span class="visually-hidden">Toggle</span>
-                                </th>
                                 <th>Passing Comp</th>
                                 <th>Pass Total</th>
                                 <th>YPP</th>
@@ -342,22 +339,19 @@ function getTeamGameStats(gameID, event) {
     let elSibling = el.nextElementSibling;
 
     let elSiblings = [];
-    console.log("currentTarget: ", el);
-    console.log("Next sibling of currentTarget <tr>: ", elSibling);
-    console.log("elTarget: ", elTarget);
+    //console.log("currentTarget: ", el);
+    console.log("elTarget: ", elTarget.tagName);
     console.log("element attr: ", elTarget.getAttribute("aria-expanded"));
 
     for (let i = 0; i < 2; i++) {
         // push sibling to array
-        console.log("Row sibling of <tr> scores row: ", elSibling);
         elSiblings.push(elSibling);
-
         elSibling = elSibling.nextElementSibling;
     }
 
-    console.log("Siblings: ", elSiblings);
+    console.log("Siblings(should have two elements in it): ", elSiblings);
 
-    /* if (
+    if (
         elTarget.tagName === "BUTTON" &&
         elTarget.getAttribute("aria-expanded") === "false"
     ) {
@@ -366,7 +360,7 @@ function getTeamGameStats(gameID, event) {
         const url = `https://v1.american-football.api-sports.io/games/statistics/teams?id=${gameID}`;
         gameStats.value = useGetTeamStats(url, HOST_NAME);
 
-        // Loop through the rows and show them
+        // Loop through the stats rows and show them
         for (const child of elSiblings) {
             console.log("child tagname", child.tagName);
             child.classList.add("shown");
@@ -377,14 +371,14 @@ function getTeamGameStats(gameID, event) {
         elTarget.setAttribute("aria-expanded", "true");
         // Otherwise button is not expanded...
     } else {
-        // Loop thru stats and hide them
+        // Loop thru stats rows and hide them
         for (const child of elSiblings) {
             child.classList.add("hidden");
             child.classList.remove("shown");
         }
         // Now set the button to collapsed
         elTarget.setAttribute("aria-expanded", "false");
-    } */
+    }
 }
 </script>
 
@@ -417,23 +411,16 @@ h2 {
 }
 /* ----------- Table Stylings --------------------- */
 
-.gameStatsRow {
-    font-size: 0.6rem;
-}
-.gameStatsRow > .gameStatsItem {
-    font-size: 0.9rem;
-}
-
 table {
     margin: 1em 0;
     border-collapse: collapse;
 }
 
-th,
-td {
+#scores > th,
+#scores > td {
     padding: 0.25em 0.5em 0.25em 1em;
     vertical-align: text-top;
-    text-align: left;
+    text-align: center;
     text-indent: -0.5em;
 }
 
@@ -454,11 +441,25 @@ tr.hidden {
     display: none;
 }
 
+#scores .gameStatsRowHeaders > th{
+    font-size: 0.8rem;
+}
+#scores .gameStatsRow > td {
+    font-size: 0.7rem;
+}
+
+#scores td:last-child:not(:first-child) {
+  font-weight: 500;
+  font-size: .8rem;
+}
+
+/* ----------- End of Table Stylings -------------- */
+
+
 .button {
     color: rgba(0, 0, 0, 0.75);
 }
 
-/* ----------- End of Table Stylings -------------- */
 
 /* --- Dialog styles ----- */
 details {
