@@ -72,7 +72,7 @@
                                         aria-label="3 more from"
                                         aria-labelledby="btnMSb lblMSb"
                                     >
-                                        Stats
+                                        <span>Stats</span>
                                     </button>
                                 </td>
                                 <td><img :src="gameInfo.teams.away.logo" /></td>
@@ -163,7 +163,7 @@
                                         aria-label="3 more from"
                                         aria-labelledby="btnMSb lblMSb"
                                     >
-                                        Stats
+                                        <span>Stats</span>
                                     </button>
                                 </td>
                                 <td><img :src="gameInfo.teams.home.logo" /></td>
@@ -269,6 +269,7 @@ const currentNFLSeason = inject("currentNFLSeason");
 const API_KEY = import.meta.env.VITE_API_SPORTS_KEY;
 const HOST_NAME = import.meta.env.VITE_API_HOST_FOOTBALL;
 let gameStats = ref(null);
+let counter = 0;
 
 let myHeaders = new Headers();
 myHeaders.append("x-apisports-key", API_KEY);
@@ -339,9 +340,6 @@ function getTeamGameStats(gameID, event) {
     let elSibling = el.nextElementSibling;
 
     let elSiblings = [];
-    //console.log("currentTarget: ", el);
-    console.log("elTarget: ", elTarget.tagName);
-    console.log("element attr: ", elTarget.getAttribute("aria-expanded"));
 
     for (let i = 0; i < 2; i++) {
         // push sibling to array
@@ -349,16 +347,17 @@ function getTeamGameStats(gameID, event) {
         elSibling = elSibling.nextElementSibling;
     }
 
-    console.log("Siblings(should have two elements in it): ", elSiblings);
-
     if (
-        elTarget.tagName === "BUTTON" &&
+        (elTarget.tagName === "SPAN" || "BUTTON") &&
         elTarget.getAttribute("aria-expanded") === "false"
     ) {
-        console.log("In if loop");
-        // Fetch the Gamestats for given gameID
-        const url = `https://v1.american-football.api-sports.io/games/statistics/teams?id=${gameID}`;
-        gameStats.value = useGetTeamStats(url, HOST_NAME);
+        // Fetch the Gamestats for given gameID. Only do call if hasn't
+        // been done before
+        if (counter < 1) {
+            const url = `https://v1.american-football.api-sports.io/games/statistics/teams?id=${gameID}`;
+            gameStats.value = useGetTeamStats(url, HOST_NAME);
+            counter = ++counter;
+        }
 
         // Loop through the stats rows and show them
         for (const child of elSiblings) {
@@ -426,8 +425,7 @@ table {
 
 th {
     vertical-align: bottom;
-    background-color: rgba(0, 0, 0, 0.75);
-    color: #fff;
+    background-color: var(--main-blue);
     font-weight: bold;
 }
 
@@ -441,25 +439,72 @@ tr.hidden {
     display: none;
 }
 
-#scores .gameStatsRowHeaders > th{
-    font-size: 0.8rem;
-}
-#scores .gameStatsRow > td {
-    font-size: 0.7rem;
+#scores .gameStatsRowHeaders {
+    & > th {
+        font-size: 0.8rem;
+        background-color: #12aef1d6;
+    }
 }
 
-#scores td:last-child:not(:first-child) {
-  font-weight: 500;
-  font-size: .8rem;
+#scores .gameStatsRow {
+    & > td {
+        font-size: 0.8rem;
+        font-weight: 650;
+    }
+    & td:last-child:not(:first-child) {
+        font-weight: 650;
+        font-size: 0.8rem;
+    }
 }
 
 /* ----------- End of Table Stylings -------------- */
 
-
 .button {
+    display: inline-block;
+    background-color: #0c75d88d;
+    padding: 8px;
+    text-align: center;
     color: rgba(0, 0, 0, 0.75);
-}
+    font-weight: 575;
+    border-radius: 7px;
+    border: 4px double #141414;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 5px;
+    -webkit-transition: all 0.5s; /* add this line, chrome, safari, etc */
+    -moz-transition: all 0.5s; /* add this line, firefox */
+    -o-transition: all 0.5s; /* add this line, opera */
+    transition: all 0.8s;
 
+    & span {
+        cursor: pointer;
+        display: inline-block;
+        position: relative;
+        transition: 0.5s;
+    }
+
+    & span::after {
+        content: "\00bb";
+        position: absolute;
+        opacity: 0;
+        top: 0;
+        right: -20px;
+        transition: 0.5s;
+    }
+
+    &:hover span {
+        padding-right: 25px;
+    }
+
+    &:hover span:after {
+        opacity: 1;
+        right: 0;
+    }
+
+    &:hover {
+        background-color: rgba(118, 164, 240, 0.693);
+    }
+}
 
 /* --- Dialog styles ----- */
 details {

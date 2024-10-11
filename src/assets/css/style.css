@@ -1,9 +1,13 @@
 :root {
     --main-dark: #212221;
-    --blue: #1181b2;
-    --light-blue: #ddedf4;
+    --blue: rgb(128, 164, 237);
+    --light-blue: rgb(188, 211, 242);
+    --dark-blue: rgb(188, 211, 242);
     --purple: #44449b;
-    --main-bg: #edeef0;
+    --main: rgb(72, 86, 150);
+    --secondary: rgb(152, 159, 191);
+    --platinum: rgb(231, 231, 231);
+    --grey: rgb(124, 124, 124);
 }
 
 body {
@@ -17,4 +21,3 @@ p {
 img[src$=".svg"] {
     margin-top: 5px;
 }
-
