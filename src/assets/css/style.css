@@ -1,8 +1,9 @@
 :root {
     --main-dark: #212221;
-    --blue: rgb(128, 164, 237);
-    --light-blue: rgb(188, 211, 242);
-    --dark-blue: rgb(188, 211, 242);
+    --main-blue: #134074;
+    --blue: #00509d;
+    --light-blue: #bde0fe;
+    --dark-blue: #023e8a;
     --purple: #44449b;
     --main: rgb(72, 86, 150);
     --secondary: rgb(152, 159, 191);

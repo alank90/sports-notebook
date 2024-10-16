@@ -10,6 +10,8 @@
 </template>
 
 <style scoped>
+@import "../assets/css/style.css";
+
 .container {
     display: flex;
     flex-wrap: nowrap;

@@ -113,7 +113,7 @@ td > img {
   padding-top: 12px;
   padding-bottom: 12px;
   text-align: left;
-  background-color: #1181b2;
+  background-color: var(--main-blue);
   color: white;
 }
 
@@ -151,6 +151,6 @@ td > img {
   padding-top: 12px;
   padding-bottom: 12px;
   text-align: left;
-  background-color: #1181b2;
+  background-color: var(--main-blue);
   color: white;
 }

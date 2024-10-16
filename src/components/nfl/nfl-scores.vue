@@ -68,7 +68,7 @@
                                         class="button"
                                         id="btnMSb"
                                         aria-expanded="false"
-                                        aria-controls="MS01b MS02b MS03b"
+                                        aria-controls="MS01b MS02b"
                                         aria-label="3 more from"
                                         aria-labelledby="btnMSb lblMSb"
                                     >
@@ -107,13 +107,13 @@
                             <!--======================================================-->
                             <!--============ Game Stats row for away team ============-->
                             <!--======================================================-->
-                            <tr class="hidden gameStatsRowHeaders">
+                            <tr class="hidden gameStatsRowHeaders" id="MS01b">
                                 <th>Passing Comp</th>
                                 <th>Pass Total</th>
                                 <th>YPP</th>
                             </tr>
 
-                            <tr class="hidden gameStatsRow">
+                            <tr class="hidden gameStatsRow" id="MS02b">
                                 <td
                                     v-if="gameStats !== null"
                                     class="gameStatsItem"
@@ -159,7 +159,7 @@
                                         class="button"
                                         id="btnMSb"
                                         aria-expanded="false"
-                                        aria-controls="MS01b MS02b MS03b"
+                                        aria-controls="MS03b MS04b"
                                         aria-label="3 more from"
                                         aria-labelledby="btnMSb lblMSb"
                                     >
@@ -198,7 +198,7 @@
                             <!--======================================================-->
                             <!--============ Game Stats row for home team ============-->
                             <!--======================================================-->
-                            <tr class="hidden gameStatsRowHeaders">
+                            <tr class="hidden gameStatsRowHeaders" id="MS03b">
                                 <th>Passing Comp</th>
                                 <th>Pass Total</th>
                                 <th>YPP</th>
@@ -207,6 +207,7 @@
                             <tr
                                 v-if="gameStats !== null"
                                 class="gameStatsRow hidden"
+                                id="MS04b"
                             >
                                 <td
                                     v-if="gameStats.gamestats !== null"
@@ -269,7 +270,7 @@ const currentNFLSeason = inject("currentNFLSeason");
 const API_KEY = import.meta.env.VITE_API_SPORTS_KEY;
 const HOST_NAME = import.meta.env.VITE_API_HOST_FOOTBALL;
 let gameStats = ref(null);
-let counter = 0;
+//let counter = 0;
 
 let myHeaders = new Headers();
 myHeaders.append("x-apisports-key", API_KEY);
@@ -335,10 +336,10 @@ watch(gameScores, () => {
  *  @returns { object } - This is a composable function that exposes the game statistics object
  */
 function getTeamGameStats(gameID, event) {
+    console.log("The gameID is: ", gameID);
     const el = event.currentTarget;
     const elTarget = event.target;
     let elSibling = el.nextElementSibling;
-
     let elSiblings = [];
 
     for (let i = 0; i < 2; i++) {
@@ -346,22 +347,17 @@ function getTeamGameStats(gameID, event) {
         elSiblings.push(elSibling);
         elSibling = elSibling.nextElementSibling;
     }
-
     if (
-        (elTarget.tagName === "SPAN" || "BUTTON") &&
+        elTarget.tagName === "BUTTON" &&
         elTarget.getAttribute("aria-expanded") === "false"
     ) {
         // Fetch the Gamestats for given gameID. Only do call if hasn't
         // been done before
-        if (counter < 1) {
-            const url = `https://v1.american-football.api-sports.io/games/statistics/teams?id=${gameID}`;
-            gameStats.value = useGetTeamStats(url, HOST_NAME);
-            counter = ++counter;
-        }
+        const url = `https://v1.american-football.api-sports.io/games/statistics/teams?id=${gameID}`;
+        gameStats.value = useGetTeamStats(url, HOST_NAME);
 
         // Loop through the stats rows and show them
         for (const child of elSiblings) {
-            console.log("child tagname", child.tagName);
             child.classList.add("shown");
             child.classList.remove("hidden");
         }
@@ -442,7 +438,7 @@ tr.hidden {
 #scores .gameStatsRowHeaders {
     & > th {
         font-size: 0.8rem;
-        background-color: #12aef1d6;
+        background-color: var(--blue);
     }
 }
 
@@ -461,7 +457,7 @@ tr.hidden {
 
 .button {
     display: inline-block;
-    background-color: #0c75d88d;
+    background-color: var(--light-blue);
     padding: 8px;
     text-align: center;
     color: rgba(0, 0, 0, 0.75);
@@ -477,7 +473,7 @@ tr.hidden {
     transition: all 0.8s;
 
     & span {
-        cursor: pointer;
+        cursor: not-allowed;
         display: inline-block;
         position: relative;
         transition: 0.5s;

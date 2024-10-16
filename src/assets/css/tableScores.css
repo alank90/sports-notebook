@@ -24,6 +24,11 @@ td {
     caption-side: bottom;
 }
 
+tr > th {
+    background-color: var(--main-blue);
+    color: #fff;
+}
+
 th:first-child {
     text-align: left;
     vertical-align: middle;
