@@ -64,6 +64,7 @@
                             >
                                 <td>
                                     <button
+                                        @click="$emit('getStats')"
                                         type="button"
                                         class="button"
                                         id="btnMSb"
@@ -107,41 +108,9 @@
                             <!--======================================================-->
                             <!--============ Game Stats row for away team ============-->
                             <!--======================================================-->
-                            <tr class="hidden gameStatsRowHeaders" id="MS01b">
-                                <th>Passing Comp</th>
-                                <th>Pass Total</th>
-                                <th>YPP</th>
-                            </tr>
 
-                            <tr class="hidden gameStatsRow" id="MS02b">
-                                <td
-                                    v-if="gameStats !== null"
-                                    class="gameStatsItem"
-                                >
-                                    {{
-                                        gameStats.gameStats.response[1]
-                                            .statistics.passing.comp_att
-                                    }}
-                                </td>
-                                <td
-                                    v-if="gameStats !== null"
-                                    class="gameStatsItem"
-                                >
-                                    {{
-                                        gameStats.gameStats.response[1]
-                                            .statistics.passing.total
-                                    }}
-                                </td>
-                                <td
-                                    v-if="gameStats !== null"
-                                    class="gameStatsItem"
-                                >
-                                    {{
-                                        gameStats.gameStats.response[1]
-                                            .statistics.passing.yards_per_pass
-                                    }}
-                                </td>
-                            </tr>
+                            <nflGameStats :props_GameID="gameInfo.game.id" />
+
                             <!--======================================================-->
                             <!--============ Game Stats row for away team end ========-->
                             <!--======================================================-->
@@ -198,42 +167,8 @@
                             <!--======================================================-->
                             <!--============ Game Stats row for home team ============-->
                             <!--======================================================-->
-                            <tr class="hidden gameStatsRowHeaders" id="MS03b">
-                                <th>Passing Comp</th>
-                                <th>Pass Total</th>
-                                <th>YPP</th>
-                            </tr>
 
-                            <tr
-                                v-if="gameStats !== null"
-                                class="gameStatsRow hidden"
-                                id="MS04b"
-                            >
-                                <td
-                                    v-if="gameStats.gamestats !== null"
-                                    class="gameStatsItem"
-                                >
-                                    {{
-                                        gameStats.gameStats.response[0]
-                                            .statistics.passing.comp_att
-                                    }}
-                                </td>
-                                <td class="gameStatsItem">
-                                    {{
-                                        gameStats.gameStats.response[0]
-                                            .statistics.passing.total
-                                    }}
-                                </td>
-                                <td class="gameStatsItem">
-                                    {{
-                                        gameStats.gameStats.response[0]
-                                            .statistics.passing.yards_per_pass
-                                    }}
-                                </td>
-                            </tr>
-                            <!--======================================================-->
-                            <!--========= End of Game Stats row for home team ========-->
-                            <!--======================================================-->
+                            <nflGameStats :props_GameID="gameInfo.game.id" />
                         </tbody>
 
                         <tfoot v-align="center">
@@ -264,6 +199,7 @@ import { todayLocaleString, today } from "../modules/getDate.js";
 import { getPreviousWeeksDates } from "../modules/getFootballDates.js";
 import { useFetches } from "../modules/useFetches.js";
 import { useGetTeamStats } from "../modules/getTeamGameStats.js";
+import nflGameStats from "./nfl-game-stats.vue";
 
 // ======= Variable Declarations ============ //
 const currentNFLSeason = inject("currentNFLSeason");
@@ -336,7 +272,6 @@ watch(gameScores, () => {
  *  @returns { object } - This is a composable function that exposes the game statistics object
  */
 function getTeamGameStats(gameID, event) {
-    console.log("The gameID is: ", gameID);
     const el = event.currentTarget;
     const elTarget = event.target;
     let elSibling = el.nextElementSibling;
