@@ -56,15 +56,9 @@
 
                         <tbody>
                             <!-- ------- Away team score line ----------- -->
-                            <tr
-                                @click="
-                                    getTeamGameStats(gameInfo.game.id, $event)
-                                "
-                                title="Click for Game Stats"
-                            >
+                            <tr @click="gameStats" title="Click for Game Stats">
                                 <td>
                                     <button
-                                        @click="$emit('getStats')"
                                         type="button"
                                         class="button"
                                         id="btnMSb"
@@ -109,19 +103,18 @@
                             <!--============ Game Stats row for away team ============-->
                             <!--======================================================-->
 
-                            <nflGameStats :props_GameID="gameInfo.game.id" />
+                            <nflGameStats
+                                ref="gameStats"
+                                :prop_GameID="gameInfo.game.id"
+                                :prop_HOST_NAME="HOST_NAME"
+                            />
 
                             <!--======================================================-->
                             <!--============ Game Stats row for away team end ========-->
                             <!--======================================================-->
 
                             <!-- ------- Home team score line ----------- -->
-                            <tr
-                                @click="
-                                    getTeamGameStats(gameInfo.game.id, $event)
-                                "
-                                title="Click for Game Stats"
-                            >
+                            <tr @click="gameStats" title="Click for Game Stats">
                                 <td>
                                     <button
                                         type="button"
@@ -168,7 +161,10 @@
                             <!--============ Game Stats row for home team ============-->
                             <!--======================================================-->
 
-                            <nflGameStats :props_GameID="gameInfo.game.id" />
+                            <nflGameStats
+                                :prop_GameID="gameInfo.game.id"
+                                :prop_HOST_NAME="HOST_NAME"
+                            />
                         </tbody>
 
                         <tfoot v-align="center">
@@ -205,7 +201,7 @@ import nflGameStats from "./nfl-game-stats.vue";
 const currentNFLSeason = inject("currentNFLSeason");
 const API_KEY = import.meta.env.VITE_API_SPORTS_KEY;
 const HOST_NAME = import.meta.env.VITE_API_HOST_FOOTBALL;
-let gameStats = ref(null);
+//let gameStats = ref(null);
 //let counter = 0;
 
 let myHeaders = new Headers();
@@ -268,10 +264,15 @@ watch(gameScores, () => {
 
 // ============================== Methods ============================================= //
 /** Description - Retrieves the game stats from  /games/statistics/teams endpoint
- *  @parameters {number, } - the game id, the event object
+ *  @parameters {number, object } - the game id, the event object
  *  @returns { object } - This is a composable function that exposes the game statistics object
  */
-function getTeamGameStats(gameID, event) {
+function gameStats() {
+    console.log("In gameStats.", nflGameStats);
+    getStats.value;
+}
+
+/* function getTeamGameStats(gameID, event) {
     const el = event.currentTarget;
     const elTarget = event.target;
     let elSibling = el.nextElementSibling;
@@ -286,8 +287,7 @@ function getTeamGameStats(gameID, event) {
         elTarget.tagName === "BUTTON" &&
         elTarget.getAttribute("aria-expanded") === "false"
     ) {
-        // Fetch the Gamestats for given gameID. Only do call if hasn't
-        // been done before
+        // Fetch the Gamestats for given gameID.
         const url = `https://v1.american-football.api-sports.io/games/statistics/teams?id=${gameID}`;
         gameStats.value = useGetTeamStats(url, HOST_NAME);
 
@@ -308,8 +308,8 @@ function getTeamGameStats(gameID, event) {
         }
         // Now set the button to collapsed
         elTarget.setAttribute("aria-expanded", "false");
-    }
-}
+    } 
+} */
 </script>
 
 <style scoped>

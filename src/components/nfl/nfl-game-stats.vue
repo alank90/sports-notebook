@@ -7,11 +7,28 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, defineExpose } from "vue";
+import { useGetTeamStats } from "../modules/getTeamGameStats.js";
 
-const props = defineProps(["props_GameID"]);
-console.log("gameID: ", props.props_GameID);
-const count = ref(0);
+const props = defineProps(["prop_GameID", "prop_HOST_NAME"]);
+let gameStats = ref(null);
+
+// ================================================================ //
+// ====================== Methods ================================= //
+// ================================================================ //
+
+/** Description - Retrieves the game stats from  /games/statistics/teams endpoint
+ *  @parameters {number, object } - the game id, the event object
+ *  @returns { object } - This is a composable function that exposes the game statistics object
+ */
+const getStats = () => {
+    // Fetch the Gamestats for given gameID.
+    const url = `https://v1.american-football.api-sports.io/games/statistics/teams?id=${props.prop_GameID}`;
+    console.log("url: ", url);
+    //gameStats.value = useGetTeamStats(url, HOST_NAME);
+};
+
+defineExpose({ getStats });
 </script>
 
 <style lang="css" scoped>
