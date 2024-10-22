@@ -3,6 +3,7 @@
         <th>Passing Comp</th>
         <th>Pass Total</th>
         <th>YPP</th>
+        <th>{{ gameStats }}</th>
     </tr>
 </template>
 
@@ -10,8 +11,8 @@
 import { ref, defineExpose } from "vue";
 import { useGetTeamStats } from "../modules/getTeamGameStats.js";
 
-const props = defineProps(["prop_GameID", "prop_HOST_NAME"]);
-let gameStats = ref(null);
+const props = defineProps(["prop_HOST_NAME"]);
+//let gameStats = ref(null);
 
 // ================================================================ //
 // ====================== Methods ================================= //
@@ -21,11 +22,11 @@ let gameStats = ref(null);
  *  @parameters {number, object } - the game id, the event object
  *  @returns { object } - This is a composable function that exposes the game statistics object
  */
-const getStats = () => {
+const getStats = (gameID) => {
     // Fetch the Gamestats for given gameID.
-    const url = `https://v1.american-football.api-sports.io/games/statistics/teams?id=${props.prop_GameID}`;
-    console.log("url: ", url);
-    //gameStats.value = useGetTeamStats(url, HOST_NAME);
+    const url = `https://v1.american-football.api-sports.io/games/statistics/teams?id=${gameID}`;
+    const { data: gameStats } = useGetTeamStats(url, props.prop_HOST_NAME);
+    console.log(gameStats);
 };
 
 defineExpose({ getStats });

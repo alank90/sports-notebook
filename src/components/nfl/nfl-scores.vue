@@ -56,7 +56,14 @@
 
                         <tbody>
                             <!-- ------- Away team score line ----------- -->
-                            <tr @click="gameStats" title="Click for Game Stats">
+                            <tr
+                                @click="
+                                    childGetStats[totalCount].getStats(
+                                        gameInfo.game.id
+                                    )
+                                "
+                                title="Click for Game Stats"
+                            >
                                 <td>
                                     <button
                                         type="button"
@@ -104,8 +111,7 @@
                             <!--======================================================-->
 
                             <nflGameStats
-                                ref="gameStats"
-                                :prop_GameID="gameInfo.game.id"
+                                ref="childGetStats"
                                 :prop_HOST_NAME="HOST_NAME"
                             />
 
@@ -114,7 +120,14 @@
                             <!--======================================================-->
 
                             <!-- ------- Home team score line ----------- -->
-                            <tr @click="gameStats" title="Click for Game Stats">
+                            <tr
+                                @click="
+                                    childGetStats[totalCount].getStats(
+                                        gameInfo.game.id
+                                    )
+                                "
+                                title="Click for Game Stats"
+                            >
                                 <td>
                                     <button
                                         type="button"
@@ -162,7 +175,7 @@
                             <!--======================================================-->
 
                             <nflGameStats
-                                :prop_GameID="gameInfo.game.id"
+                                ref="childGetStats"
                                 :prop_HOST_NAME="HOST_NAME"
                             />
                         </tbody>
@@ -201,8 +214,9 @@ import nflGameStats from "./nfl-game-stats.vue";
 const currentNFLSeason = inject("currentNFLSeason");
 const API_KEY = import.meta.env.VITE_API_SPORTS_KEY;
 const HOST_NAME = import.meta.env.VITE_API_HOST_FOOTBALL;
-//let gameStats = ref(null);
-//let counter = 0;
+const childGetStats = ref(null);
+let childGetStatsIndex = ref(0);
+let totalCount = ref(0);
 
 let myHeaders = new Headers();
 myHeaders.append("x-apisports-key", API_KEY);
@@ -268,8 +282,8 @@ watch(gameScores, () => {
  *  @returns { object } - This is a composable function that exposes the game statistics object
  */
 function gameStats() {
-    console.log("In gameStats.", nflGameStats);
-    getStats.value;
+    console.log("In gameStats.");
+    childGetStats.value.getStats();
 }
 
 /* function getTeamGameStats(gameID, event) {

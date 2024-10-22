@@ -8,10 +8,9 @@ import { ref } from "vue";
 import { useFetch } from "./useFetch";
 
 // --------- Vars --------------------- //
-const gameStats = ref();
 
 export function useGetTeamStats(url, hostName) {
-    const { data: gameStats, loadingState, error } = useFetch(url);
+    const { data, loadingState, error } = useFetch(url);
 
-    return { gameStats };
+    return { data };
 }
