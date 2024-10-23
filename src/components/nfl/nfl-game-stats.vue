@@ -1,18 +1,29 @@
 <template>
-    <tr class="hidden gameStatsRowHeaders" id="MS01b">
+    <tr class="gameStatsRowHeaders" id="MS01b">
         <th>Passing Comp</th>
         <th>Pass Total</th>
         <th>YPP</th>
-        <th>{{ gameStats }}</th>
+    </tr>
+
+    <tr class="gameStatsRow" id="MS02b">
+        <td class="gameStatsItem">
+            {{ rowGameStats.response[0].statistics.passing.comp_att }}
+        </td>
+        <td v-if="rowGameStats !== null" class="gameStatsItem">
+            {{ rowGameStats.response[0].statistics.passing.total }}
+        </td>
+        <td  class="gameStatsItem">
+            {{ rowGameStats.response[0].statistics.passing.yards_per_pass }}
+        </td>
     </tr>
 </template>
 
 <script setup>
-import { ref, defineExpose } from "vue";
+import { ref } from "vue";
 import { useGetTeamStats } from "../modules/getTeamGameStats.js";
 
 const props = defineProps(["prop_HOST_NAME"]);
-//let gameStats = ref(null);
+let rowGameStats = null;
 
 // ================================================================ //
 // ====================== Methods ================================= //
@@ -25,8 +36,9 @@ const props = defineProps(["prop_HOST_NAME"]);
 const getStats = (gameID) => {
     // Fetch the Gamestats for given gameID.
     const url = `https://v1.american-football.api-sports.io/games/statistics/teams?id=${gameID}`;
-    const { data: gameStats } = useGetTeamStats(url, props.prop_HOST_NAME);
-    console.log(gameStats);
+    const { data } = useGetTeamStats(url, props.prop_HOST_NAME);
+    rowGameStats = data;
+    console.log(rowGameStats);
 };
 
 defineExpose({ getStats });
