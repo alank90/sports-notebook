@@ -113,6 +113,7 @@
                             <nflGameStats
                                 ref="childGetStats"
                                 :prop_HOST_NAME="HOST_NAME"
+                                :prop_team="awayTeam"
                             />
 
                             <!--======================================================-->
@@ -177,6 +178,7 @@
                             <nflGameStats
                                 ref="childGetStats"
                                 :prop_HOST_NAME="HOST_NAME"
+                                :prop_team="homeTeam"
                             />
                         </tbody>
 
@@ -215,8 +217,9 @@ const currentNFLSeason = inject("currentNFLSeason");
 const API_KEY = import.meta.env.VITE_API_SPORTS_KEY;
 const HOST_NAME = import.meta.env.VITE_API_HOST_FOOTBALL;
 const childGetStats = ref(null);
-let childGetStatsIndex = ref(0);
 let totalCount = ref(0);
+const homeTeam = 0;
+const awayTeam = 1;
 
 let myHeaders = new Headers();
 myHeaders.append("x-apisports-key", API_KEY);
@@ -322,7 +325,7 @@ function gameStats() {
         }
         // Now set the button to collapsed
         elTarget.setAttribute("aria-expanded", "false");
-    } 
+    }
 } */
 </script>
 

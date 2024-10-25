@@ -1,29 +1,46 @@
 <template>
-    <tr class="gameStatsRowHeaders" id="MS01b">
-        <th>Passing Comp</th>
-        <th>Pass Total</th>
-        <th>YPP</th>
+    <tr v-if="loadingState === true">
+        Loading...
     </tr>
+    <tbody v-else>
+        <!--======================================================-->
+        <!--============ Game Stats row for team ============-->
+        <!--======================================================-->
+        <tr class="gameStatsRowHeaders" id="MS01b">
+            <th>Passing Comp</th>
+            <th>Pass Total</th>
+            <th>YPP</th>
+        </tr>
 
-    <tr class="gameStatsRow" id="MS02b">
-        <td class="gameStatsItem">
-            {{ rowGameStats.response[0].statistics.passing.comp_att }}
-        </td>
-        <td v-if="rowGameStats !== null" class="gameStatsItem">
-            {{ rowGameStats.response[0].statistics.passing.total }}
-        </td>
-        <td  class="gameStatsItem">
-            {{ rowGameStats.response[0].statistics.passing.yards_per_pass }}
-        </td>
-    </tr>
+        <tr class="gameStatsRow" id="MS02b">
+            <td v-if="rowGameStats !== null" class="gameStatsItem">
+                {{
+                    rowGameStats.value.response[props.prop_team].statistics
+                        .passing.comp_att
+                }}
+            </td>
+            <td v-if="rowGameStats !== null" class="gameStatsItem">
+                {{
+                    rowGameStats.value.response[props.prop_team].statistics
+                        .passing.total
+                }}
+            </td>
+            <td v-if="rowGameStats !== null" class="gameStatsItem">
+                {{
+                    rowGameStats.value.response[props.prop_team].statistics
+                        .passing.yards_per_pass
+                }}
+            </td>
+        </tr>
+    </tbody>
 </template>
 
 <script setup>
 import { ref } from "vue";
-import { useGetTeamStats } from "../modules/getTeamGameStats.js";
+import { useFetch } from "../modules/useFetch.js";
 
-const props = defineProps(["prop_HOST_NAME"]);
-let rowGameStats = null;
+const props = defineProps(["prop_HOST_NAME", "prop_team"]);
+let rowGameStats = ref(null);
 
 // ================================================================ //
 // ====================== Methods ================================= //
@@ -36,9 +53,9 @@ let rowGameStats = null;
 const getStats = (gameID) => {
     // Fetch the Gamestats for given gameID.
     const url = `https://v1.american-football.api-sports.io/games/statistics/teams?id=${gameID}`;
-    const { data } = useGetTeamStats(url, props.prop_HOST_NAME);
-    rowGameStats = data;
-    console.log(rowGameStats);
+    const { data, loadingState, error } = useFetch(url, props.prop_HOST_NAME);
+    rowGameStats.value = data;
+    console.log(rowGameStats.value);
 };
 
 defineExpose({ getStats });
