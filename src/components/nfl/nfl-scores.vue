@@ -37,7 +37,6 @@
                                 <th scope="row">
                                     {{ gameInfo.game.status.short }}
                                 </th>
-                                <th></th>
                                 <th colspan="2"></th>
                                 <th>Q1</th>
                                 <th>Q2</th>
@@ -56,54 +55,28 @@
 
                         <tbody>
                             <!-- ------- Away team score line ----------- -->
-                            <tr
-                                @click="
-                                    childGetStats[totalCount].getStats(
-                                        gameInfo.game.id
-                                    )
-                                "
-                                title="Click for Game Stats"
+                            <td><img :src="gameInfo.teams.away.logo" /></td>
+                            <td scope="row" colspan="2">
+                                {{ gameInfo.teams.away.name }}
+                            </td>
+                            <td>{{ gameInfo.scores.away.quarter_1 }}</td>
+                            <td>{{ gameInfo.scores.away.quarter_2 }}</td>
+                            <td>{{ gameInfo.scores.away.quarter_3 }}</td>
+                            <td>{{ gameInfo.scores.away.quarter_4 }}</td>
+                            <td v-if="gameInfo.game.status.long === 'Final/OT'">
+                                {{ gameInfo.scores.away.overtime }}
+                            </td>
+                            <td
+                                :class="{
+                                    winner:
+                                        gameInfo.scores.away.total >
+                                        gameInfo.scores.home.total,
+                                }"
+                                scope="col"
+                                colspan="3"
                             >
-                                <td>
-                                    <button
-                                        type="button"
-                                        class="button"
-                                        id="btnMSb"
-                                        aria-expanded="false"
-                                        aria-controls="MS01b MS02b"
-                                        aria-label="3 more from"
-                                        aria-labelledby="btnMSb lblMSb"
-                                    >
-                                        <span>Stats</span>
-                                    </button>
-                                </td>
-                                <td><img :src="gameInfo.teams.away.logo" /></td>
-                                <td scope="row" colspan="2">
-                                    {{ gameInfo.teams.away.name }}
-                                </td>
-                                <td>{{ gameInfo.scores.away.quarter_1 }}</td>
-                                <td>{{ gameInfo.scores.away.quarter_2 }}</td>
-                                <td>{{ gameInfo.scores.away.quarter_3 }}</td>
-                                <td>{{ gameInfo.scores.away.quarter_4 }}</td>
-                                <td
-                                    v-if="
-                                        gameInfo.game.status.long === 'Final/OT'
-                                    "
-                                >
-                                    {{ gameInfo.scores.away.overtime }}
-                                </td>
-                                <td
-                                    :class="{
-                                        winner:
-                                            gameInfo.scores.away.total >
-                                            gameInfo.scores.home.total,
-                                    }"
-                                    scope="col"
-                                    colspan="3"
-                                >
-                                    {{ gameInfo.scores.away.total }}
-                                </td>
-                            </tr>
+                                {{ gameInfo.scores.away.total }}
+                            </td>
                             <!-- ------- Away team score line End----------- -->
 
                             <!--======================================================-->
@@ -111,9 +84,9 @@
                             <!--======================================================-->
 
                             <nflGameStats
-                                ref="childGetStats"
                                 :prop_HOST_NAME="HOST_NAME"
                                 :prop_team="awayTeam"
+                                :prop_gameID="gameInfo.game.id"
                             />
 
                             <!--======================================================-->
@@ -121,27 +94,7 @@
                             <!--======================================================-->
 
                             <!-- ------- Home team score line ----------- -->
-                            <tr
-                                @click="
-                                    childGetStats[totalCount].getStats(
-                                        gameInfo.game.id
-                                    )
-                                "
-                                title="Click for Game Stats"
-                            >
-                                <td>
-                                    <button
-                                        type="button"
-                                        class="button"
-                                        id="btnMSb"
-                                        aria-expanded="false"
-                                        aria-controls="MS03b MS04b"
-                                        aria-label="3 more from"
-                                        aria-labelledby="btnMSb lblMSb"
-                                    >
-                                        <span>Stats</span>
-                                    </button>
-                                </td>
+                            <tr>
                                 <td><img :src="gameInfo.teams.home.logo" /></td>
                                 <td scope="row" colspan="2">
                                     {{ gameInfo.teams.home.name }}
@@ -176,9 +129,9 @@
                             <!--======================================================-->
 
                             <nflGameStats
-                                ref="childGetStats"
                                 :prop_HOST_NAME="HOST_NAME"
                                 :prop_team="homeTeam"
+                                :prop_gameID="gameInfo.game.id"
                             />
                         </tbody>
 
@@ -216,7 +169,6 @@ import nflGameStats from "./nfl-game-stats.vue";
 const currentNFLSeason = inject("currentNFLSeason");
 const API_KEY = import.meta.env.VITE_API_SPORTS_KEY;
 const HOST_NAME = import.meta.env.VITE_API_HOST_FOOTBALL;
-const childGetStats = ref(null);
 let totalCount = ref(0);
 const homeTeam = 0;
 const awayTeam = 1;
@@ -278,16 +230,6 @@ watch(gameScores, () => {
         }
     });
 });
-
-// ============================== Methods ============================================= //
-/** Description - Retrieves the game stats from  /games/statistics/teams endpoint
- *  @parameters {number, object } - the game id, the event object
- *  @returns { object } - This is a composable function that exposes the game statistics object
- */
-function gameStats() {
-    console.log("In gameStats.");
-    childGetStats.value.getStats();
-}
 
 /* function getTeamGameStats(gameID, event) {
     const el = event.currentTarget;
@@ -363,6 +305,11 @@ table {
     border-collapse: collapse;
 }
 
+tbody tr:nth-child(6),
+tbody tr:nth-child(10) {
+    border-bottom: 1px solid #000;
+}
+
 #scores > th,
 #scores > td {
     padding: 0.25em 0.5em 0.25em 1em;
@@ -377,82 +324,7 @@ th {
     font-weight: bold;
 }
 
-tr.shown,
-tr.hidden {
-    background-color: #eee;
-    display: table-row;
-}
-
-tr.hidden {
-    display: none;
-}
-
-#scores .gameStatsRowHeaders {
-    & > th {
-        font-size: 0.8rem;
-        background-color: var(--blue);
-    }
-}
-
-#scores .gameStatsRow {
-    & > td {
-        font-size: 0.8rem;
-        font-weight: 650;
-    }
-    & td:last-child:not(:first-child) {
-        font-weight: 650;
-        font-size: 0.8rem;
-    }
-}
-
 /* ----------- End of Table Stylings -------------- */
-
-.button {
-    display: inline-block;
-    background-color: var(--light-blue);
-    padding: 8px;
-    text-align: center;
-    color: rgba(0, 0, 0, 0.75);
-    font-weight: 575;
-    border-radius: 7px;
-    border: 4px double #141414;
-    border-radius: 8px;
-    cursor: pointer;
-    margin: 5px;
-    -webkit-transition: all 0.5s; /* add this line, chrome, safari, etc */
-    -moz-transition: all 0.5s; /* add this line, firefox */
-    -o-transition: all 0.5s; /* add this line, opera */
-    transition: all 0.8s;
-
-    & span {
-        cursor: not-allowed;
-        display: inline-block;
-        position: relative;
-        transition: 0.5s;
-    }
-
-    & span::after {
-        content: "\00bb";
-        position: absolute;
-        opacity: 0;
-        top: 0;
-        right: -20px;
-        transition: 0.5s;
-    }
-
-    &:hover span {
-        padding-right: 25px;
-    }
-
-    &:hover span:after {
-        opacity: 1;
-        right: 0;
-    }
-
-    &:hover {
-        background-color: rgba(118, 164, 240, 0.693);
-    }
-}
 
 /* --- Dialog styles ----- */
 details {
