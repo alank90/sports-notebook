@@ -55,28 +55,34 @@
 
                         <tbody>
                             <!-- ------- Away team score line ----------- -->
-                            <td><img :src="gameInfo.teams.away.logo" /></td>
-                            <td scope="row" colspan="2">
-                                {{ gameInfo.teams.away.name }}
-                            </td>
-                            <td>{{ gameInfo.scores.away.quarter_1 }}</td>
-                            <td>{{ gameInfo.scores.away.quarter_2 }}</td>
-                            <td>{{ gameInfo.scores.away.quarter_3 }}</td>
-                            <td>{{ gameInfo.scores.away.quarter_4 }}</td>
-                            <td v-if="gameInfo.game.status.long === 'Final/OT'">
-                                {{ gameInfo.scores.away.overtime }}
-                            </td>
-                            <td
-                                :class="{
-                                    winner:
-                                        gameInfo.scores.away.total >
-                                        gameInfo.scores.home.total,
-                                }"
-                                scope="col"
-                                colspan="3"
-                            >
-                                {{ gameInfo.scores.away.total }}
-                            </td>
+                            <tr>
+                                <td><img :src="gameInfo.teams.away.logo" /></td>
+                                <td scope="row" colspan="2">
+                                    {{ gameInfo.teams.away.name }}
+                                </td>
+                                <td>{{ gameInfo.scores.away.quarter_1 }}</td>
+                                <td>{{ gameInfo.scores.away.quarter_2 }}</td>
+                                <td>{{ gameInfo.scores.away.quarter_3 }}</td>
+                                <td>{{ gameInfo.scores.away.quarter_4 }}</td>
+                                <td
+                                    v-if="
+                                        gameInfo.game.status.long === 'Final/OT'
+                                    "
+                                >
+                                    {{ gameInfo.scores.away.overtime }}
+                                </td>
+                                <td
+                                    :class="{
+                                        winner:
+                                            gameInfo.scores.away.total >
+                                            gameInfo.scores.home.total,
+                                    }"
+                                    scope="col"
+                                    colspan="3"
+                                >
+                                    {{ gameInfo.scores.away.total }}
+                                </td>
+                            </tr>
                             <!-- ------- Away team score line End----------- -->
 
                             <!--======================================================-->
@@ -230,45 +236,6 @@ watch(gameScores, () => {
         }
     });
 });
-
-/* function getTeamGameStats(gameID, event) {
-    const el = event.currentTarget;
-    const elTarget = event.target;
-    let elSibling = el.nextElementSibling;
-    let elSiblings = [];
-
-    for (let i = 0; i < 2; i++) {
-        // push sibling to array
-        elSiblings.push(elSibling);
-        elSibling = elSibling.nextElementSibling;
-    }
-    if (
-        elTarget.tagName === "BUTTON" &&
-        elTarget.getAttribute("aria-expanded") === "false"
-    ) {
-        // Fetch the Gamestats for given gameID.
-        const url = `https://v1.american-football.api-sports.io/games/statistics/teams?id=${gameID}`;
-        gameStats.value = useGetTeamStats(url, HOST_NAME);
-
-        // Loop through the stats rows and show them
-        for (const child of elSiblings) {
-            child.classList.add("shown");
-            child.classList.remove("hidden");
-        }
-
-        // Now set the button to expanded
-        elTarget.setAttribute("aria-expanded", "true");
-        // Otherwise button is not expanded...
-    } else {
-        // Loop thru stats rows and hide them
-        for (const child of elSiblings) {
-            child.classList.add("hidden");
-            child.classList.remove("shown");
-        }
-        // Now set the button to collapsed
-        elTarget.setAttribute("aria-expanded", "false");
-    }
-} */
 </script>
 
 <style scoped>

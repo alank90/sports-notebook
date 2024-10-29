@@ -7,7 +7,6 @@
     <!--======================================================-->
     <tr
         v-else
-        class="hidden gameStatsRowHeaders"
         id="MS01b"
         @click="getStats(props.prop_gameID, $event)"
         title="Click for Game Stats"
@@ -25,14 +24,19 @@
                 <span>Stats</span>
             </button>
         </td>
-
+    </tr>
+    <tr class="hidden gameStatsRowHeaders">
         <th>Passing Comp</th>
         <th>Pass Total</th>
-        <th>YPP</th>
+        <th>Yards/Pass</th>
+        <th>Rushing Att</th>
+        <th>Rushing Total</th>
+        <th>Yards/Rush</th>
+        <th>Total Yards</th>
+        <th>Turnovers</th>
     </tr>
 
-    <tr class="gameStatsRow" id="MS02b">
-        <td></td>
+    <tr class="hidden gameStatsRow" id="MS02b">
         <td v-if="rowGameStats !== null" class="gameStatsItem">
             {{
                 rowGameStats.value.response[props.prop_team].statistics.passing
@@ -49,6 +53,37 @@
             {{
                 rowGameStats.value.response[props.prop_team].statistics.passing
                     .yards_per_pass
+            }}
+        </td>
+        <td v-if="rowGameStats !== null" class="gameStatsItem">
+            {{
+                rowGameStats.value.response[props.prop_team].statistics.rushings
+                    .attempts
+            }}
+        </td>
+        <td v-if="rowGameStats !== null" class="gameStatsItem">
+            {{
+                rowGameStats.value.response[props.prop_team].statistics.rushings
+                    .total
+            }}
+        </td>
+        <td v-if="rowGameStats !== null" class="gameStatsItem">
+            {{
+                rowGameStats.value.response[props.prop_team].statistics.rushings
+                    .yards_per_rush
+            }}
+        </td>
+        <td v-if="rowGameStats !== null" class="gameStatsItem">
+            {{
+                rowGameStats.value.response[props.prop_team].statistics.yards
+                    .total
+            }}
+        </td>
+
+        <td v-if="rowGameStats !== null" class="gameStatsItem">
+            {{
+                rowGameStats.value.response[props.prop_team].statistics
+                    .turnovers.total
             }}
         </td>
     </tr>
@@ -70,12 +105,51 @@ let rowGameStats = ref(null);
  *  @returns { object } - This is a composable function that exposes the game statistics object
  */
 const getStats = (gameID, event) => {
-    console.log("DOM event :", event.target);
-    // Fetch the Gamestats for given gameID.
-    const url = `https://v1.american-football.api-sports.io/games/statistics/teams?id=${gameID}`;
-    const { data, loadingState, error } = useFetch(url, props.prop_HOST_NAME);
-    rowGameStats.value = data;
-    console.log(rowGameStats.value);
+    const el = event.currentTarget;
+    const elTarget = event.target;
+    let elSibling = el.nextElementSibling;
+    let elSiblings = [];
+    console.log("currentTarget: ", el);
+    console.log("el.currentTarget's next sibling: ", elSibling);
+
+    for (let i = 0; i < 2; i++) {
+        // push sibling of currentTarget onto array
+        elSiblings.push(elSibling);
+        elSibling = elSibling.nextElementSibling;
+    }
+    console.log("elSiblings array; ", elSiblings);
+
+    if (
+        elTarget.tagName === "BUTTON" &&
+        elTarget.getAttribute("aria-expanded") === "false"
+    ) {
+        // Fetch the Gamestats for given gameID if necessary.
+        if (rowGameStats.value === null) {
+            const url = `https://v1.american-football.api-sports.io/games/statistics/teams?id=${gameID}`;
+            const { data, loadingState, error } = useFetch(
+                url,
+                props.prop_HOST_NAME
+            );
+            rowGameStats.value = data;
+        }
+        // Loop through the stats rows and show them
+        for (const child of elSiblings) {
+            child.classList.add("shown");
+            child.classList.remove("hidden");
+        }
+
+        // Now set the button to expanded
+        elTarget.setAttribute("aria-expanded", "true");
+        // Otherwise button is not expanded...
+    } else {
+        // Loop thru stats rows and hide them
+        for (const child of elSiblings) {
+            child.classList.add("hidden");
+            child.classList.remove("shown");
+        }
+        // Now set the button to collapsed
+        elTarget.setAttribute("aria-expanded", "false");
+    }
 };
 </script>
 
@@ -88,8 +162,13 @@ tr.hidden {
     display: table-row;
 }
 
-tr.hidden(not:first-child) {
-    display: none;
+button {
+    line-height: 0;
+    transition: all 1s 0.5s;
+
+    &:hover {
+        line-height: 20px;
+    }
 }
 
 #scores .gameStatsRowHeaders {
@@ -161,79 +240,3 @@ tr.hidden(not:first-child) {
 
 /* -------- End of Button stylings ------------------------ */
 </style>
-<!-- ================ Away markup========================== -->
-<!-- <tr class="hidden gameStatsRowHeaders" id="MS01b">
-    <th>Passing Comp</th>
-    <th>Pass Total</th>
-    <th>YPP</th>
-</tr>
-
-<tr class="hidden gameStatsRow" id="MS02b">
-    <td
-        v-if="gameStats !== null"
-        class="gameStatsItem"
-    >
-        {{
-            gameStats.gameStats.response[1]
-                .statistics.passing.comp_att
-        }}
-    </td>
-    <td
-        v-if="gameStats !== null"
-        class="gameStatsItem"
-    >
-        {{
-            gameStats.gameStats.response[1]
-                .statistics.passing.total
-        }}
-    </td>
-    <td
-        v-if="gameStats !== null"
-        class="gameStatsItem"
-    >
-        {{
-            gameStats.gameStats.response[1]
-                .statistics.passing.yards_per_pass
-        }}
-    </td>
-</tr> -->
-
-<!--======================================================-->
-<!--============ Game Stats row for home team ============-->
-<!--======================================================-->
-<!-- <tr class="hidden gameStatsRowHeaders" id="MS03b">
-                                <th>Passing Comp</th>
-                                <th>Pass Total</th>
-                                <th>YPP</th>
-                            </tr>
-
-                            <tr
-                                v-if="gameStats !== null"
-                                class="gameStatsRow hidden"
-                                id="MS04b"
-                            >
-                                <td
-                                    v-if="gameStats.gamestats !== null"
-                                    class="gameStatsItem"
-                                >
-                                    {{
-                                        gameStats.gameStats.response[0]
-                                            .statistics.passing.comp_att
-                                    }}
-                                </td>
-                                <td class="gameStatsItem">
-                                    {{
-                                        gameStats.gameStats.response[0]
-                                            .statistics.passing.total
-                                    }}
-                                </td>
-                                <td class="gameStatsItem">
-                                    {{
-                                        gameStats.gameStats.response[0]
-                                            .statistics.passing.yards_per_pass
-                                    }}
-                                </td>
-                            </tr> -->
-<!--======================================================-->
-<!--========= End of Game Stats row for home team ========-->
-<!--======================================================-->
