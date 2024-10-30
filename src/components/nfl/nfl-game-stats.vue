@@ -154,12 +154,17 @@ const getStats = (gameID, event) => {
 </script>
 
 <style lang="css" scoped>
+@import "../../assets/css/style.css";
 @import "../../assets/css/table.css";
 
 tr.shown,
 tr.hidden {
     background-color: #eee;
     display: table-row;
+}
+
+tr.shown:not(.gameStatsRowHeaders) {
+    border-bottom: 5px solid var(--main-dark);
 }
 
 button {
@@ -173,7 +178,7 @@ button {
 
 #scores .gameStatsRowHeaders {
     & > th {
-        font-size: 0.8rem;
+        font-size: 0.7rem;
         background-color: var(--blue);
         font-weight: 600;
     }
@@ -181,13 +186,17 @@ button {
 
 #scores .gameStatsRow {
     & > td {
-        font-size: 0.9rem;
+        font-size: 0.8rem;
         font-weight: 650;
     }
     & td:last-child:not(:first-child) {
         font-weight: 650;
-        font-size: 0.9rem;
+        font-size: 0.8rem;
     }
+}
+
+#scores #MS01b {
+    border-bottom: 1px solid var(--main-dark);
 }
 
 /* -------- Button stylings ------------------------ */
