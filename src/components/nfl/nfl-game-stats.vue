@@ -110,7 +110,13 @@ const getStats = (gameID, event) => {
     let elSibling = el.nextElementSibling;
     let elSiblings = [];
     console.log("currentTarget: ", el);
+    console.log("target is: ", elTarget);
     console.log("el.currentTarget's next sibling: ", elSibling);
+    console.log("The elTarget.tagName is: ", elTarget.tagName);
+    console.log(
+        "The elTarget.getAttribute aria-expanded value is: ",
+        elTarget.getAttribute("aria-expanded")
+    );
 
     for (let i = 0; i < 2; i++) {
         // push sibling of currentTarget onto array
