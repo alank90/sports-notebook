@@ -7,20 +7,11 @@
     <!--======================================================-->
     <tr
         v-else
-        id="MS01b"
         @click="getStats(props.prop_gameID, $event)"
         title="Click for Game Stats"
     >
         <td>
-            <button
-                type="button"
-                class="button"
-                id="btnMSb"
-                aria-expanded="false"
-                aria-controls="MS01b MS02b"
-                aria-label="3 more from"
-                aria-labelledby="btnMSb lblMSb"
-            >
+            <button type="button" class="button" aria-expanded="false">
                 <span>Stats</span>
             </button>
         </td>
@@ -36,7 +27,7 @@
         <th>Turnovers</th>
     </tr>
 
-    <tr class="hidden gameStatsRow" id="MS02b">
+    <tr class="hidden gameStatsRow">
         <td v-if="rowGameStats !== null" class="gameStatsItem">
             {{
                 rowGameStats.value.response[props.prop_team].statistics.passing
@@ -147,6 +138,10 @@ const getStats = (gameID, event) => {
         // Now set the button to expanded
         elTarget.setAttribute("aria-expanded", "true");
         // Otherwise button is not expanded...
+        console.log(
+            "The elTarget.getAttribute aria-expanded value is: ",
+            elTarget.getAttribute("aria-expanded")
+        );
     } else {
         // Loop thru stats rows and hide them
         for (const child of elSiblings) {
@@ -155,6 +150,10 @@ const getStats = (gameID, event) => {
         }
         // Now set the button to collapsed
         elTarget.setAttribute("aria-expanded", "false");
+        console.log(
+            "The elTarget.getAttribute aria-expanded value is: ",
+            elTarget.getAttribute("aria-expanded")
+        );
     }
 };
 </script>
@@ -163,10 +162,14 @@ const getStats = (gameID, event) => {
 @import "../../assets/css/style.css";
 @import "../../assets/css/table.css";
 
-tr.shown,
-tr.hidden {
+tr.shown {
     background-color: #eee;
     display: table-row;
+}
+
+tr.hidden {
+    background-color: #eee;
+    display: none;
 }
 
 tr.shown:not(.gameStatsRowHeaders) {
@@ -199,10 +202,6 @@ button {
         font-weight: 650;
         font-size: 0.8rem;
     }
-}
-
-#scores #MS01b {
-    border-bottom: 1px solid var(--main-dark);
 }
 
 /* -------- Button stylings ------------------------ */

@@ -390,13 +390,13 @@ br.cb {
 
 /* -- display -- */
 
-.hidden {
+/* .hidden {
     display: none !important;
 }
 .hidden,
 .invisible {
     visibility: hidden !important;
-}
+} */
 
 /* -- centering -- */
 
