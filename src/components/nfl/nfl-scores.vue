@@ -272,11 +272,6 @@ table {
     border-collapse: collapse;
 }
 
-tbody tr:nth-child(6),
-tbody tr:nth-child(10) {
-    border-bottom: 1px solid #000;
-}
-
 #scores > th,
 #scores > td {
     padding: 0.25em 0.5em 0.25em 1em;

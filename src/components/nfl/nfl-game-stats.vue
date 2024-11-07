@@ -11,7 +11,7 @@
         title="Click for Game Stats"
     >
         <td>
-            <button type="button" class="button" aria-expanded="false">
+            <button type="button" class="button">
                 <span>Stats</span>
             </button>
         </td>
@@ -100,28 +100,20 @@ const getStats = (gameID, event) => {
     const elTarget = event.target;
     let elSibling = el.nextElementSibling;
     let elSiblings = [];
-    console.log("currentTarget: ", el);
-    console.log("target is: ", elTarget);
-    console.log("el.currentTarget's next sibling: ", elSibling);
-    console.log("The elTarget.tagName is: ", elTarget.tagName);
-    console.log(
-        "The elTarget.getAttribute aria-expanded value is: ",
-        elTarget.getAttribute("aria-expanded")
-    );
 
     for (let i = 0; i < 2; i++) {
         // push sibling of currentTarget onto array
         elSiblings.push(elSibling);
         elSibling = elSibling.nextElementSibling;
     }
-    console.log("elSiblings array; ", elSiblings);
 
     if (
         elTarget.tagName === "BUTTON" &&
-        elTarget.getAttribute("aria-expanded") === "false"
+        elSiblings[0].classList.contains("hidden")
     ) {
         // Fetch the Gamestats for given gameID if necessary.
         if (rowGameStats.value === null) {
+            console.log("in if");
             const url = `https://v1.american-football.api-sports.io/games/statistics/teams?id=${gameID}`;
             const { data, loadingState, error } = useFetch(
                 url,
@@ -134,25 +126,18 @@ const getStats = (gameID, event) => {
             child.classList.add("shown");
             child.classList.remove("hidden");
         }
-
-        // Now set the button to expanded
-        elTarget.setAttribute("aria-expanded", "true");
-        // Otherwise button is not expanded...
-        console.log(
-            "The elTarget.getAttribute aria-expanded value is: ",
-            elTarget.getAttribute("aria-expanded")
-        );
-    } else {
+    } else if (
+        elTarget.tagName === "BUTTON" &&
+        elSiblings[0].classList.contains("shown")
+    ) {
         // Loop thru stats rows and hide them
         for (const child of elSiblings) {
             child.classList.add("hidden");
             child.classList.remove("shown");
         }
-        // Now set the button to collapsed
-        elTarget.setAttribute("aria-expanded", "false");
-        console.log(
-            "The elTarget.getAttribute aria-expanded value is: ",
-            elTarget.getAttribute("aria-expanded")
+    } else {
+        console.error(
+            "Error: No .hidden or .shown classes in the Stats table rows <tr> elements."
         );
     }
 };
@@ -162,17 +147,17 @@ const getStats = (gameID, event) => {
 @import "../../assets/css/style.css";
 @import "../../assets/css/table.css";
 
-tr.shown {
+.shown {
     background-color: #eee;
     display: table-row;
 }
 
-tr.hidden {
+.hidden {
     background-color: #eee;
     display: none;
 }
 
-tr.shown:not(.gameStatsRowHeaders) {
+.shown:not(.gameStatsRowHeaders) {
     border-bottom: 5px solid var(--main-dark);
 }
 
@@ -202,6 +187,10 @@ button {
         font-weight: 650;
         font-size: 0.8rem;
     }
+}
+
+#scores tbody tr {
+    border-bottom: 1px solid #000;
 }
 
 /* -------- Button stylings ------------------------ */
