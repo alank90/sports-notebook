@@ -7,7 +7,7 @@
 <script setup>
 import { provide } from "vue";
 
-provide("currentNBASeason", "2023-2024")
+provide("currentNBASeason", "2024-2025")
 
 </script>
 

@@ -113,7 +113,6 @@ const getStats = (gameID, event) => {
     ) {
         // Fetch the Gamestats for given gameID if necessary.
         if (rowGameStats.value === null) {
-            console.log("in if");
             const url = `https://v1.american-football.api-sports.io/games/statistics/teams?id=${gameID}`;
             const { data, loadingState, error } = useFetch(
                 url,

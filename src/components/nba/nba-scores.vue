@@ -93,6 +93,24 @@
                                 {{ team.scores.away.total }}
                             </td>
                         </tr>
+                        <!-- ------- Away team score line End----------- -->
+
+                        <!--======================================================-->
+                        <!--============ Game Stats row for away team ============-->
+                        <!--======================================================-->
+
+                        <nbaGameStats
+                            :prop_HOST_NAME="HOST_NAME"
+                            :prop_team="awayTeam"
+                            :prop_gameID="team.id"
+                        />
+
+                        <!--======================================================-->
+                        <!--============ Game Stats row for away team End ========-->
+                        <!--======================================================-->
+
+                        <!-- ------- Home team score line ----------- -->
+
                         <tr>
                             <td><img :src="team.teams.home.logo" /></td>
                             <td scope="row" colspan="2">
@@ -131,18 +149,21 @@ import {
     yesterdayLocaleString,
 } from "../modules/getDate.js";
 import { useFetch } from "../modules/useFetch.js";
+import nbaGameStats from "./nba-game-stats.vue";
 
 // ======= Variable Declarations ============ //
 const currentNBASeason = inject("currentNBASeason");
 const urlNBAScores = `https://v1.basketball.api-sports.io/games/?league=12&season=${currentNBASeason}&date=${yesterdayISOString}&timezone=America/New_York`;
-const hostName = import.meta.env.VITE_API_HOST_BASKETBALL;
+const HOST_NAME = import.meta.env.VITE_API_HOST_BASKETBALL;
+const homeTeam = 0;
+const awayTeam = 1;
 
-// Fetch scores
+// ========== Fetch scores =============== //
 const {
     data: gameScores,
     loadingState,
     error,
-} = useFetch(urlNBAScores, hostName);
+} = useFetch(urlNBAScores, HOST_NAME);
 </script>
 
 <style scoped>

@@ -168,7 +168,7 @@ import { inject, watch, ref } from "vue";
 import { todayLocaleString, today } from "../modules/getDate.js";
 import { getPreviousWeeksDates } from "../modules/getFootballDates.js";
 import { useFetches } from "../modules/useFetches.js";
-import { useGetTeamStats } from "../modules/getTeamGameStats.js";
+// import { useGetTeamStats } from "../modules/getTeamGameStats.js";
 import nflGameStats from "./nfl-game-stats.vue";
 
 // ======= Variable Declarations ============ //
