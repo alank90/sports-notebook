@@ -135,6 +135,17 @@
                                 {{ team.scores.home.total }}
                             </td>
                         </tr>
+                        <!-- ------- Home team score line End----------- -->
+
+                        <!--======================================================-->
+                        <!--============ Game Stats row for home team ============-->
+                        <!--======================================================-->
+
+                        <nbaGameStats
+                            :prop_HOST_NAME="HOST_NAME"
+                            :prop_team="homeTeam"
+                            :prop_gameID="team.id"
+                        />
                     </tbody>
                 </template>
             </table>
