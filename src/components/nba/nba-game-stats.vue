@@ -92,9 +92,17 @@
 <script setup>
 import { ref } from "vue";
 import { useFetch } from "../modules/useFetch.js";
+import sortPlayersByTeam from "../modules/playersStats.js";
 
-const props = defineProps(["prop_HOST_NAME", "prop_team", "prop_gameID"]);
+// ============== Vars ========================================== //
+const props = defineProps([
+    "prop_HOST_NAME",
+    "prop_team",
+    "prop_gameID",
+    "prop_teamID",
+]);
 let rowGameStats = ref(null);
+let playerGameStats = ref(null);
 
 // ================================================================ //
 // ====================== Methods ================================= //
@@ -110,20 +118,18 @@ const getStats = (gameID, event) => {
     const elTarget = event.target;
     let elSibling = el.nextElementSibling;
     let elSiblings = [];
-    console.log("el, elTarget, elSibling", el, elTarget, elSibling);
+
     // Fill elSiblings array
     for (let i = 0; i < 2; i++) {
         // push sibling of currentTarget onto array
         elSiblings.push(elSibling);
         elSibling = elSibling.nextElementSibling;
     }
-    console.log("elSiblings: ", elSiblings[0]);
 
     if (
         elTarget.tagName === "BUTTON" &&
         elSiblings[0].classList.contains("hidden")
     ) {
-        console.log("element is hidden currently");
         // Fetch the Gamestats for given gameID if necessary.
         if (rowGameStats.value === null) {
             const url = `https://v1.basketball.api-sports.io/games/statistics/teams?id=${gameID}`;
@@ -132,6 +138,15 @@ const getStats = (gameID, event) => {
                 props.prop_HOST_NAME
             );
             rowGameStats.value = data;
+
+            // Get player game stats
+            const urlPlayerStats = `https://v1.basketball.api-sports.io/games/statistics/players?id=${gameID}`;
+            const {
+                data: playerStats,
+                loadingState: loadingStatePlayerStats,
+                error: errorPlayerStats,
+            } = useFetch(urlPlayerStats, props.prop_HOST_NAME);
+            playerGameStats.value = playerStats;
         }
 
         // Loop through the stats rows and show them
@@ -153,6 +168,8 @@ const getStats = (gameID, event) => {
             "Error: No .hidden or .shown classes in the Stats table rows <tr> elements."
         );
     }
+
+    sortPlayersByTeam(playerGameStats.value);
 };
 </script>
 
@@ -174,6 +191,10 @@ const getStats = (gameID, event) => {
 }
 table {
     width: 100%;
+
+    & tbody tr:nth-child(6) {
+        border-bottom: 3px black solid;
+    }
 }
 
 .gameStatsRowHeaders {

@@ -103,6 +103,7 @@
                             :prop_HOST_NAME="HOST_NAME"
                             :prop_team="awayTeam"
                             :prop_gameID="team.id"
+                            :prop_teamID="team.teams.away.id"
                         />
 
                         <!--======================================================-->
@@ -145,6 +146,7 @@
                             :prop_HOST_NAME="HOST_NAME"
                             :prop_team="homeTeam"
                             :prop_gameID="team.id"
+                            :prop_teamID="team.teams.home.id"
                         />
                     </tbody>
                 </template>
