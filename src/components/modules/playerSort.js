@@ -5,6 +5,11 @@
  *   @returns - { arrays } - returns two arrays sorted by home or away team
  */
 
-export default function sortPlayersByTeam(playerStatsArray) {
-    console.log(playerStatsArray);
+const homeTeam = [];
+const awayTeam = [];
+
+export function sortPlayers(playerStatsArray) {
+    console.log("team id: ", playerStatsArray);
+
+    return { homeTeam, awayTeam };
 }

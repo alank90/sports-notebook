@@ -92,7 +92,7 @@
 <script setup>
 import { ref } from "vue";
 import { useFetch } from "../modules/useFetch.js";
-import sortPlayersByTeam from "../modules/playersStats.js";
+import { sortPlayers } from "../modules/playerSort.js";
 
 // ============== Vars ========================================== //
 const props = defineProps([
@@ -103,6 +103,10 @@ const props = defineProps([
 ]);
 let rowGameStats = ref(null);
 let playerGameStats = ref(null);
+let homeTeamStats = ref(null);
+let awayTeamStats = ref(null);
+
+console.log(homeTeamStats.value);
 
 // ================================================================ //
 // ====================== Methods ================================= //
@@ -169,7 +173,10 @@ const getStats = (gameID, event) => {
         );
     }
 
-    sortPlayersByTeam(playerGameStats.value);
+    // Sort the playerGameStats array into serperate home/away arrays //
+    const { homeTeam, awayTeam } = sortPlayers(playerGameStats.value);
+    homeTeamStats.value = homeTeam;
+    awayTeamStats.value = awayTeam;
 };
 </script>
 
