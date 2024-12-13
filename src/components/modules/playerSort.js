@@ -5,11 +5,13 @@
  *   @returns - { arrays } - returns two arrays sorted by home or away team
  */
 
+import { unref } from "vue";
 const homeTeam = [];
 const awayTeam = [];
 
 export function sortPlayers(playerStatsArray) {
-    console.log("team id: ", playerStatsArray);
+    const playerStatsArrayUnref = unref(playerStatsArray);
+    console.log("team id: ", playerStatsArrayUnref.value);
 
     return { homeTeam, awayTeam };
 }

@@ -87,6 +87,12 @@
             }}%
         </td>
     </tr>
+
+    <tr v-if="playerGameStats !== null">
+        {{
+            playerGameStats.value.response[0].team.id
+        }}
+    </tr>
 </template>
 
 <script setup>
@@ -105,8 +111,6 @@ let rowGameStats = ref(null);
 let playerGameStats = ref(null);
 let homeTeamStats = ref(null);
 let awayTeamStats = ref(null);
-
-console.log(homeTeamStats.value);
 
 // ================================================================ //
 // ====================== Methods ================================= //
@@ -153,6 +157,9 @@ const getStats = (gameID, event) => {
             playerGameStats.value = playerStats;
         }
 
+        console.log("PlayerStats: ", playerGameStats);
+
+        console.log("Check for async");
         // Loop through the stats rows and show them
         for (const child of elSiblings) {
             child.classList.add("shown");
