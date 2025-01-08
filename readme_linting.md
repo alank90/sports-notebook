@@ -59,7 +59,7 @@ To install prettier in your project and pin its version as recommended, run:
 Using Prettier Configuration files to set formatting options is the recommended approach. Options are searched recursively down from the file being formatted so if you want to apply prettier settings to your entire project simply set a configuration in the root.
      To run _prettier_ from the command line prefix the command with _npx_  (e.g. _npx prettier --help_)
 
-### Basic Cinfiguration of Prettier
+### Basic Configuration of Prettier
 ```JS:
 // prettier.config.js or .prettierrc.js
 module.exports = {
@@ -78,7 +78,7 @@ Install the **"Prettier - Code formatter"** extension from the extensions sideba
 
 Linters usually contain not only code quality rules, but also stylistic rules. Most stylistic rules are unnecessary when using Prettier, but worse – they might conflict with Prettier! Use Prettier for code formatting concerns, and linters for code-quality concerns. To turn off linter eslint use _eslint-config-prettier_ in your project.
 
-` npm install --save-dev eslint-config-prettier `
+`npm install --save-dev eslint-config-prettier`
 
 Then, add "prettier" to the "extends" array in your .eslintrc.\* file. Make sure to put it last, so it gets the chance to override other configs.
 
