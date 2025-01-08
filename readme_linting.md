@@ -13,8 +13,9 @@ $ npm run dev
 ```
 
 Before you set up ESLint for your project, you will first need to install ESLint and the _eslint-plugin-vue_. This plugin allows us to check the template and script of .vue files with ESLint, as well as Vue code in .js files.  If you want to use SFCs then you'll also need to install _@vue/compiler-sfc_ :
+`npm init @eslint/config@latest`
 
-`npm install eslint eslint-plugin-vue @vue/compiler-sfc --save-dev`
+`npm install eslint-plugin-vue --save-dev`
 
 Now that ESLint is installed along with associated packages, you can initialize an ESLint configuration for your project using the following command:
 `./node_modules/.bin/eslint --init`
