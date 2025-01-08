@@ -1,4 +1,4 @@
-# Setting Up Project for Linting with Vite
+# Setting Up Project for Linting with Vite in VSCode
 _Vite_ is a web development build tool that allows for lightning fast serving of code due to its native ES Module import approach.
 
 Vue projects can quickly be set up with Vite by running the following commands in your terminal.
@@ -12,10 +12,13 @@ $ npm install
 $ npm run dev
 ```
 
-Before you set up ESLint for your project, you will first need to install ESLint and the _eslint-plugin-vue_. This plugin allows us to check the template and script of .vue files with ESLint, as well as Vue code in .js files.  If you want to use SFCs then you'll also need to install _@vue/compiler-sfc_ :
+Before you set up ESLint for your project, you will first need to install ESLint and the _eslint-plugin-vue_. This plugin allows us to check the template and script of .vue files with ESLint, as well as Vue code in .js files.  If you want to use SFCs then you'll also need to install _@vue/compiler-sfc_(No longer necessary. _compiler/sfc_ is included in main vue package. :
+
 `npm init @eslint/config@latest`
 
 `npm install eslint-plugin-vue --save-dev`
+
+***This next step is no loner necessary. The npm init command from previous line will generate a new _eslint.config.js_ and start linting in project.***
 
 Now that ESLint is installed along with associated packages, you can initialize an ESLint configuration for your project using the following command:
 `./node_modules/.bin/eslint --init`
@@ -23,6 +26,8 @@ Now that ESLint is installed along with associated packages, you can initialize 
 An important piece in this command is the --init flag. The ./node_modules/.bin/eslint section of the command is the path to ESLint in your project. Using the --init flag activates ESLint for your project. Activating or initializing ESLint will create an ESLint configuration file that will allow you to customize how ESLint works with your project.
 
 Follow the prompts to setup your .eslintrc file. More Info can be found at https://www.digitalocean.com/community/tutorials/linting-and-formatting-with-eslint-in-vs-code
+
+***End of .eslintrc initilization that is no longer needed***
 
 To integrate ESLint into Visual Studio Code, you will need to install the ESLint extension for Visual Studio Code. Navigate back to Visual Studio Code and search for ESLint in the Extensions tab. Click Install once you have located the extension:
 
