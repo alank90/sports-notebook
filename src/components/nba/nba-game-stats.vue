@@ -157,9 +157,8 @@ const getStats = (gameID, event) => {
             playerGameStats.value = playerStats;
         }
 
-        console.log("PlayerStats: ", playerGameStats);
+        console.log("PlayerStats: ", playerGameStats.value);
 
-        console.log("Check for async");
         // Loop through the stats rows and show them
         for (const child of elSiblings) {
             child.classList.add("shown");
