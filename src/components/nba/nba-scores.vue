@@ -363,9 +363,9 @@ const urlNBAScores = `https://v1.basketball.api-sports.io/games/?league=12&seaso
 const HOST_NAME = import.meta.env
     .VITE_API_HOST_BASKETBALL;
 const homeTeam = 0;
-const awayTeam = 9;
+const awayTeam = 9
 
-let y = 7;
+
 // ========== Fetch scores =============== //
 const {
     data: gameScores,

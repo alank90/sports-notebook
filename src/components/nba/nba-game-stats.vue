@@ -7,7 +7,9 @@
     <!--======================================================-->
     <tr
         v-else
-        @click="getStats(props.prop_gameID, $event)"
+        @click="
+            getStats(props.prop_gameID, $event)
+        "
         title="Click for Game Stats"
     >
         <td>
@@ -26,71 +28,120 @@
         <th>3pt/Att,3pt/Md,3pt/pct</th>
     </tr>
     <tr class="hidden gameStatsRow">
-        <td v-if="rowGameStats !== null" class="gameStatsItem">
+        <td
+            v-if="rowGameStats !== null"
+            class="gameStatsItem"
+        >
             {{
-                rowGameStats.value.response[props.prop_team].field_goals.total
+                rowGameStats.value.response[
+                    props.prop_team
+                ].field_goals.total
             }}-
 
             {{
-                rowGameStats.value.response[props.prop_team].field_goals
-                    .attempts
+                rowGameStats.value.response[
+                    props.prop_team
+                ].field_goals.attempts
             }}/
 
             {{
-                rowGameStats.value.response[props.prop_team].field_goals
-                    .percentage
+                rowGameStats.value.response[
+                    props.prop_team
+                ].field_goals.percentage
             }}%
         </td>
-        <td v-if="rowGameStats !== null" class="gameStatsItem">
+        <td
+            v-if="rowGameStats !== null"
+            class="gameStatsItem"
+        >
             {{
-                rowGameStats.value.response[props.prop_team].freethrows_goals
-                    .total
+                rowGameStats.value.response[
+                    props.prop_team
+                ].freethrows_goals.total
             }}-
 
             {{
-                rowGameStats.value.response[props.prop_team].freethrows_goals
-                    .attempts
+                rowGameStats.value.response[
+                    props.prop_team
+                ].freethrows_goals.attempts
             }}/
 
             {{
-                rowGameStats.value.response[props.prop_team].freethrows_goals
-                    .percentage
+                rowGameStats.value.response[
+                    props.prop_team
+                ].freethrows_goals.percentage
             }}%
         </td>
-        <td v-if="rowGameStats !== null" class="gameStatsItem">
-            {{ rowGameStats.value.response[props.prop_team].assists }}/
-
-            {{ rowGameStats.value.response[props.prop_team].steals }}/
-
-            {{ rowGameStats.value.response[props.prop_team].blocks }}
-        </td>
-        <td v-if="rowGameStats !== null" class="gameStatsItem">
-            {{ rowGameStats.value.response[props.prop_team].turnovers }}
-        </td>
-        <td v-if="rowGameStats !== null" class="gameStatsItem">
-            {{ rowGameStats.value.response[props.prop_team].rebounds.total }}
-        </td>
-        <td v-if="rowGameStats !== null" class="gameStatsItem">
+        <td
+            v-if="rowGameStats !== null"
+            class="gameStatsItem"
+        >
             {{
-                rowGameStats.value.response[props.prop_team].threepoint_goals
-                    .total
-            }}-
-
-            {{
-                rowGameStats.value.response[props.prop_team].threepoint_goals
-                    .attempts
+                rowGameStats.value.response[
+                    props.prop_team
+                ].assists
             }}/
 
             {{
-                rowGameStats.value.response[props.prop_team].threepoint_goals
-                    .percentage
+                rowGameStats.value.response[
+                    props.prop_team
+                ].steals
+            }}/
+
+            {{
+                rowGameStats.value.response[
+                    props.prop_team
+                ].blocks
+            }}
+        </td>
+        <td
+            v-if="rowGameStats !== null"
+            class="gameStatsItem"
+        >
+            {{
+                rowGameStats.value.response[
+                    props.prop_team
+                ].turnovers
+            }}
+        </td>
+        <td
+            v-if="rowGameStats !== null"
+            class="gameStatsItem"
+        >
+            {{
+                rowGameStats.value.response[
+                    props.prop_team
+                ].rebounds.total
+            }}
+        </td>
+        <td
+            v-if="rowGameStats !== null"
+            class="gameStatsItem"
+        >
+            {{
+                rowGameStats.value.response[
+                    props.prop_team
+                ].threepoint_goals.total
+            }}-
+
+            {{
+                rowGameStats.value.response[
+                    props.prop_team
+                ].threepoint_goals.attempts
+            }}/
+
+            {{
+                rowGameStats.value.response[
+                    props.prop_team
+                ].threepoint_goals.percentage
             }}%
         </td>
     </tr>
 
     <tr v-if="playerGameStats !== null">
         {{
-            playerGameStats.value.response[0].team.id
+            playerGameStats.value.response[0].team
+                .id
         }}
     </tr>
 </template>
@@ -141,23 +192,34 @@ const getStats = (gameID, event) => {
         // Fetch the Gamestats for given gameID if necessary.
         if (rowGameStats.value === null) {
             const url = `https://v1.basketball.api-sports.io/games/statistics/teams?id=${gameID}`;
-            const { data, loadingState, error } = useFetch(
-                url,
-                props.prop_HOST_NAME
-            );
+            // eslint-disable-next-line no-unused-vars
+            const { data, loadingState, error } =
+                useFetch(
+                    url,
+                    props.prop_HOST_NAME
+                );
             rowGameStats.value = data;
 
             // Get player game stats
             const urlPlayerStats = `https://v1.basketball.api-sports.io/games/statistics/players?id=${gameID}`;
             const {
                 data: playerStats,
-                loadingState: loadingStatePlayerStats,
+                loadingState:
+                    // eslint-disable-next-line no-unused-vars
+                    loadingStatePlayerStats,
+                // eslint-disable-next-line no-unused-vars
                 error: errorPlayerStats,
-            } = useFetch(urlPlayerStats, props.prop_HOST_NAME);
+            } = useFetch(
+                urlPlayerStats,
+                props.prop_HOST_NAME
+            );
             playerGameStats.value = playerStats;
         }
 
-        console.log("PlayerStats: ", playerGameStats.value);
+        console.log(
+            "PlayerStats: ",
+            playerGameStats.value
+        );
 
         // Loop through the stats rows and show them
         for (const child of elSiblings) {
@@ -179,10 +241,12 @@ const getStats = (gameID, event) => {
         );
     }
 
-    // Sort the playerGameStats array into serperate home/away arrays //
-    const { homeTeam, awayTeam } = sortPlayers(playerGameStats.value);
+    // Sort the playerGameStats array into separate home/away arrays //
+    /* const { homeTeam, awayTeam } = sortPlayers(
+        playerGameStats.value
+    );
     homeTeamStats.value = homeTeam;
-    awayTeamStats.value = awayTeam;
+    awayTeamStats.value = awayTeam; */
 };
 </script>
 
@@ -270,7 +334,12 @@ table {
     }
 
     &:hover {
-        background-color: rgba(118, 164, 240, 0.693);
+        background-color: rgba(
+            118,
+            164,
+            240,
+            0.693
+        );
     }
 }
 
